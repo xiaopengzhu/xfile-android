@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">绝密档案</string>
+    <string name="ActivityMainTitle">绝密档案</string>
+    <string name="main_navigation_home">首页</string>
+    <string name="main_navigation_catagory">分类</string>
+    <string name="main_navigation_car">购物车</string>
+    <string name="main_code_buy">我的资料</string>
+    <string name="main_navigation_more">更多</string>
+    <string name="app_close">关闭应用程序</string>
+    <string name="btn_cancel">取 消</string>
+    <string name="btn_ok">确 定</string>
+    <string name="cart_item_hint">购物车还是空的,快去选购吧~ !</string>
+    <string name="more">更多</string>
+    <string name="tab_list">记录列表</string>
+    <string name="tab_notice">密码提示</string>
+    <string name="tab_myhome">我的资料</string>
+    <string name="tab_more">更多设置</string>
+    <string name="tab_message">消息中心</string>
+    <string name="account">用户名称</string>
+    <string name="password">用户密码</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="remember_me">记住我</string>
+    <string name="please_enter_password">请输出密码</string>
+    <string name="please_enter_account">请输入用户名</string>
+
+</resources>
