@@ -20,11 +20,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".ListActivity"/>
+        <activity android:name=".ListItemActivity"/>
         <activity android:name=".MessageActivity"/>
         <activity android:name=".NoticeActivity"/>
         <activity android:name=".MyhomeActivity"/>
         <activity android:name=".MoreActivity"/>
         <activity android:name=".XfileActivity"/>
+        <activity android:name=".AddActivity"/>
     </application>
 
 </manifest>

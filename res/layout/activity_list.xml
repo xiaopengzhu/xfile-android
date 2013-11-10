@@ -17,25 +17,6 @@
             android:layout_height="fill_parent"
             android:background="#106184" />
     
-        <ImageView
-            android:id="@+id/progressImage"
-            android:layout_width="0.0dip"
-            android:layout_height="fill_parent"
-            android:background="@drawable/android_title_bg_progress"
-            android:visibility="gone" />
-    
-        <Button
-            android:id="@+id/titleRightButton"
-            style="\@style/title_right_button"
-            android:layout_width="100.0dip"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="5.0dip"
-            android:layout_marginTop="2.0dip"
-            android:visibility="gone" />
-    
         <TextView
             android:id="@+id/titleText"
             android:layout_width="fill_parent"
@@ -46,6 +27,12 @@
             android:text="@string/tab_list"
             android:textColor="@color/white"
             android:textSize="15sp" />
+
+        <Button 
+            android:id="@+id/add_btn"
+            android:background="@drawable/invite_friends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
         
     </RelativeLayout>
 

@@ -24,5 +24,6 @@
     <string name="remember_me">记住我</string>
     <string name="please_enter_password">请输出密码</string>
     <string name="please_enter_account">请输入用户名</string>
+    <string name="add">添加</string>
 
 </resources>

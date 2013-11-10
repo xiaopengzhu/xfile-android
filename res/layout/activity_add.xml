@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/empty_cart_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:background="#ffefebe7">
+  
+
+    <RelativeLayout
+        android:id="@+id/top_relative"
+        android:layout_width="fill_parent"
+        android:layout_height="50.0dip" >
+
+    <ImageView
+        android:id="@+id/titleBg"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#106184" />
+
+    <ImageView
+        android:id="@+id/progressImage"
+        android:layout_width="0.0dip"
+        android:layout_height="fill_parent"
+        android:background="@drawable/android_title_bg_progress"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/titleRightButton"
+        style="\@style/title_right_button"
+        android:layout_width="100.0dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="5.0dip"
+        android:layout_marginTop="2.0dip"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:padding="10.0dip"
+        android:singleLine="true"
+        android:text="@string/add"
+        android:textColor="@color/white"
+        android:textSize="15dp" />
+
+    </RelativeLayout>
+
+    <LinearLayout 
+        android:layout_below="@+id/top_relative"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/top_relative"
+            android:layout_marginTop="22dp"
+            android:text="类型选择" />
+    
+        <Spinner
+            android:id="@+id/type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/textView1"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="18dp" />
+    
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/spinner1"
+            android:layout_marginTop="36dp"
+            android:text="帐号" />
+    
+        <EditText
+            android:id="@+id/account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView2"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@+id/textView2"
+            android:ems="10" >
+    
+            <requestFocus />
+        </EditText>
+    
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/editText1"
+            android:layout_marginTop="33dp"
+            android:text="密码" />
+    
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/textView3"
+            android:ems="10" />
+    
+        <Button
+            android:id="@+id/sub_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/editText2"
+            android:layout_marginTop="19dp"
+            android:text="提交" />
+    </LinearLayout>
+</RelativeLayout>

@@ -25,15 +25,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleAdapter.ViewBinder;
 
-public class ListActivity extends Activity{
-    private String url = "http://www.xpcms.net/mobile.php/api/getTypes";
+public class ListItemActivity extends Activity{
     private ListView listview;
     
     @Override
@@ -41,7 +40,12 @@ public class ListActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         
-        SimpleAdapter simpleadapter = new SimpleAdapter(this, getData(),
+      //获取转入数据
+        Intent intent = getIntent();
+        String id = intent.getStringExtra("pid");
+        String url = "http://www.xpcms.net/mobile.php/api/getTypes/pid/" + id;
+        
+        SimpleAdapter simpleadapter = new SimpleAdapter(this, getData(url),
                 R.layout.activity_list_item,
                 new String[]{"id", "name", "icon"}, 
                 new int[]{R.id.item_id, R.id.item_name, R.id.item_icon});
@@ -62,25 +66,26 @@ public class ListActivity extends Activity{
         
         listview = (ListView)findViewById(R.id.listview);
         listview.setAdapter(simpleadapter);
-        //选项点击事件	
-        listview.setOnItemClickListener(new OnItemClickListener() {
 
+        //添加事件
+        Button add_btn = (Button)findViewById(R.id.add_btn);
+        add_btn.setOnClickListener(new OnClickListener() {
+			
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
+			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				HashMap<String, Object> map = (HashMap<String, Object>) listview.getItemAtPosition(arg2);
-				String id = (String) map.get("id");
 				Intent intent = new Intent();
-				intent.setClass(ListActivity.this, ListItemActivity.class);
-				intent.putExtra("pid", id);
+				intent.setClass(ListItemActivity.this, AddActivity.class);
 				startActivity(intent);
 			}
 		});
+        
+        
+        
     }
     
     
-    private List<HashMap<String, Object>> getData() {
+    private List<HashMap<String, Object>> getData(String url) {
         ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
         HashMap<String, Object> map = null;
         
