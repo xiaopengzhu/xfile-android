@@ -18,39 +18,52 @@ import org.json.JSONTokener;
 import android.R.integer;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
 public class AddActivity extends Activity{
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_add);
-		
-		String url = "http://www.xpcms.net/mobile.php/api/getTypes";
-		
-		Spinner type = (Spinner)findViewById(R.id.type);
-		type.setAdapter(getData(url));
-		
-		
-	}
-	
-    private SpinnerAdapter getData(String url) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add);
         
-    	String[] map;
-
+        String url = "http://www.xpcms.net/mobile.php/api/getTypes";
+        
+        Spinner type = (Spinner)findViewById(R.id.type);
+        type.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getData(url)));
+        
+        //添加
+        Button sub_btn = (Button)findViewById(R.id.sub_btn);
+        sub_btn.setOnClickListener(new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                
+            }
+        });
+    }
+    
+    private ArrayList<String> getData(String url) {
+        ArrayList<String> list = new ArrayList<String>();
+        
         HttpGet get = new HttpGet(url);
         HttpClient client = new DefaultHttpClient();
         try {
             HttpResponse response = client.execute(get);
             String str = EntityUtils.toString(response.getEntity());
+            Log.v("debug", str);
             JSONArray line = new JSONArray(new JSONTokener(str));
             for (int i =0; i<line.length();i++) {
-                line.getJSONObject(i).getString("name");
+                String name = line.getJSONObject(i).getString("name");
+                list.add(name);
             }
         } catch (ClientProtocolException e) {
             // TODO Auto-generated catch block
@@ -62,9 +75,6 @@ public class AddActivity extends Activity{
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        SpinnerAdapter list = new SpinnerAdapter(this,
-                android.R.layout.simple_spinner_item, map);
         return list;
-        
     }
 }
