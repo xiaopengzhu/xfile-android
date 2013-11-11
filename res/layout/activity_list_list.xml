@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/empty_cart_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:background="#ffefebe7">
+  
+
+    <RelativeLayout
+        android:id="@+id/top_relative"
+        android:layout_width="fill_parent"
+        android:layout_height="50.0dip" >
+
+        <ImageView
+            android:id="@+id/titleBg"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#106184" />
+    
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="10.0dip"
+            android:singleLine="true"
+            android:text="@string/tab_list"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <Button 
+            android:id="@+id/add_btn"
+            android:background="@drawable/invite_friends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false" />"
+        
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/listlistview" 
+        android:layout_below="@id/top_relative"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
+</RelativeLayout>
+

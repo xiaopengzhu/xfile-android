@@ -73,7 +73,7 @@ public class ListActivity extends Activity{
 				String id = (String) map.get("id");
 				Intent intent = new Intent();
 				intent.setClass(ListActivity.this, ListItemActivity.class);
-				intent.putExtra("pid", id);
+				intent.putExtra("tid", id);
 				startActivity(intent);
 			}
 		});
