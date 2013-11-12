@@ -22,7 +22,14 @@ import org.json.JSONTokener;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -62,21 +69,22 @@ public class ListActivity extends Activity{
         
         listview = (ListView)findViewById(R.id.listview);
         listview.setAdapter(simpleadapter);
-        //选项点击事件	
+        //选项点击事件    
         listview.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				// TODO Auto-generated method stub
-				HashMap<String, Object> map = (HashMap<String, Object>) listview.getItemAtPosition(arg2);
-				String id = (String) map.get("id");
-				Intent intent = new Intent();
-				intent.setClass(ListActivity.this, ListItemActivity.class);
-				intent.putExtra("tid", id);
-				startActivity(intent);
-			}
-		});
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                    long arg3) {
+                // TODO Auto-generated method stub
+                @SuppressWarnings("unchecked")
+                HashMap<String, Object> map = (HashMap<String, Object>) listview.getItemAtPosition(arg2);
+                String id = (String) map.get("id");
+                Intent intent = new Intent();
+                intent.setClass(ListActivity.this, ListItemActivity.class);
+                intent.putExtra("tid", id);
+                startActivity(intent);
+            }
+        });
     }
     
     
@@ -118,6 +126,26 @@ public class ListActivity extends Activity{
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             InputStream is = conn.getInputStream();
             img = BitmapFactory.decodeStream(is); 
+            //圆角
+            
+            Bitmap output = Bitmap.createBitmap(img.getWidth(), img.getHeight(), Config.ARGB_8888);
+            Canvas canvas = new Canvas(output);
+            
+            final int color = 0xff424242;
+            final Paint paint = new Paint();
+            final Rect rect = new Rect(0, 0, img.getWidth(), img.getHeight());
+            final RectF rectF= new RectF(rect);
+            final float roundPx = 5;
+            
+            paint.setAntiAlias(true);
+            canvas.drawARGB(0, 0, 0, 0);
+            paint.setColor(color);
+            canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+            canvas.drawBitmap(img, rect, rect, paint);
+            img = output;
+            
+            
         } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
