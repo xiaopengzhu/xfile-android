@@ -3,8 +3,13 @@
     android:id="@+id/empty_cart_view"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
-    android:background="#ffefebe7">
+    android:background="#ffefebe7"
+    android:gravity="center">
   
+    <ImageView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/login_bg"/>
 
     <RelativeLayout
         android:id="@+id/top_relative"
@@ -38,13 +43,15 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" 
         android:layout_below="@id/top_relative"
-        android:background="#ffefebe7">
+        >
+        
 
             <RelativeLayout
                 android:id="@+id/regist_scroller_relative"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:padding="10.0dip" >
+                android:padding="10.0dip"
+                android:layout_marginTop="100dp" >
 
                 <TextView
                     android:id="@+id/login_page_input_name"
@@ -54,7 +61,8 @@
                     android:layout_marginTop="20.0dip"
                     android:paddingTop="10.0dip"
                     android:text="@string/account"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/login_input_name"
@@ -76,6 +84,7 @@
                     android:layout_marginTop="25.0dip"
                     android:paddingTop="10.0dip"
                     android:text="@string/password"
+                    android:textSize="18sp"
                     android:textColor="@color/black" />
 
                 <EditText

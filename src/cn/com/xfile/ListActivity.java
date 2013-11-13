@@ -19,6 +19,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONTokener;
 
+import cn.com.lib.RefreshableView;
+import cn.com.lib.RefreshableView.PullToRefreshListener;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -42,6 +45,7 @@ import android.widget.SimpleAdapter.ViewBinder;
 public class ListActivity extends Activity{
     private String url = "http://www.xpcms.net/mobile.php/api/getTypes";
     private ListView listview;
+    RefreshableView refreshableView; 
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +89,20 @@ public class ListActivity extends Activity{
                 startActivity(intent);
             }
         });
+        //下拉刷新
+        refreshableView = (RefreshableView) findViewById(R.id.refreshable_view);
+        refreshableView.setOnRefreshListener(new PullToRefreshListener() {
+            @Override
+            public void onRefresh() {
+                try {
+                    Thread.sleep(3000);
+                    //刷新数据逻辑
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                refreshableView.finishRefreshing();
+            }
+        }, 0);
     }
     
     

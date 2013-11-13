@@ -30,10 +30,18 @@
         
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/listview" 
-        android:layout_below="@id/top_relative"
+    <cn.com.lib.RefreshableView
+        android:id="@+id/refreshable_view"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
+        android:layout_height="fill_parent"
+        android:layout_below="@id/top_relative" >
+        
+        <ListView
+            android:id="@+id/listview" 
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
+
+    </cn.com.lib.RefreshableView>
+
 </RelativeLayout>
 
