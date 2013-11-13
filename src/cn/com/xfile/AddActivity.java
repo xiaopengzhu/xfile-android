@@ -2,8 +2,6 @@ package cn.com.xfile;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +20,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import cn.com.lib.FunctionHelper;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,29 +33,18 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 public class AddActivity extends Activity{
-    //分类类型
-    private ArrayList<String> types;
-    //当前记录
-    private ArrayList<NameValuePair> record;
-    //类型URL
-    private String typeUrl = "http://www.xpcms.net/mobile.php/api/getTypes/pid/";
-    //添加URL
-    private String addUrl = "http://www.xpcms.net/mobile.php/api/addRecord";
-    //记录URL
-    private String recordUrl = "http://www.xpcms.net/mobile.php/api/getRecord";
-    //页面控件
-    private Spinner type;
-    private EditText account, password;
-    //登录者ID
-    private int mid;
-    //Helper
-    private FunctionHelper funhelper;
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+        Intent intent = getIntent();
+        String tid = intent.getStringExtra("tid");
+        String id = intent.getStringExtra("id");
+        Spinner type = (Spinner)findViewById(R.id.type);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getData("http://www.xpcms.net/mobile.php/api/getTypes/pid/" + tid));
+        type.setAdapter(adapter);
+        
         
         //记录拉取
         MyApp myapp = (MyApp)getApplication();
@@ -117,7 +102,6 @@ public class AddActivity extends Activity{
                     post.setEntity(entity);
                     HttpResponse response = httpclient.execute(post);
                     if (response.getStatusLine().getStatusCode() == 200)
-                        Log.v("debug", EntityUtils.toString(response.getEntity()));
                         Toast.makeText(AddActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
                 } catch (UnsupportedEncodingException e) {
                     // TODO Auto-generated catch block
@@ -133,73 +117,29 @@ public class AddActivity extends Activity{
         });
     }
     
-    private void init() {
-        //控件获取
-        type = (Spinner)findViewById(R.id.type);
-        type.setAdapter(getTypes());
+    private ArrayList<String> getData(String url) {
+        ArrayList<String> list = new ArrayList<String>();
         
-        account = (EditText)findViewById(R.id.account);
-        password = (EditText)findViewById(R.id.password);
-    }
-    
-    private ArrayAdapter<String> getTypes() {
-        ArrayAdapter<String> adapter = null;
-        Intent intent = getIntent();
-        String tid = intent.getStringExtra("tid");
-        if (tid != null) {
-            typeUrl += tid;
-            URI uri;
-            try {
-                uri = new URI(typeUrl);
-                String str = funhelper.getGetData(uri);
-                ArrayList<String> list = new ArrayList<String>();
-                JSONArray line = new JSONArray(new JSONTokener(str));
-                for (int i =0; i<line.length();i++) {
-                    String name = line.getJSONObject(i).getString("name");
-                    list.add(name);
-                }
-                adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
-            } catch (URISyntaxException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        return adapter;
-    }
-    
-    private ArrayList<NameValuePair> getRecordData() {
-        List<NameValuePair> list = new ArrayList<NameValuePair>();
-        Intent intent = getIntent();
-        String id = intent.getStringExtra("id");
-        MyApp myapp = (MyApp)getApplication();
-        String mid = myapp.getData("id").toString();
-        List<NameValuePair> data = new ArrayList<NameValuePair>();
-        NameValuePair pair1 = new BasicNameValuePair("id", id);
-        NameValuePair pair2 = new BasicNameValuePair("mid", mid);
-        data.add(pair1);
-        data.add(pair2);
-        funhelper = new FunctionHelper();
-        URI uri;
+        HttpGet get = new HttpGet(url);
+        HttpClient client = new DefaultHttpClient();
         try {
-            uri = new URI(recordUrl);
-            String str = funhelper.getPostData(uri, data);
-            JSONObject line = new JSONObject(new JSONTokener(str));
-            if (line!=null) {
-                NameValuePair pair3 = new BasicNameValuePair("account",line.getString("account"));
-                account.setText(line.getString("account"));
-                EditText password = (EditText)findViewById(R.id.password);
-                password.setText(line.getString("password"));
+            HttpResponse response = client.execute(get);
+            String str = EntityUtils.toString(response.getEntity());
+            JSONArray line = new JSONArray(new JSONTokener(str));
+            for (int i =0; i<line.length();i++) {
+                list.add(line.getJSONObject(i).getString("name"));
             }
-        } catch (URISyntaxException e) {
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return null;
+        return list;
+        
     }
 }
