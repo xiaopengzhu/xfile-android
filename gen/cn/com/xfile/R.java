@@ -55,9 +55,9 @@ public final class R {
         public static final int ic_more_item_top_pressed=0x7f02001e;
         public static final int invite_friends=0x7f02001f;
         public static final int invite_friends_press=0x7f020020;
-        public static final int list_row_mormal=0x7f020035;
-        public static final int list_row_pressed=0x7f020037;
-        public static final int list_row_zeng=0x7f020036;
+        public static final int list_row_mormal=0x7f02003b;
+        public static final int list_row_pressed=0x7f02003d;
+        public static final int list_row_zeng=0x7f02003c;
         public static final int login_bg=0x7f020021;
         public static final int login_remember=0x7f020022;
         public static final int main_navigation_background=0x7f020023;
@@ -74,10 +74,16 @@ public final class R {
         public static final int moreitems_version=0x7f02002e;
         public static final int myfollow=0x7f02002f;
         public static final int mylike=0x7f020030;
-        public static final int search_friends=0x7f020031;
-        public static final int setting_mor=0x7f020032;
-        public static final int transparent=0x7f020034;
-        public static final int transparent_background=0x7f020033;
+        public static final int new1=0x7f020031;
+        public static final int new2=0x7f020032;
+        public static final int new3=0x7f020033;
+        public static final int new4=0x7f020034;
+        public static final int page=0x7f020035;
+        public static final int page_now=0x7f020036;
+        public static final int search_friends=0x7f020037;
+        public static final int setting_mor=0x7f020038;
+        public static final int transparent=0x7f02003a;
+        public static final int transparent_background=0x7f020039;
     }
     public static final class id {
         public static final int MorePageTableLayout_Client=0x7f08002c;
@@ -85,9 +91,9 @@ public final class R {
         public static final int MorePageTableLayout_Follow=0x7f080028;
         public static final int account=0x7f080009;
         public static final int add_btn=0x7f080012;
-        public static final int arrow=0x7f080035;
+        public static final int arrow=0x7f08003a;
         public static final int console_line_bottom=0x7f08001f;
-        public static final int description=0x7f080037;
+        public static final int description=0x7f08003c;
         public static final int empty_cart_view=0x7f080000;
         public static final int item_account=0x7f080014;
         public static final int item_icon=0x7f08000f;
@@ -113,8 +119,8 @@ public final class R {
         public static final int no_cart_item=0x7f080031;
         public static final int password=0x7f08000b;
         public static final int progressImage=0x7f080003;
-        public static final int progress_bar=0x7f080036;
-        public static final int pull_to_refresh_head=0x7f080034;
+        public static final int progress_bar=0x7f08003b;
+        public static final int pull_to_refresh_head=0x7f080039;
         public static final int refreshable_view=0x7f08000d;
         public static final int reg_btn=0x7f08001e;
         public static final int regist_scroller=0x7f080016;
@@ -136,7 +142,12 @@ public final class R {
         public static final int titleText=0x7f080005;
         public static final int top_relative=0x7f080001;
         public static final int type=0x7f080007;
-        public static final int updated_at=0x7f080038;
+        public static final int updated_at=0x7f08003d;
+        public static final int welcome_page0=0x7f080035;
+        public static final int welcome_page1=0x7f080036;
+        public static final int welcome_page2=0x7f080037;
+        public static final int welcome_page3=0x7f080038;
+        public static final int welcome_viewpager=0x7f080034;
     }
     public static final class layout {
         public static final int activity_add=0x7f030000;
@@ -150,7 +161,12 @@ public final class R {
         public static final int activity_more=0x7f030008;
         public static final int activity_myhome=0x7f030009;
         public static final int activity_notice=0x7f03000a;
-        public static final int pull_to_refresh=0x7f03000b;
+        public static final int activity_welcome=0x7f03000b;
+        public static final int new1=0x7f03000c;
+        public static final int new2=0x7f03000d;
+        public static final int new3=0x7f03000e;
+        public static final int new4=0x7f03000f;
+        public static final int pull_to_refresh=0x7f030010;
     }
     public static final class string {
         public static final int ActivityMainTitle=0x7f060001;

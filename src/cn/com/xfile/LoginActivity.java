@@ -71,6 +71,9 @@ public class LoginActivity extends Activity{
                                 intent.setClass(LoginActivity.this, XfileActivity.class);
                                 startActivity(intent);
                             } else {
+                                Intent intent = new Intent();
+                                intent.setClass(LoginActivity.this, WelcomeActivity.class);
+                                startActivity(intent);
                                 Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
                             }
                         } else {
