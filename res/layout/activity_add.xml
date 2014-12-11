@@ -4,48 +4,23 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
     android:background="#ffefebe7">
-  
 
     <RelativeLayout
         android:id="@+id/top_relative"
         android:layout_width="fill_parent"
-        android:layout_height="50.0dip" >
-
-    <ImageView
-        android:id="@+id/titleBg"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#106184" />
-
-    <ImageView
-        android:id="@+id/progressImage"
-        android:layout_width="0.0dip"
-        android:layout_height="fill_parent"
-        android:background="@drawable/android_title_bg_progress"
-        android:visibility="gone" />
-
-    <Button
-        android:id="@+id/titleRightButton"
-        style="\@style/title_right_button"
-        android:layout_width="100.0dip"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="5.0dip"
-        android:layout_marginTop="2.0dip"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/titleText"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:padding="10.0dip"
-        android:singleLine="true"
-        android:text="@string/add"
-        android:textColor="@color/white"
-        android:textSize="15dp" />
+        android:layout_height="50.0dip"
+        android:background="#106184" >
+	    
+	    <TextView
+	        android:id="@+id/titleText"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_centerInParent="true"
+	        android:padding="10.0dip"
+	        android:singleLine="true"
+	        android:text="@string/add"
+	        android:textColor="@color/white"
+	        android:textSize="15dp" />
 
     </RelativeLayout>
 
@@ -53,24 +28,28 @@
         android:layout_below="@+id/top_relative"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical">
         
         <LinearLayout 
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginTop="20dp"
+            android:gravity="center"
             android:orientation="horizontal">
+            
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="70dp"
-                android:layout_height="50dp"
-                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:gravity="right"
                 android:text="类型选择" />
         
             <Spinner
                 android:id="@+id/type"
                 android:layout_width="200dp"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"/>
         </LinearLayout>
         
@@ -78,12 +57,15 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginTop="20dp"
+            android:gravity="center"
             android:orientation="horizontal">
+            
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="70dp"
-                android:layout_height="50dp"
-                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:gravity="right"
                 android:text="帐号" />
         
             <EditText
@@ -101,12 +83,15 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginTop="20dp"
+            android:gravity="center"
             android:orientation="horizontal">
+            
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="70dp"
-                android:layout_height="50dp"
-                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:gravity="right"
                 android:text="密码" />
         
             <EditText
@@ -117,6 +102,7 @@
                 android:layout_marginLeft="10dp"
                 android:ems="10" />
         </LinearLayout>
+        
         <Button
             android:id="@+id/sub_btn"
             android:layout_width="300dp"
@@ -125,4 +111,5 @@
             android:layout_marginLeft="10dp"
             android:text="提交" />
     </LinearLayout>
+    
 </RelativeLayout>

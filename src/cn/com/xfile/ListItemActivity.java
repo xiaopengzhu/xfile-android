@@ -25,6 +25,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import cn.com.lib.RefreshableView;
+import cn.com.lib.RefreshableView.PullToRefreshListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -39,6 +41,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -52,10 +55,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.SimpleAdapter.ViewBinder;
 
+/**
+ * 查看列表中的一项
+ * @author Administrator
+ *
+ */
 public class ListItemActivity extends Activity{
     private ListView listview;
     private SimpleAdapter simpleadapter;
     private List<HashMap<String, Object>> data;
+    private RefreshableView refreshableView; 
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +76,9 @@ public class ListItemActivity extends Activity{
         final String tid = intent.getStringExtra("tid");
         
         MyApp myapp = (MyApp)getApplication();
-        String mid = myapp.getData("id").toString();
+        String mid = myapp.getData("id").toString(); //获取UID
         String url = "http://www.xpcms.net/mobile.php/api/getRecords/tid/" + tid + "/mid/" + mid;
+        
         data = getData(url);
         
         simpleadapter = new SimpleAdapter(this, data,
@@ -180,6 +190,21 @@ public class ListItemActivity extends Activity{
                 return false;
             }
         });
+        
+        //下拉刷新
+        refreshableView = (RefreshableView) findViewById(R.id.refreshable_view);
+        refreshableView.setOnRefreshListener(new PullToRefreshListener() {
+            @Override
+            public void onRefresh() {
+                try {
+                    Thread.sleep(3000);
+                    //刷新数据逻辑
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                refreshableView.finishRefreshing();
+            }
+        }, 0);
     }
     
     

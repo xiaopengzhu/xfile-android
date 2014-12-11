@@ -26,6 +26,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * 登录
+ * @author Administrator
+ *
+ */
 public class LoginActivity extends Activity{
     private Button login_btn;
 

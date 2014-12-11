@@ -12,11 +12,18 @@ import android.view.View.OnClickListener;
 import android.widget.RadioButton;
 import android.widget.TabHost;
 
+/**
+ * 主框架
+ * @author Administrator
+ *
+ */
 @SuppressWarnings("deprecation")
 public class XfileActivity extends TabActivity {
-    TabHost tabHost;
+    //底部选项卡
+	private TabHost tabHost;
     private RadioButton tab_list, tab_notice, tab_message,
             tab_myhome, tab_more;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +39,7 @@ public class XfileActivity extends TabActivity {
         tab_message = (RadioButton) findViewById(R.id.tab_message);
         tab_myhome = (RadioButton) findViewById(R.id.tab_myhome);
         tab_more = (RadioButton) findViewById(R.id.tab_more);
+        
         tab_list.setOnClickListener(new OnClickListener() {
 
             public void onClick(View view) {
@@ -45,12 +53,14 @@ public class XfileActivity extends TabActivity {
                 tabHost.setCurrentTabByTag("notice");
             }
         });
+        
         tab_message.setOnClickListener(new OnClickListener() {
 
             public void onClick(View view) {
                 tabHost.setCurrentTabByTag("message");
             }
         });
+        
         tab_myhome.setOnClickListener(new OnClickListener() {
 
             public void onClick(View view) {
@@ -58,6 +68,7 @@ public class XfileActivity extends TabActivity {
 
             }
         });
+        
         tab_more.setOnClickListener(new OnClickListener() {
 
             public void onClick(View view) {

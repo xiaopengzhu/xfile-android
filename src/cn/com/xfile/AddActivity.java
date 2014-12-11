@@ -32,6 +32,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+/**
+ * 添加记录
+ * @author Administrator
+ *
+ */
 public class AddActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {

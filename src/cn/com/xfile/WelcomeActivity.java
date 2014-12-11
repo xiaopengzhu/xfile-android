@@ -16,6 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+/**
+ * 登录欢迎ListView
+ * @author Administrator
+ *
+ */
 public class WelcomeActivity extends Activity{
     
     @Override

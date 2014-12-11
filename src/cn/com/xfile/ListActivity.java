@@ -21,7 +21,6 @@ import org.json.JSONTokener;
 
 import cn.com.lib.RefreshableView;
 import cn.com.lib.RefreshableView.PullToRefreshListener;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -34,6 +33,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -42,10 +42,15 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleAdapter.ViewBinder;
 
+/**
+ * 记录列表
+ * @author Administrator
+ *
+ */
 public class ListActivity extends Activity{
-    private String url = "http://www.xpcms.net/mobile.php/api/getTypes";
+    //数据接口
+	private String url = "http://www.xpcms.net/mobile.php/api/getTypes";
     private ListView listview;
-    RefreshableView refreshableView; 
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,7 @@ public class ListActivity extends Activity{
                 R.layout.activity_list_item,
                 new String[]{"id", "name", "icon"}, 
                 new int[]{R.id.item_id, R.id.item_name, R.id.item_icon});
+        
         simpleadapter.setViewBinder(new ViewBinder() {
             
             @Override
@@ -73,6 +79,7 @@ public class ListActivity extends Activity{
         
         listview = (ListView)findViewById(R.id.listview);
         listview.setAdapter(simpleadapter);
+        
         //选项点击事件    
         listview.setOnItemClickListener(new OnItemClickListener() {
 
@@ -89,20 +96,6 @@ public class ListActivity extends Activity{
                 startActivity(intent);
             }
         });
-        //下拉刷新
-        refreshableView = (RefreshableView) findViewById(R.id.refreshable_view);
-        refreshableView.setOnRefreshListener(new PullToRefreshListener() {
-            @Override
-            public void onRefresh() {
-                try {
-                    Thread.sleep(3000);
-                    //刷新数据逻辑
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                refreshableView.finishRefreshing();
-            }
-        }, 0);
     }
     
     

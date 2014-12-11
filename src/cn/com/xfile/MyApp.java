@@ -6,6 +6,11 @@ import java.util.Map;
 
 import android.app.Application;
 
+/**
+ * 公共全局
+ * @author Administrator
+ *
+ */
 public class MyApp extends Application{
     private Map<String, Object> myData;
     
