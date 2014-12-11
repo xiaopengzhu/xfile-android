@@ -3,10 +3,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/new4" >
-    <Button 
-        android:layout_width="120dp"
-        android:layout_height="fill_parent"
-        android:text="开始"
-        android:onClick="startButton"/>
+
+    <Button
+    	android:layout_width="fill_parent"
+    	android:layout_height="100dp"
+    	android:layout_alignParentBottom="true"
+    	android:onClick="startButton"
+    	android:text="开始" />
 
 </RelativeLayout>
