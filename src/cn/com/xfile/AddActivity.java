@@ -109,6 +109,7 @@ public class AddActivity extends Activity{
                     HttpResponse response = httpclient.execute(post);
                     if (response.getStatusLine().getStatusCode() == 200)
                         Toast.makeText(AddActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                        //返回
                 } catch (UnsupportedEncodingException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
