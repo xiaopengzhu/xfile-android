@@ -48,6 +48,7 @@ public class AddActivity extends Activity{
         String id = intent.getStringExtra("id");
         Spinner type = (Spinner)findViewById(R.id.type);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getData("http://www.xpcms.net/mobile.php/api/getTypes/pid/" + tid));
+        adapter.setDropDownViewResource(R.layout.activity_add_spinner_item);
         type.setAdapter(adapter);
         
         

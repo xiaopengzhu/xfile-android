@@ -18,7 +18,10 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +36,9 @@ import android.widget.Toast;
  */
 public class LoginActivity extends Activity{
     private Button login_btn;
+    //首次登录
+    private SharedPreferences preferences;
+    private Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,18 +73,27 @@ public class LoginActivity extends Activity{
                         if (str!=null) {
                             JSONObject line = new JSONObject(new JSONTokener(str));
                             int code = Integer.parseInt(line.getString("code")); 
-                            if (code ==1) {
+                            if (code ==1) {//登录成功
                                 int id = Integer.parseInt(line.getJSONObject("data").getString("id"));
                                 //存入全局变量
                                 MyApp appCookies = (MyApp) getApplication();
                                 appCookies.setData("id", id);
-                                Intent intent = new Intent();
-                                intent.setClass(LoginActivity.this, XfileActivity.class);
-                                startActivity(intent);
+                                
+                                //启动判断
+                                preferences = getSharedPreferences("phone", Context.MODE_PRIVATE); 
+                                if (preferences.getBoolean("firststart", true)) {//首次启动进行欢迎页面
+                                	editor = preferences.edit();
+                                	editor.putBoolean("firststart", false);
+                                	editor.commit();
+                                	Intent intent = new Intent();
+                                    intent.setClass(LoginActivity.this, WelcomeActivity.class);
+                                    startActivity(intent);
+                                } else {
+                                	Intent intent = new Intent();
+                                	intent.setClass(LoginActivity.this, XfileActivity.class);
+                                	startActivity(intent);
+                                }
                             } else {
-                                Intent intent = new Intent();
-                                intent.setClass(LoginActivity.this, WelcomeActivity.class);
-                                startActivity(intent);
                                 Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
                             }
                         } else {

@@ -6,4 +6,5 @@
      <item type="drawable" name="list_row_mormal">#ffffffff</item>
     <item type="drawable" name="list_row_zeng">#fffffddd</item>
     <item type="drawable" name="list_row_pressed">#ffeeeeee</item>
+    
 </resources>

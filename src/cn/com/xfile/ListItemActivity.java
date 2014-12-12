@@ -42,6 +42,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -51,6 +52,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.SimpleAdapter.ViewBinder;
@@ -65,6 +67,7 @@ public class ListItemActivity extends Activity{
     private SimpleAdapter simpleadapter;
     private List<HashMap<String, Object>> data;
     private RefreshableView refreshableView; 
+    private float start, end, distance;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +78,9 @@ public class ListItemActivity extends Activity{
         Intent intent = getIntent();
         final String tid = intent.getStringExtra("tid");
         
+        //获取UID
         MyApp myapp = (MyApp)getApplication();
-        String mid = myapp.getData("id").toString(); //获取UID
+        String mid = myapp.getData("id").toString();
         String url = "http://www.xpcms.net/mobile.php/api/getRecords/tid/" + tid + "/mid/" + mid;
         
         data = getData(url);
@@ -198,6 +202,7 @@ public class ListItemActivity extends Activity{
             public void onRefresh() {
                 try {
                     Thread.sleep(3000);
+                    simpleadapter.notifyDataSetChanged();
                     //刷新数据逻辑
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -205,10 +210,30 @@ public class ListItemActivity extends Activity{
                 refreshableView.finishRefreshing();
             }
         }, 0);
+        
+        
     }
     
     
-    private List<HashMap<String, Object>> getData(String url) {
+    @Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// TODO Auto-generated method stub
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			start = event.getY();
+			break;
+        case MotionEvent.ACTION_UP:
+			end = event.getY();
+			distance = end - start;
+			break;
+		default:
+			break;
+		}
+		return distance > 200;
+	}
+
+
+	private List<HashMap<String, Object>> getData(String url) {
         ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
         HashMap<String, Object> map = null;
         

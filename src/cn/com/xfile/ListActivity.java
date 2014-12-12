@@ -37,6 +37,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -50,7 +51,7 @@ import android.widget.SimpleAdapter.ViewBinder;
 public class ListActivity extends Activity{
     //数据接口
 	private String url = "http://www.xpcms.net/mobile.php/api/getTypes";
-    private ListView listview;
+    private GridView gridview;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,18 +78,18 @@ public class ListActivity extends Activity{
             }
         });
         
-        listview = (ListView)findViewById(R.id.listview);
-        listview.setAdapter(simpleadapter);
+        gridview = (GridView)findViewById(R.id.gridview);
+        gridview.setAdapter(simpleadapter);
         
         //选项点击事件    
-        listview.setOnItemClickListener(new OnItemClickListener() {
+        gridview.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                     long arg3) {
                 // TODO Auto-generated method stub
                 @SuppressWarnings("unchecked")
-                HashMap<String, Object> map = (HashMap<String, Object>) listview.getItemAtPosition(arg2);
+                HashMap<String, Object> map = (HashMap<String, Object>) gridview.getItemAtPosition(arg2);
                 String id = (String) map.get("id");
                 Intent intent = new Intent();
                 intent.setClass(ListActivity.this, ListItemActivity.class);

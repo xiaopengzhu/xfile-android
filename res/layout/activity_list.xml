@@ -29,10 +29,18 @@
         
     </RelativeLayout>
         
-    <ListView
-        android:id="@+id/listview" 
+    <GridView
+        android:id="@+id/gridview" 
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:columnWidth="100dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:horizontalSpacing="10dp"
+        android:verticalSpacing="10dp"
+        android:gravity="center"
         android:layout_below="@id/top_relative" />
 
 </RelativeLayout>

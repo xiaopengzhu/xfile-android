@@ -50,7 +50,9 @@
         <ListView
             android:id="@+id/listlistview" 
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent"
+            android:divider="#ccc"
+            android:dividerHeight="2px"/>
 
     </cn.com.lib.RefreshableView>
 </RelativeLayout>

@@ -9,7 +9,7 @@
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_margin="10dp"
-        android:src="@drawable/about_page_mor" />
+        android:src="@null" />
     <LinearLayout 
         android:layout_width="fill_parent"
         android:layout_height="60dp"
