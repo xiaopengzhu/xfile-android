@@ -41,6 +41,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -67,28 +68,34 @@ public class ListItemActivity extends Activity{
     private SimpleAdapter simpleadapter;
     private List<HashMap<String, Object>> data;
     private RefreshableView refreshableView; 
-    private float start, end, distance;
+    private Handler mHandler;
+    private Runnable runnabelData;
+    private String url;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_list);
+        //主线程
+        mHandler = new Handler();
         
         //获取转入数据
         Intent intent = getIntent();
         final String tid = intent.getStringExtra("tid");
+        TextView tv2 = (TextView)findViewById(R.id.type_id);
+        tv2.setText(tid);
         
         //获取UID
         MyApp myapp = (MyApp)getApplication();
         String mid = myapp.getData("id").toString();
-        String url = "http://www.xpcms.net/mobile.php/api/getRecords/tid/" + tid + "/mid/" + mid;
+        url = "http://www.xpcms.net/mobile.php/api/getRecords/tid/" + tid + "/mid/" + mid;
         
         data = getData(url);
         
         simpleadapter = new SimpleAdapter(this, data,
                 R.layout.activity_list_list_item,
-                new String[]{"id", "account", "password", "icon"}, 
-                new int[]{R.id.item_id, R.id.item_account, R.id.item_password, R.id.item_icon});
+                new String[]{"id", "type_name",  "account", "password", "icon"}, 
+                new int[]{R.id.item_id, R.id.type_name, R.id.item_account, R.id.item_password, R.id.item_icon});
         simpleadapter.setViewBinder(new ViewBinder() {
             
             @Override
@@ -128,10 +135,12 @@ public class ListItemActivity extends Activity{
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                     long arg3) {
                 // TODO Auto-generated method stub
-                TextView tv = (TextView)findViewById(R.id.item_id);
-                String id = tv.getText().toString();
+                String id = data.get(arg2).get("id").toString();
+                TextView tv = (TextView)findViewById(R.id.type_id); 
+                String tid = tv.getText().toString();
                 Intent intent = new Intent();
                 intent.putExtra("id", id);
+                intent.putExtra("tid", tid);
                 intent.setClass(ListItemActivity.this, AddActivity.class);
                 startActivity(intent);
             }
@@ -145,8 +154,7 @@ public class ListItemActivity extends Activity{
                     int arg2, long arg3) {
                 final int index  = arg2;
                 // TODO Auto-generated method stub
-                TextView tv = (TextView)findViewById(R.id.item_id);
-                final String id = tv.getText().toString();
+                final String id = data.get(index).get("id").toString();
                 new AlertDialog.Builder(ListItemActivity.this).setTitle("删除记录").
                 setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     
@@ -191,9 +199,23 @@ public class ListItemActivity extends Activity{
                         
                     }
                 }).show();
-                return false;
+                
+                //返回true则不会再次触发ItemClick
+                return true;
             }
         });
+        
+        //更新数据
+        runnabelData = new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				data.clear();
+				data.addAll(getData(url));
+				simpleadapter.notifyDataSetChanged();
+			}
+		};
         
         //下拉刷新
         refreshableView = (RefreshableView) findViewById(R.id.refreshable_view);
@@ -201,8 +223,8 @@ public class ListItemActivity extends Activity{
             @Override
             public void onRefresh() {
                 try {
-                    Thread.sleep(3000);
-                    simpleadapter.notifyDataSetChanged();
+                    Thread.sleep(2000);
+                    mHandler.post(runnabelData);
                     //刷新数据逻辑
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -211,27 +233,9 @@ public class ListItemActivity extends Activity{
             }
         }, 0);
         
+
         
     }
-    
-    
-    @Override
-	public boolean onTouchEvent(MotionEvent event) {
-		// TODO Auto-generated method stub
-		switch (event.getAction()) {
-		case MotionEvent.ACTION_DOWN:
-			start = event.getY();
-			break;
-        case MotionEvent.ACTION_UP:
-			end = event.getY();
-			distance = end - start;
-			break;
-		default:
-			break;
-		}
-		return distance > 200;
-	}
-
 
 	private List<HashMap<String, Object>> getData(String url) {
         ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
@@ -246,6 +250,8 @@ public class ListItemActivity extends Activity{
             for (int i =0; i<line.length();i++) {
                 map = new HashMap<String, Object>();
                 map.put("id", line.getJSONObject(i).getString("id"));
+                map.put("type_id", line.getJSONObject(i).getJSONObject("type").getString("id"));
+                map.put("type_name", line.getJSONObject(i).getJSONObject("type").getString("name"));
                 map.put("account", line.getJSONObject(i).getString("account"));
                 map.put("password", line.getJSONObject(i).getString("password"));
                 JSONObject type = line.getJSONObject(i).getJSONObject("type");
@@ -303,4 +309,5 @@ public class ListItemActivity extends Activity{
         }
         return img;
     }
+
 }

@@ -3,6 +3,7 @@ package cn.com.xfile;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -19,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
 
 
 import android.app.Activity;
@@ -38,13 +40,15 @@ import android.widget.Toast;
  *
  */
 public class AddActivity extends Activity{
+	private String tid;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         Intent intent = getIntent();
-        String tid = intent.getStringExtra("tid");
+        tid = intent.getStringExtra("tid");
         String id = intent.getStringExtra("id");
         Spinner type = (Spinner)findViewById(R.id.type);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getData("http://www.xpcms.net/mobile.php/api/getTypes/pid/" + tid));
@@ -110,6 +114,11 @@ public class AddActivity extends Activity{
                     if (response.getStatusLine().getStatusCode() == 200)
                         Toast.makeText(AddActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
                         //返回
+	                    Intent intent = new Intent();
+	                    intent.setClass(AddActivity.this, ListItemActivity.class);
+	                    intent.putExtra("tid", tid);
+	                    startActivity(intent);
+	                    finish();
                 } catch (UnsupportedEncodingException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

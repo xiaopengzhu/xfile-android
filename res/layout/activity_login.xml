@@ -36,10 +36,10 @@
     	
     <Button
         android:id="@+id/login_btn"
+        style="\@style/common_button"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/android_big_button_x"
         android:gravity="center"
         android:text="@string/login"
         android:textColor="#ff000000"
@@ -47,11 +47,11 @@
 
     <Button
         android:id="@+id/reg_btn"
+        style="\@style/common_button"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:background="@drawable/android_big_button_x"
         android:gravity="center"
         android:text="@string/register"
         android:textColor="#ff000000"

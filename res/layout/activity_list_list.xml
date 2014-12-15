@@ -55,5 +55,11 @@
             android:dividerHeight="2px"/>
 
     </cn.com.lib.RefreshableView>
+    
+    <TextView 
+    	android:id="@+id/type_id"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:visibility="gone"/>
 </RelativeLayout>
 
