@@ -2,7 +2,9 @@ package cn.com.xfile;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,6 +25,9 @@ import org.json.JSONTokener;
 
 
 
+
+
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,6 +37,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -41,6 +47,7 @@ import android.widget.Toast;
  */
 public class AddActivity extends Activity{
 	private String tid;
+	private ArrayList<String> data;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +58,8 @@ public class AddActivity extends Activity{
         tid = intent.getStringExtra("tid");
         String id = intent.getStringExtra("id");
         Spinner type = (Spinner)findViewById(R.id.type);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getData("http://www.xpcms.net/mobile.php/api/getTypes/pid/" + tid));
+        data = getData("http://www.xpcms.net/mobile.php/api/getTypes/pid/"+tid);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, data);
         adapter.setDropDownViewResource(R.layout.activity_add_spinner_item);
         type.setAdapter(adapter);
         
@@ -64,8 +72,18 @@ public class AddActivity extends Activity{
             HttpResponse response = client.execute(get);
             String str = EntityUtils.toString(response.getEntity());
             JSONObject line = new JSONObject(new JSONTokener(str));
-            if (line!=null) {
-                type.setSelection(1);
+            if (line!=null) {//编辑模式
+            	TextView titleText = (TextView)findViewById(R.id.titleText);
+            	titleText.setText("编辑");
+            	TextView record_id = (TextView)findViewById(R.id.record_id);
+            	record_id.setText(line.getString("id"));
+            	
+            	//下拉选中
+            	int index = Arrays.binarySearch(data.toArray(), line.getString("type"));
+            	if (index >= 0) {
+            		type.setSelection(index);
+            	}
+                
                 EditText account = (EditText)findViewById(R.id.account);
                 account.setText(line.getString("account"));
                 EditText password = (EditText)findViewById(R.id.password);
@@ -82,7 +100,7 @@ public class AddActivity extends Activity{
             e.printStackTrace();
         }
         
-        //添加
+        //提交
         Button sub_btn = (Button)findViewById(R.id.sub_btn);
         sub_btn.setOnClickListener(new View.OnClickListener() {
             
@@ -90,10 +108,12 @@ public class AddActivity extends Activity{
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 List<NameValuePair> list = new ArrayList<NameValuePair>();
+                TextView id = (TextView)findViewById(R.id.record_id);
                 EditText account = (EditText)findViewById(R.id.account);
                 EditText password = (EditText)findViewById(R.id.password);
                 Spinner type = (Spinner)findViewById(R.id.type);
                 
+                NameValuePair pair0 = new BasicNameValuePair("id", id.getText().toString());
                 NameValuePair pair1 = new BasicNameValuePair("account", account.getText().toString());
                 NameValuePair pair2 = new BasicNameValuePair("password", password.getText().toString());
                 NameValuePair pair3 = new BasicNameValuePair("type", type.getSelectedItem().toString());
@@ -101,6 +121,7 @@ public class AddActivity extends Activity{
                 MyApp myapp = (MyApp) getApplication();
                 NameValuePair pair4 = new BasicNameValuePair("mid", myapp.getData("id").toString());
                 
+                list.add(pair0);
                 list.add(pair1);
                 list.add(pair2);
                 list.add(pair3);
@@ -111,14 +132,11 @@ public class AddActivity extends Activity{
                     HttpPost post = new HttpPost("http://www.xpcms.net/mobile.php/api/addRecord");
                     post.setEntity(entity);
                     HttpResponse response = httpclient.execute(post);
-                    if (response.getStatusLine().getStatusCode() == 200)
-                        Toast.makeText(AddActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                    if (response.getStatusLine().getStatusCode() == 200) {
                         //返回
-	                    Intent intent = new Intent();
-	                    intent.setClass(AddActivity.this, ListItemActivity.class);
-	                    intent.putExtra("tid", tid);
-	                    startActivity(intent);
 	                    finish();
+	                    Toast.makeText(AddActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                    }
                 } catch (UnsupportedEncodingException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

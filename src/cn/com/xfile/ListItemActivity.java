@@ -237,6 +237,16 @@ public class ListItemActivity extends Activity{
         
     }
 
+	@Override
+	/**
+	 * 返回时调用此方法刷新
+	 */
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		mHandler.post(runnabelData);
+	}
+
 	private List<HashMap<String, Object>> getData(String url) {
         ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
         HashMap<String, Object> map = null;

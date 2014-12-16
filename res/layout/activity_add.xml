@@ -20,7 +20,7 @@
 	        android:singleLine="true"
 	        android:text="@string/add"
 	        android:textColor="@color/white"
-	        android:textSize="15dp" />
+	        android:textSize="15sp" />
 
     </RelativeLayout>
 
@@ -56,6 +56,13 @@
             android:hint="请输入密码"
             android:layout_marginTop="10dp"
             android:ems="10" />
+        
+        <TextView 
+        	android:id="@+id/record_id"
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:text="@null"
+        	android:visibility="gone"/>
         
         <Button
             android:id="@+id/sub_btn"
