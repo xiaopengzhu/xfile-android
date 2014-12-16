@@ -43,6 +43,7 @@
         android:gravity="center"
         android:text="@string/login"
         android:textColor="#ff000000"
+        android:onClick="login"
         android:textSize="16.0sp" />
 
     <Button

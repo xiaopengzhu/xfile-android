@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor.DiscardOldestPolicy;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -29,6 +30,7 @@ import cn.com.lib.RefreshableView;
 import cn.com.lib.RefreshableView.PullToRefreshListener;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -71,11 +73,15 @@ public class ListItemActivity extends Activity{
     private Handler mHandler;
     private Runnable runnabelData;
     private String url;
+    static ProgressDialog progressDialog;
+    private float yStart, yMove, yEnd, distance;
+    
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_list);
+        
         //主线程
         mHandler = new Handler();
         
@@ -90,30 +96,11 @@ public class ListItemActivity extends Activity{
         String mid = myapp.getData("id").toString();
         url = "http://www.xpcms.net/mobile.php/api/getRecords/tid/" + tid + "/mid/" + mid;
         
-        data = getData(url);
-        
-        simpleadapter = new SimpleAdapter(this, data,
-                R.layout.activity_list_list_item,
-                new String[]{"id", "type_name",  "account", "password", "icon"}, 
-                new int[]{R.id.item_id, R.id.type_name, R.id.item_account, R.id.item_password, R.id.item_icon});
-        simpleadapter.setViewBinder(new ViewBinder() {
-            
-            @Override
-            public boolean setViewValue(View view, Object data,
-                    String textRepresentation) {
-                // TODO Auto-generated method stub
-                if (view instanceof ImageView && data instanceof Bitmap) {
-                    ImageView iv = (ImageView) view;
-                    iv.setImageBitmap((Bitmap)data);
-                    return true;
-                } else 
-                return false;
-            }
-        });
+        //Loading
+        progressDialog = ProgressDialog.show(this, "Loading...", "please wait", true, false);
         
         listview = (ListView)findViewById(R.id.listlistview);
-        listview.setAdapter(simpleadapter);
-
+        
         //添加事件
         Button add_btn = (Button)findViewById(R.id.add_btn);
         add_btn.setOnClickListener(new OnClickListener() {
@@ -152,7 +139,11 @@ public class ListItemActivity extends Activity{
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                     int arg2, long arg3) {
-                final int index  = arg2;
+                //如果是下拉就返回
+            	if (distance > 20) return true;
+            	
+            	//长按
+            	final int index  = arg2;
                 // TODO Auto-generated method stub
                 final String id = data.get(index).get("id").toString();
                 new AlertDialog.Builder(ListItemActivity.this).setTitle("删除记录").
@@ -204,37 +195,75 @@ public class ListItemActivity extends Activity{
                 return true;
             }
         });
-        
-        //更新数据
-        runnabelData = new Runnable() {
+       
+        //异步加载
+        Runnable run = new Runnable() {
 			
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				data.clear();
-				data.addAll(getData(url));
-				simpleadapter.notifyDataSetChanged();
+				data = getData(url);
+				simpleadapter = new SimpleAdapter(getApplicationContext(), data,
+		                R.layout.activity_list_list_item,
+		                new String[]{"id", "type_name",  "account", "password", "icon"}, 
+		                new int[]{R.id.item_id, R.id.type_name, R.id.item_account, R.id.item_password, R.id.item_icon});
+		        simpleadapter.setViewBinder(new ViewBinder() {
+		            
+		            @Override
+		            public boolean setViewValue(View view, Object data,
+		                    String textRepresentation) {
+		                // TODO Auto-generated method stub
+		                if (view instanceof ImageView && data instanceof Bitmap) {
+		                    ImageView iv = (ImageView) view;
+		                    iv.setImageBitmap((Bitmap)data);
+		                    return true;
+		                } else 
+		                return false;
+		            }
+		        });
+				
+				mHandler.post(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						listview.setAdapter(simpleadapter);
+						progressDialog.dismiss();
+					}
+				});
 			}
 		};
-        
-        //下拉刷新
-        refreshableView = (RefreshableView) findViewById(R.id.refreshable_view);
+		
+		new Thread(run).start();
+		
+		//下拉刷新
+		refreshableView = (RefreshableView) findViewById(R.id.refreshable_view);
         refreshableView.setOnRefreshListener(new PullToRefreshListener() {
             @Override
             public void onRefresh() {
-                try {
-                    Thread.sleep(2000);
-                    mHandler.post(runnabelData);
-                    //刷新数据逻辑
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                refreshableView.finishRefreshing();
+                //异步加载
+                Runnable ajax = new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						final List<HashMap<String, Object>> data2 = getData(url);
+						mHandler.post(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								data.clear();
+								data.addAll(data2);
+								simpleadapter.notifyDataSetChanged();
+								refreshableView.finishRefreshing();
+							}
+						});
+					}
+				};
+                new Thread(ajax).start();
             }
         }, 0);
-        
-
-        
     }
 
 	@Override
@@ -320,4 +349,5 @@ public class ListItemActivity extends Activity{
         return img;
     }
 
+    
 }

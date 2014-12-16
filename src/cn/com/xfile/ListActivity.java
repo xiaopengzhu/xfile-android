@@ -22,6 +22,7 @@ import org.json.JSONTokener;
 import cn.com.lib.RefreshableView;
 import cn.com.lib.RefreshableView.PullToRefreshListener;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -33,6 +34,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -50,36 +52,24 @@ import android.widget.SimpleAdapter.ViewBinder;
  */
 public class ListActivity extends Activity{
     //数据接口
-	private String url = "http://www.xpcms.net/mobile.php/api/getTypes";
     private GridView gridview;
+    //数据
+    private List<HashMap<String, Object>> data = null;
+    private SimpleAdapter simpleadapter;
+    //主线程
+    private Handler mHandler;
+    //Loading
+    static ProgressDialog progressDialog;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        
-        SimpleAdapter simpleadapter = new SimpleAdapter(this, getData(),
-                R.layout.activity_list_item,
-                new String[]{"id", "name", "icon"}, 
-                new int[]{R.id.item_id, R.id.item_name, R.id.item_icon});
-        
-        simpleadapter.setViewBinder(new ViewBinder() {
-            
-            @Override
-            public boolean setViewValue(View view, Object data,
-                    String textRepresentation) {
-                // TODO Auto-generated method stub
-                if (view instanceof ImageView && data instanceof Bitmap) {
-                    ImageView iv = (ImageView) view;
-                    iv.setImageBitmap((Bitmap)data);
-                    return true;
-                } else 
-                return false;
-            }
-        });
-        
+		
+		//初始加载空数据
+		progressDialog = ProgressDialog.show(this, "Loading...", "please wait", true, false);
         gridview = (GridView)findViewById(R.id.gridview);
-        gridview.setAdapter(simpleadapter);
+        
         
         //选项点击事件    
         gridview.setOnItemClickListener(new OnItemClickListener() {
@@ -97,6 +87,46 @@ public class ListActivity extends Activity{
                 startActivity(intent);
             }
         });
+        
+        //异步加载服务器数据
+        mHandler = new Handler();
+        Runnable run = new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				data = getData();
+				simpleadapter = new SimpleAdapter(getApplicationContext(), data,
+		                R.layout.activity_list_item,
+		                new String[]{"id", "name", "icon"}, 
+		                new int[]{R.id.item_id, R.id.item_name, R.id.item_icon});
+		        
+		        simpleadapter.setViewBinder(new ViewBinder() {
+		            
+		            @Override
+		            public boolean setViewValue(View view, Object data,
+		                    String textRepresentation) {
+		                // TODO Auto-generated method stub
+		                if (view instanceof ImageView && data instanceof Bitmap) {
+		                    ImageView iv = (ImageView) view;
+		                    iv.setImageBitmap((Bitmap)data);
+		                    return true;
+		                } else 
+		                return false;
+		            }
+		        });
+				mHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						gridview.setAdapter(simpleadapter);
+						progressDialog.dismiss();
+					}
+				});
+			}
+		};
+        
+		new Thread(run).start();
     }
     
     
@@ -104,6 +134,7 @@ public class ListActivity extends Activity{
         ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
         HashMap<String, Object> map = null;
         
+        String url = "http://www.xpcms.net/mobile.php/api/getTypes";
         HttpGet get = new HttpGet(url);
         HttpClient client = new DefaultHttpClient();
         try {
