@@ -12,7 +12,8 @@
             android:id="@android:id/tabcontent"
             android:layout_width="fill_parent"
             android:layout_height="0.0dip"
-            android:layout_weight="1.0" />
+            android:layout_weight="1.0"
+            android:background="#ffefebe7" />
         <TabWidget
             android:id="@android:id/tabs"
             android:layout_width="fill_parent"
@@ -24,15 +25,20 @@
             android:id="@+id/console_line_bottom"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/main_navigation_background"
-            android:orientation="horizontal" >
+            android:background="#ffefebe7"
+            android:orientation="vertical" >
+            
+        	<TextView 
+        		android:layout_width="fill_parent"
+        		android:layout_height="1dp"
+        		android:background="#999"/>
 
             <RadioGroup
                 android:id="@+id/main_tab_group"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:background="@drawable/main_navigation_background"
+                android:background="#081f4e"
                 android:gravity="bottom"
                 android:orientation="horizontal" >
 

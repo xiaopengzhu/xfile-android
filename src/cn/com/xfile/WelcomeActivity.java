@@ -1,9 +1,7 @@
 package cn.com.xfile;
 
 import java.util.ArrayList;
-import java.util.Currency;
-import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +21,8 @@ import android.widget.ImageView;
  */
 public class WelcomeActivity extends Activity{
     
-    @Override
+    @SuppressLint("InflateParams")
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);

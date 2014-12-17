@@ -1,12 +1,12 @@
 package cn.com.lib;
 
 import cn.com.xfile.R;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -174,7 +174,8 @@ public class RefreshableView extends LinearLayout implements OnTouchListener {
      * @param context
      * @param attrs
      */
-    public RefreshableView(Context context, AttributeSet attrs) {
+    @SuppressLint("InflateParams")
+	public RefreshableView(Context context, AttributeSet attrs) {
         super(context, attrs);
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         header = LayoutInflater.from(context).inflate(R.layout.pull_to_refresh, null, true);
@@ -207,7 +208,8 @@ public class RefreshableView extends LinearLayout implements OnTouchListener {
     /**
      * 当ListView被触摸时调用，其中处理了各种下拉刷新的具体逻辑。
      */
-    @Override
+    @SuppressLint("ClickableViewAccessibility")
+	@Override
     public boolean onTouch(View v, MotionEvent event) {
         setIsAbleToPull(event);
         if (ableToPull) {
