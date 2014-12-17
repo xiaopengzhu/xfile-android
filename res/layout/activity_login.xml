@@ -36,7 +36,6 @@
     	
     <Button
         android:id="@+id/login_btn"
-        style="\@style/common_button"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -48,7 +47,6 @@
 
     <Button
         android:id="@+id/reg_btn"
-        style="\@style/common_button"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

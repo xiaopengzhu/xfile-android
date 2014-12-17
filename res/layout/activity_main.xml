@@ -22,8 +22,8 @@
 
         <LinearLayout
             android:id="@+id/console_line_bottom"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/main_navigation_background"
             android:orientation="horizontal" >
 
@@ -34,8 +34,7 @@
                 android:layout_gravity="bottom"
                 android:background="@drawable/main_navigation_background"
                 android:gravity="bottom"
-                android:orientation="horizontal"
-                android:paddingTop="2.0dip" >
+                android:orientation="horizontal" >
 
                 <RadioButton
                     android:id="@+id/tab_list"
@@ -55,12 +54,6 @@
                     style="@style/main_tab_bottom"
                     android:drawableTop="@drawable/main_navigation_car"
                     android:text="@string/tab_message" />
-
-                <RadioButton
-                    android:id="@+id/tab_myhome"
-                    style="@style/main_tab_bottom"
-                    android:drawableTop="@drawable/main_navigation_personal"
-                    android:text="@string/tab_myhome" />
 
                 <RadioButton
                     android:id="@+id/tab_more"

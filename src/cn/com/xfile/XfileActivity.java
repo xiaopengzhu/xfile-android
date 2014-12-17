@@ -21,8 +21,7 @@ import android.widget.TabHost;
 public class XfileActivity extends TabActivity {
     //底部选项卡
 	private TabHost tabHost;
-    private RadioButton tab_list, tab_notice, tab_message,
-            tab_myhome, tab_more;
+    private RadioButton tab_list, tab_notice, tab_message, tab_more;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,6 @@ public class XfileActivity extends TabActivity {
         tab_list=(RadioButton)findViewById(R.id.tab_list);
         tab_notice = (RadioButton) findViewById(R.id.tab_notice);
         tab_message = (RadioButton) findViewById(R.id.tab_message);
-        tab_myhome = (RadioButton) findViewById(R.id.tab_myhome);
         tab_more = (RadioButton) findViewById(R.id.tab_more);
         
         tab_list.setOnClickListener(new OnClickListener() {
@@ -61,14 +59,6 @@ public class XfileActivity extends TabActivity {
             }
         });
         
-        tab_myhome.setOnClickListener(new OnClickListener() {
-
-            public void onClick(View view) {
-                tabHost.setCurrentTabByTag("myhome");
-
-            }
-        });
-        
         tab_more.setOnClickListener(new OnClickListener() {
 
             public void onClick(View view) {
@@ -86,8 +76,6 @@ public class XfileActivity extends TabActivity {
                 .setContent(new Intent(this, NoticeActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("message").setIndicator("message")
                 .setContent(new Intent(this, MessageActivity.class)));
-        tabHost.addTab(tabHost.newTabSpec("myhome").setIndicator("myhome")
-                .setContent(new Intent(this, MyhomeActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("more").setIndicator("more")
                 .setContent(new Intent(this, MoreActivity.class)));
     }
