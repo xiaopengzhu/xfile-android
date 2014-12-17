@@ -59,7 +59,7 @@ public class LoginActivity extends Activity{
 
     public void login(View v) {
         //加载Loading界面
-    	progressDialog = ProgressDialog.show(this, "Loading...", "please wait", true, false);
+    	progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
     	
     	//设计任务
         Runnable login = new Runnable() {

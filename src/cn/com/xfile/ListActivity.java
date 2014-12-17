@@ -67,9 +67,9 @@ public class ListActivity extends Activity{
         setContentView(R.layout.activity_list);
 		
 		//初始加载空数据
-		progressDialog = ProgressDialog.show(this, "Loading...", "please wait", true, false);
+        progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
         gridview = (GridView)findViewById(R.id.gridview);
-        
+        mHandler = new Handler();
         
         //选项点击事件    
         gridview.setOnItemClickListener(new OnItemClickListener() {
@@ -89,7 +89,6 @@ public class ListActivity extends Activity{
         });
         
         //异步加载服务器数据
-        mHandler = new Handler();
         Runnable run = new Runnable() {
 			
 			@Override
@@ -125,7 +124,6 @@ public class ListActivity extends Activity{
 				});
 			}
 		};
-        
 		new Thread(run).start();
     }
     

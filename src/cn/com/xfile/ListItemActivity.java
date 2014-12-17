@@ -71,10 +71,9 @@ public class ListItemActivity extends Activity{
     private List<HashMap<String, Object>> data;
     private RefreshableView refreshableView; 
     private Handler mHandler;
-    private Runnable runnabelData;
+    private Runnable runnabelData, run;
     private String url;
     static ProgressDialog progressDialog;
-    private float yStart, yMove, yEnd, distance;
     
     
     @Override
@@ -82,8 +81,11 @@ public class ListItemActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_list);
         
-        //主线程
+        //控件线程
         mHandler = new Handler();
+        Button add_btn = (Button)findViewById(R.id.add_btn);
+        listview = (ListView)findViewById(R.id.listlistview);
+        refreshableView = (RefreshableView) findViewById(R.id.refreshable_view);
         
         //获取转入数据
         Intent intent = getIntent();
@@ -97,12 +99,49 @@ public class ListItemActivity extends Activity{
         url = "http://www.xpcms.net/mobile.php/api/getRecords/tid/" + tid + "/mid/" + mid;
         
         //Loading
-        progressDialog = ProgressDialog.show(this, "Loading...", "please wait", true, false);
+        progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
         
-        listview = (ListView)findViewById(R.id.listlistview);
+        //异步加载
+        run = new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				data = getData(url);
+				simpleadapter = new SimpleAdapter(getApplicationContext(), data,
+		                R.layout.activity_list_list_item,
+		                new String[]{"id", "type_name",  "account", "password", "icon"}, 
+		                new int[]{R.id.item_id, R.id.type_name, R.id.item_account, R.id.item_password, R.id.item_icon});
+		        simpleadapter.setViewBinder(new ViewBinder() {
+		            
+		            @Override
+		            public boolean setViewValue(View view, Object data,
+		                    String textRepresentation) {
+		                // TODO Auto-generated method stub
+		                if (view instanceof ImageView && data instanceof Bitmap) {
+		                    ImageView iv = (ImageView) view;
+		                    iv.setImageBitmap((Bitmap)data);
+		                    return true;
+		                } else 
+		                return false;
+		            }
+		        });
+				
+				mHandler.post(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						listview.setAdapter(simpleadapter);
+						progressDialog.dismiss();
+					}
+				});
+			}
+		};
+		
+		
         
         //添加事件
-        Button add_btn = (Button)findViewById(R.id.add_btn);
         add_btn.setOnClickListener(new OnClickListener() {
             
             @Override
@@ -139,9 +178,7 @@ public class ListItemActivity extends Activity{
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                     int arg2, long arg3) {
-                //如果是下拉就返回
-            	if (distance > 20) return true;
-            	
+           	
             	//长按
             	final int index  = arg2;
                 // TODO Auto-generated method stub
@@ -195,54 +232,13 @@ public class ListItemActivity extends Activity{
                 return true;
             }
         });
-       
-        //异步加载
-        Runnable run = new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				data = getData(url);
-				simpleadapter = new SimpleAdapter(getApplicationContext(), data,
-		                R.layout.activity_list_list_item,
-		                new String[]{"id", "type_name",  "account", "password", "icon"}, 
-		                new int[]{R.id.item_id, R.id.type_name, R.id.item_account, R.id.item_password, R.id.item_icon});
-		        simpleadapter.setViewBinder(new ViewBinder() {
-		            
-		            @Override
-		            public boolean setViewValue(View view, Object data,
-		                    String textRepresentation) {
-		                // TODO Auto-generated method stub
-		                if (view instanceof ImageView && data instanceof Bitmap) {
-		                    ImageView iv = (ImageView) view;
-		                    iv.setImageBitmap((Bitmap)data);
-		                    return true;
-		                } else 
-		                return false;
-		            }
-		        });
-				
-				mHandler.post(new Runnable() {
-					
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						listview.setAdapter(simpleadapter);
-						progressDialog.dismiss();
-					}
-				});
-			}
-		};
-		
-		new Thread(run).start();
 		
 		//下拉刷新
-		refreshableView = (RefreshableView) findViewById(R.id.refreshable_view);
         refreshableView.setOnRefreshListener(new PullToRefreshListener() {
             @Override
             public void onRefresh() {
                 //异步加载
-                Runnable ajax = new Runnable() {
+                runnabelData = new Runnable() {
 					
 					@Override
 					public void run() {
@@ -261,9 +257,10 @@ public class ListItemActivity extends Activity{
 						});
 					}
 				};
-                new Thread(ajax).start();
+                new Thread(runnabelData).start();
             }
-        }, 0);
+        }, Integer.parseInt(tid));
+
     }
 
 	@Override
@@ -273,7 +270,7 @@ public class ListItemActivity extends Activity{
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		mHandler.post(runnabelData);
+		new Thread(run).start();
 	}
 
 	private List<HashMap<String, Object>> getData(String url) {
@@ -319,8 +316,8 @@ public class ListItemActivity extends Activity{
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             InputStream is = conn.getInputStream();
             img = BitmapFactory.decodeStream(is); 
-            //圆角
             
+            //圆角
             Bitmap output = Bitmap.createBitmap(img.getWidth(), img.getHeight(), Config.ARGB_8888);
             Canvas canvas = new Canvas(output);
             
@@ -348,6 +345,5 @@ public class ListItemActivity extends Activity{
         }
         return img;
     }
-
     
 }

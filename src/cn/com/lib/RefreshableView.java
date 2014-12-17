@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -165,6 +166,7 @@ public class RefreshableView extends LinearLayout implements OnTouchListener {
      * 当前是否可以下拉，只有ListView滚动到头的时候才允许下拉
      */
     private boolean ableToPull;
+   
 
     /**
      * 下拉刷新控件的构造函数，会在运行时动态添加一个下拉头的布局。
@@ -216,6 +218,7 @@ public class RefreshableView extends LinearLayout implements OnTouchListener {
             case MotionEvent.ACTION_MOVE:
                 float yMove = event.getRawY();
                 int distance = (int) (yMove - yDown);
+                
                 // 如果手指是下滑状态，并且下拉头是完全隐藏的，就屏蔽下拉事件
                 if (distance <= 0 && headerLayoutParams.topMargin <= hideHeaderHeight) {
                     return false;
@@ -233,6 +236,7 @@ public class RefreshableView extends LinearLayout implements OnTouchListener {
                     headerLayoutParams.topMargin = (distance / 2) + hideHeaderHeight;
                     header.setLayoutParams(headerLayoutParams);
                 }
+                
                 break;
             case MotionEvent.ACTION_UP:
             default:
@@ -400,7 +404,6 @@ public class RefreshableView extends LinearLayout implements OnTouchListener {
     /**
      * 正在刷新的任务，在此任务中会去回调注册进来的下拉刷新监听器。
      * 
-     * @author guolin
      */
     class RefreshingTask extends AsyncTask<Void, Integer, Void> {
 
@@ -436,7 +439,6 @@ public class RefreshableView extends LinearLayout implements OnTouchListener {
     /**
      * 隐藏下拉头的任务，当未进行下拉刷新或下拉刷新完成后，此任务将会使下拉头重新隐藏。
      * 
-     * @author guolin
      */
     class HideHeaderTask extends AsyncTask<Void, Integer, Integer> {
 
@@ -473,7 +475,7 @@ public class RefreshableView extends LinearLayout implements OnTouchListener {
      * 使当前线程睡眠指定的毫秒数。
      * 
      * @param time
-     *            指定当前线程睡眠多久，以毫秒为单位
+     * 指定当前线程睡眠多久，以毫秒为单位
      */
     private void sleep(int time) {
         try {
@@ -486,7 +488,6 @@ public class RefreshableView extends LinearLayout implements OnTouchListener {
     /**
      * 下拉刷新的监听器，使用下拉刷新的地方应该注册此监听器来获取刷新回调。
      * 
-     * @author guolin
      */
     public interface PullToRefreshListener {
 

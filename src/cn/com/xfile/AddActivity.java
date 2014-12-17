@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -28,9 +29,15 @@ import org.json.JSONTokener;
 
 
 
+
+
+
+
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -48,6 +55,11 @@ import android.widget.Toast;
 public class AddActivity extends Activity{
 	private String tid;
 	private ArrayList<String> data;
+	private Handler mHandler;
+	private Spinner type;
+	private JSONObject line;
+	private String id;
+	static ProgressDialog progressDialog;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,52 +68,84 @@ public class AddActivity extends Activity{
         setContentView(R.layout.activity_add);
         Intent intent = getIntent();
         tid = intent.getStringExtra("tid");
-        String id = intent.getStringExtra("id");
-        Spinner type = (Spinner)findViewById(R.id.type);
-        data = getData("http://www.xpcms.net/mobile.php/api/getTypes/pid/"+tid);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, data);
-        adapter.setDropDownViewResource(R.layout.activity_add_spinner_item);
-        type.setAdapter(adapter);
+        id = intent.getStringExtra("id");
+        type = (Spinner)findViewById(R.id.type);
+        mHandler = new Handler();
+        Button sub_btn = (Button)findViewById(R.id.sub_btn);
         
+        progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
         
-        //记录拉取
-        MyApp myapp = (MyApp)getApplication();
-        HttpGet get = new HttpGet("http://www.xpcms.net/mobile.php/api/getRecord/id/"+id+"/mid/"+myapp.getData("id"));
-        HttpClient client = new DefaultHttpClient();
-        try {
-            HttpResponse response = client.execute(get);
-            String str = EntityUtils.toString(response.getEntity());
-            JSONObject line = new JSONObject(new JSONTokener(str));
-            if (line!=null) {//编辑模式
-            	TextView titleText = (TextView)findViewById(R.id.titleText);
-            	titleText.setText("编辑");
-            	TextView record_id = (TextView)findViewById(R.id.record_id);
-            	record_id.setText(line.getString("id"));
-            	
-            	//下拉选中
-            	int index = Arrays.binarySearch(data.toArray(), line.getString("type"));
-            	if (index >= 0) {
-            		type.setSelection(index);
-            	}
-                
-                EditText account = (EditText)findViewById(R.id.account);
-                account.setText(line.getString("account"));
-                EditText password = (EditText)findViewById(R.id.password);
-                password.setText(line.getString("password"));
-            }
-        } catch (ClientProtocolException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        //异步加载
+        Runnable ajax = new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				//类型列表拉取
+				data = getData("http://www.xpcms.net/mobile.php/api/getTypes/pid/"+tid);
+		        
+				//记录拉取
+				if (id!=null) {
+			        MyApp myapp = (MyApp)getApplication();
+			        HttpGet get = new HttpGet("http://www.xpcms.net/mobile.php/api/getRecord/id/"+id+"/mid/"+myapp.getData("id"));
+			        HttpClient client = new DefaultHttpClient();
+			        
+					try {
+						HttpResponse response = client.execute(get);
+				        String  str = EntityUtils.toString(response.getEntity());
+						line = new JSONObject(new JSONTokener(str)); 
+					} catch (ClientProtocolException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+		    
+				mHandler.post(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
+				        adapter.setDropDownViewResource(R.layout.activity_add_spinner_item);
+				        type.setAdapter(adapter);
+			            
+			            
+			            if (line!=null) {//编辑模式
+			            	TextView titleText = (TextView)findViewById(R.id.titleText);
+			            	TextView record_id = (TextView)findViewById(R.id.record_id);
+			            	EditText account = (EditText)findViewById(R.id.account);
+			                EditText password = (EditText)findViewById(R.id.password);
+			                
+			                titleText.setText("编辑");
+			                try {
+								record_id.setText(line.getString("id"));
+								account.setText(line.getString("account"));
+				                password.setText(line.getString("password"));
+				                String type_name = line.getString("type");
+				                //下拉选中
+				            	int index = Arrays.binarySearch(data.toArray(), type_name);
+				            	if (index >= 0) {
+				            		type.setSelection(index);
+				            	}
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+			            }
+				        progressDialog.dismiss();
+					}
+				});
+			}
+		};
+        new Thread(ajax).start();
         
         //提交
-        Button sub_btn = (Button)findViewById(R.id.sub_btn);
         sub_btn.setOnClickListener(new View.OnClickListener() {
             
             @Override
