@@ -57,6 +57,14 @@
             android:layout_marginTop="10dp"
             android:ems="10" />
         
+        <EditText 
+        	android:id="@+id/remark"
+        	android:layout_marginTop="10dp"
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:inputType="textMultiLine"
+        	android:hint="在此输出备注信息"/>
+        
         <TextView 
         	android:id="@+id/record_id"
         	android:layout_width="fill_parent"

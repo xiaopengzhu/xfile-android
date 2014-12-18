@@ -137,4 +137,9 @@ public class LoginActivity extends Activity{
         //启动新线程
 		new Thread(login).start();
     }
+    
+    public void register(View v) {
+    	Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+    	startActivity(intent);
+    }
 }

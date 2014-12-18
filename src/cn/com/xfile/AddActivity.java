@@ -56,6 +56,9 @@ public class AddActivity extends Activity{
 	private JSONObject line;
 	private String id;
 	static ProgressDialog progressDialog;
+	private EditText account, password,remark;
+	private TextView titleText, record_id;
+	private MyApp myapp;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,12 @@ public class AddActivity extends Activity{
         type = (Spinner)findViewById(R.id.type);
         mHandler = new Handler();
         Button sub_btn = (Button)findViewById(R.id.sub_btn);
+    	titleText = (TextView)findViewById(R.id.titleText);
+    	record_id = (TextView)findViewById(R.id.record_id);
+        account = (EditText)findViewById(R.id.account);
+        password = (EditText)findViewById(R.id.password);
+        remark = (EditText)findViewById(R.id.remark);
+        myapp = (MyApp) getApplication();
         
         progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
         
@@ -110,19 +119,14 @@ public class AddActivity extends Activity{
 						ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
 				        adapter.setDropDownViewResource(R.layout.activity_add_spinner_item);
 				        type.setAdapter(adapter);
-			            
-			            
+			            			            
 			            if (line!=null) {//编辑模式
-			            	TextView titleText = (TextView)findViewById(R.id.titleText);
-			            	TextView record_id = (TextView)findViewById(R.id.record_id);
-			            	EditText account = (EditText)findViewById(R.id.account);
-			                EditText password = (EditText)findViewById(R.id.password);
-			                
 			                titleText.setText("编辑");
 			                try {
 								record_id.setText(line.getString("id"));
 								account.setText(line.getString("account"));
 				                password.setText(line.getString("password"));
+				                remark.setText(line.getString("remark"));
 				                String type_name = line.getString("type");
 				                //下拉选中
 				            	int index = Arrays.binarySearch(data.toArray(), type_name);
@@ -148,24 +152,21 @@ public class AddActivity extends Activity{
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 List<NameValuePair> list = new ArrayList<NameValuePair>();
-                TextView id = (TextView)findViewById(R.id.record_id);
-                EditText account = (EditText)findViewById(R.id.account);
-                EditText password = (EditText)findViewById(R.id.password);
-                Spinner type = (Spinner)findViewById(R.id.type);
                 
-                NameValuePair pair0 = new BasicNameValuePair("id", id.getText().toString());
+                NameValuePair pair0 = new BasicNameValuePair("id", record_id.getText().toString());
                 NameValuePair pair1 = new BasicNameValuePair("account", account.getText().toString());
                 NameValuePair pair2 = new BasicNameValuePair("password", password.getText().toString());
                 NameValuePair pair3 = new BasicNameValuePair("type", type.getSelectedItem().toString());
-                
-                MyApp myapp = (MyApp) getApplication();
-                NameValuePair pair4 = new BasicNameValuePair("mid", myapp.getData("id").toString());
+                NameValuePair pair4 = new BasicNameValuePair("remark", remark.getText().toString());
+                NameValuePair pair5 = new BasicNameValuePair("mid", myapp.getData("id").toString());
                 
                 list.add(pair0);
                 list.add(pair1);
                 list.add(pair2);
                 list.add(pair3);
                 list.add(pair4);
+                list.add(pair5);
+                
                 try {
                     UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
                     DefaultHttpClient httpclient = new DefaultHttpClient();

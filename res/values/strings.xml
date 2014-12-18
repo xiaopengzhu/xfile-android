@@ -4,6 +4,13 @@
     <string name="app_name">绝密档案</string>
     <string name="ActivityMainTitle">绝密档案</string>
     <string name="main_navigation_home">首页</string>
+    
+    <string name="register_title">帐号注册</string>
+    <string name="register_account_tip">请填写帐号</string>
+    <string name="register_password_tip">请填写密码</string>
+    <string name="register_password_again_tip">请再次输入密码</string>
+    <string name="register_submit">提交</string>
+    
     <string name="main_navigation_catagory">分类</string>
     <string name="main_navigation_car">购物车</string>
     <string name="main_code_buy">我的资料</string>

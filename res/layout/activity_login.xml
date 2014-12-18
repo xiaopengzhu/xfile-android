@@ -54,6 +54,7 @@
         android:gravity="center"
         android:text="@string/register"
         android:textColor="#ff000000"
+        android:onClick="register"
         android:textSize="16.0sp" />
     	
     </LinearLayout>
