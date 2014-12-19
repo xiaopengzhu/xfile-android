@@ -22,7 +22,9 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -54,6 +56,16 @@ public class LoginActivity extends Activity{
         account = (EditText)findViewById(R.id.login_input_name);
         password = (EditText)findViewById(R.id.login_input_password);
 
+        TextView forgetPass = (TextView)findViewById(R.id.forgetPass);
+        forgetPass.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(LoginActivity.this, MoreActivity.class);
+				startActivity(intent);
+			}
+		});
     }
 
     public void login(View v) {
@@ -125,6 +137,7 @@ public class LoginActivity extends Activity{
 								
 							} catch (Exception e) {
 								// TODO: handle exception
+								e.printStackTrace();
 							}
 							//关闭loading
 							progressDialog.dismiss();

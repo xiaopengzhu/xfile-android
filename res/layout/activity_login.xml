@@ -58,7 +58,14 @@
         android:textSize="16.0sp" />
     	
     </LinearLayout>
-
+    
+    <TextView 
+    	android:id="@+id/forgetPass"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:textColor="#f00"
+    	android:text="忘记密码"/>
 
 </RelativeLayout>
 
