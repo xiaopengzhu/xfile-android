@@ -392,6 +392,7 @@
                     </TableRow>
 
                     <TableRow
+                    	android:id="@+id/db"
                         android:layout_width="fill_parent"
                         android:layout_marginLeft="2.0dip"
                         android:layout_marginRight="2.0dip"

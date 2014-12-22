@@ -15,12 +15,17 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.BassBoost.Settings;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewDebug.IntToString;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -67,8 +72,27 @@ public class MediaPlayActivity extends Activity{
 				}
 			}
 		});
+		
+		Button camera = (Button)findViewById(R.id.camera);
+		camera.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+				intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory().getPath() + "test.png")));
+				startActivityForResult(intent, 1);
+			}
+		});
+		
 	}
 	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		Log.v("TEST", "拍照完成");
+	}
+
 	//选择图片
 	public void select(View v) {
 		files = getFile();

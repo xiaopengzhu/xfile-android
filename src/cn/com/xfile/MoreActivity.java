@@ -5,6 +5,7 @@ import cn.com.tools.UploadActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TableRow;
@@ -15,7 +16,7 @@ import android.widget.TableRow;
  *
  */
 public class MoreActivity  extends Activity{
-	private TableRow upload_btn, mediaplay;
+	private TableRow upload_btn, mediaplay, db;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,16 @@ public class MoreActivity  extends Activity{
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(MoreActivity.this, MediaPlayActivity.class);
 				startActivity(intent);
+			}
+		});
+        
+        db = (TableRow)findViewById(R.id.db);
+        db.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Log.v("TEST", "DB");
 			}
 		});
     }
