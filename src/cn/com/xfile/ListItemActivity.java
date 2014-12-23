@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -24,8 +25,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import cn.com.lib.RefreshableView;
-import cn.com.lib.RefreshableView.PullToRefreshListener;
+import cn.com.lib.XListView;
+import cn.com.lib.XListView.IXListViewListener;
+import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -42,6 +44,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -49,7 +52,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,44 +62,29 @@ import android.widget.SimpleAdapter.ViewBinder;
  * @author Administrator
  *
  */
-public class ListItemActivity extends Activity{
-    private ListView listview;
+public class ListItemActivity extends Activity implements IXListViewListener{
+    private XListView listview;
+    private Button add_btn;
+    private String tid;
     private SimpleAdapter simpleadapter;
-    private List<HashMap<String, Object>> data;
-    private RefreshableView refreshableView; 
+    private List<HashMap<String, Object>> data = new ArrayList<HashMap<String,Object>>();
+    
     private Handler mHandler;
-    private Runnable runnabelData, run;
-    private String url;
+    private Runnable refresh, getmore, delete;
+    private String url, id;
     static ProgressDialog progressDialog;
     
+    private int index;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_list);
         
-        //控件线程
-        mHandler = new Handler();
-        Button add_btn = (Button)findViewById(R.id.add_btn);
-        listview = (ListView)findViewById(R.id.listlistview);
-        refreshableView = (RefreshableView) findViewById(R.id.refreshable_view);
+        initView();
         
-        //获取转入数据
-        Intent intent = getIntent();
-        final String tid = intent.getStringExtra("tid");
-        TextView tv2 = (TextView)findViewById(R.id.type_id);
-        tv2.setText(tid);
-        
-        //获取UID
-        MyApp myapp = (MyApp)getApplication();
-        String mid = myapp.getData("id").toString();
-        url = "http://www.xpcms.net/mobile.php/api/getRecords/tid/" + tid + "/mid/" + mid;
-        
-        //Loading
-        progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
-        
-        //异步加载
-        run = new Runnable() {
+        //刷新
+        refresh = new Runnable() {
 			
 			@Override
 			public void run() {
@@ -129,11 +116,74 @@ public class ListItemActivity extends Activity{
 						// TODO Auto-generated method stub
 						listview.setAdapter(simpleadapter);
 						progressDialog.dismiss();
+						onLoad();
 					}
 				});
 			}
 		};
         
+		//删除
+		delete = new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				 List<NameValuePair> list = new ArrayList<NameValuePair>();
+                 MyApp myapp = (MyApp) getApplication();
+                 NameValuePair pair1 = new BasicNameValuePair("mid", myapp.getData("id").toString());
+                 NameValuePair pair2 = new BasicNameValuePair("id", id);
+                 list.add(pair1);
+                 list.add(pair2);
+                 try {
+                     UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
+                     DefaultHttpClient httpclient = new DefaultHttpClient();
+                     HttpPost post = new HttpPost("http://www.xpcms.net/mobile.php/api/delRecord");
+                     post.setEntity(entity);
+                     HttpResponse response = httpclient.execute(post);
+                     if (response.getStatusLine().getStatusCode() == 200) {
+                         
+                    	 mHandler.post(new Runnable() {
+         					
+         					@Override
+         					public void run() {
+         						// TODO Auto-generated method stub
+         						data.remove(index);
+                                simpleadapter.notifyDataSetChanged();
+                                
+                                Toast.makeText(ListItemActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+         					}
+         				});
+                         
+                     }
+                 } catch (UnsupportedEncodingException e) {
+                     // TODO Auto-generated catch block
+                     e.printStackTrace();
+                 } catch (ClientProtocolException e) {
+                     // TODO Auto-generated catch block
+                     e.printStackTrace();
+                 } catch (IOException e) {
+                     // TODO Auto-generated catch block
+                     e.printStackTrace();
+                 }
+			}
+		};
+		
+		getmore = new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				mHandler.postDelayed(new Runnable() {
+ 					
+ 					@Override
+ 					public void run() {
+ 						// TODO Auto-generated method stub
+ 						onLoad();
+ 					}
+ 				}, 2000);
+			}
+		};
+		
         //添加事件
         add_btn.setOnClickListener(new OnClickListener() {
             
@@ -154,7 +204,7 @@ public class ListItemActivity extends Activity{
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                     long arg3) {
                 // TODO Auto-generated method stub
-                String id = data.get(arg2).get("id").toString();
+                String id = data.get(arg2-1).get("id").toString();
                 TextView tv = (TextView)findViewById(R.id.type_id); 
                 String tid = tv.getText().toString();
                 Intent intent = new Intent();
@@ -173,97 +223,86 @@ public class ListItemActivity extends Activity{
                     int arg2, long arg3) {
            	
             	//长按
-            	final int index  = arg2;
+                index  = arg2-1;
                 // TODO Auto-generated method stub
-                final String id = data.get(index).get("id").toString();
+                id = data.get(index).get("id").toString();
                 new AlertDialog.Builder(ListItemActivity.this).setTitle("删除记录").
-                setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO Auto-generated method stub
-                        List<NameValuePair> list = new ArrayList<NameValuePair>();
-                        MyApp myapp = (MyApp) getApplication();
-                        NameValuePair pair1 = new BasicNameValuePair("mid", myapp.getData("id").toString());
-                        NameValuePair pair2 = new BasicNameValuePair("id", id);
-                        list.add(pair1);
-                        list.add(pair2);
-                        try {
-                            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
-                            DefaultHttpClient httpclient = new DefaultHttpClient();
-                            HttpPost post = new HttpPost("http://www.xpcms.net/mobile.php/api/delRecord");
-                            post.setEntity(entity);
-                            HttpResponse response = httpclient.execute(post);
-                            if (response.getStatusLine().getStatusCode() == 200) {
-                                
-                                data.remove(index);
-                                simpleadapter.notifyDataSetChanged();
-                                
-                                Toast.makeText(ListItemActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (UnsupportedEncodingException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        } catch (ClientProtocolException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO Auto-generated method stub
-                        
-                    }
-                }).show();
+	                setPositiveButton("确定", new DialogInterface.OnClickListener() {
+	                    
+	                    @Override
+	                    public void onClick(DialogInterface dialog, int which) {
+	                        // TODO Auto-generated method stub
+	                    	new Thread(delete).start();
+	                    }
+	                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+	                    
+	                    @Override
+	                    public void onClick(DialogInterface dialog, int which) {
+	                        // TODO Auto-generated method stub
+	                        
+	                    }
+	                }).show();
                 
                 //返回true则不会再次触发ItemClick
                 return true;
             }
         });
-		
-		//下拉刷新
-        refreshableView.setOnRefreshListener(new PullToRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //异步加载
-                runnabelData = new Runnable() {
-					
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						final List<HashMap<String, Object>> data2 = getData(url);
-						mHandler.post(new Runnable() {
-							
-							@Override
-							public void run() {
-								// TODO Auto-generated method stub
-								data.clear();
-								data.addAll(data2);
-								simpleadapter.notifyDataSetChanged();
-								refreshableView.finishRefreshing();
-							}
-						});
-					}
-				};
-                new Thread(runnabelData).start();
-            }
-        }, Integer.parseInt(tid));
-
+    
+    }
+	
+    private void initView() {
+    	//控件线程
+        mHandler = new Handler();
+        add_btn = (Button)findViewById(R.id.add_btn);
+        listview = (XListView)findViewById(R.id.refreshable_view);
+        
+        //获取转入数据
+        Intent intent = getIntent();
+        tid = intent.getStringExtra("tid");
+        TextView tv2 = (TextView)findViewById(R.id.type_id);
+        tv2.setText(tid);
+        
+        //获取UID
+        MyApp myapp = (MyApp)getApplication();
+        String mid = myapp.getData("id").toString();
+        url = "http://www.xpcms.net/mobile.php/api/getRecords/tid/" + tid + "/mid/" + mid;
+        
+        //Loading
+        progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
+        
+        //初始化
+        listview.setPullLoadEnable(true);
+        simpleadapter = new SimpleAdapter(this, data,
+                R.layout.activity_list_list_item,
+                new String[]{"id", "type_name",  "account", "password", "icon"}, 
+                new int[]{R.id.item_id, R.id.type_name, R.id.item_account, R.id.item_password, R.id.item_icon});
+        listview.setAdapter(simpleadapter);
+        listview.setXListViewListener(this);
     }
 
 	@Override
-	/**
-	 * 返回时调用此方法刷新
-	 */
+	// 返回时调用此方法刷新
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		new Thread(run).start();
+		new Thread(refresh).start();
+	}
+
+    
+    private void onLoad() {
+		listview.stopRefresh();
+		listview.stopLoadMore();
+		listview.setRefreshTime("刚刚");
+	}
+
+	public void onRefresh() {
+		// TODO Auto-generated method stub
+		new Thread(refresh).start();
+	}
+
+	public void onLoadMore() {
+		// TODO Auto-generated method stub
+		new Thread(getmore).start();
 	}
 
 	private List<HashMap<String, Object>> getData(String url) {
@@ -302,7 +341,7 @@ public class ListItemActivity extends Activity{
         
     }
     
-    private Bitmap getBitMap(String str) {
+	private Bitmap getBitMap(String str) {
         Bitmap img = null;
         try {
             URL url = new URL(str);
@@ -338,5 +377,4 @@ public class ListItemActivity extends Activity{
         }
         return img;
     }
-    
 }
