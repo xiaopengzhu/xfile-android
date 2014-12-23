@@ -46,7 +46,7 @@ import android.widget.SimpleAdapter.ViewBinder;
  * @author Administrator
  *
  */
-public class ListActivity extends Activity{
+public class RecordActivity extends Activity{
     //数据接口
     private GridView gridview;
     //数据
@@ -60,7 +60,7 @@ public class ListActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        setContentView(R.layout.xfile_record);
 		
 		//初始加载空数据
         progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
@@ -78,7 +78,7 @@ public class ListActivity extends Activity{
                 HashMap<String, Object> map = (HashMap<String, Object>) gridview.getItemAtPosition(arg2);
                 String id = (String) map.get("id");
                 Intent intent = new Intent();
-                intent.setClass(ListActivity.this, ListItemActivity.class);
+                intent.setClass(RecordActivity.this, RecordListActivity.class);
                 intent.putExtra("tid", id);
                 startActivity(intent);
             }
@@ -92,7 +92,7 @@ public class ListActivity extends Activity{
 				// TODO Auto-generated method stub
 				data = getData();
 				simpleadapter = new SimpleAdapter(getApplicationContext(), data,
-		                R.layout.activity_list_item,
+		                R.layout.xfile_record_item,
 		                new String[]{"id", "name", "icon"}, 
 		                new int[]{R.id.item_id, R.id.item_name, R.id.item_icon});
 		        

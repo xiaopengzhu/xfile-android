@@ -27,7 +27,7 @@ import org.json.JSONTokener;
 
 import cn.com.lib.XListView;
 import cn.com.lib.XListView.IXListViewListener;
-import android.R.integer;
+import cn.com.util.MyApp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -44,7 +44,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -62,7 +61,7 @@ import android.widget.SimpleAdapter.ViewBinder;
  * @author Administrator
  *
  */
-public class ListItemActivity extends Activity implements IXListViewListener{
+public class RecordListActivity extends Activity implements IXListViewListener{
     private XListView listview;
     private Button add_btn;
     private String tid;
@@ -79,7 +78,7 @@ public class ListItemActivity extends Activity implements IXListViewListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_list);
+        setContentView(R.layout.xfile_record_list);
         
         initView();
         
@@ -91,7 +90,7 @@ public class ListItemActivity extends Activity implements IXListViewListener{
 				// TODO Auto-generated method stub
 				data = getData(url);
 				simpleadapter = new SimpleAdapter(getApplicationContext(), data,
-		                R.layout.activity_list_list_item,
+		                R.layout.xfile_record_list_item,
 		                new String[]{"id", "type_name",  "account", "password", "icon"}, 
 		                new int[]{R.id.item_id, R.id.type_name, R.id.item_account, R.id.item_password, R.id.item_icon});
 		        simpleadapter.setViewBinder(new ViewBinder() {
@@ -150,7 +149,7 @@ public class ListItemActivity extends Activity implements IXListViewListener{
          						data.remove(index);
                                 simpleadapter.notifyDataSetChanged();
                                 
-                                Toast.makeText(ListItemActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RecordListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
          					}
          				});
                          
@@ -191,7 +190,7 @@ public class ListItemActivity extends Activity implements IXListViewListener{
             public void onClick(View arg0) {
                 // TODO Auto-generated method stub
                 Intent intent = new Intent();
-                intent.setClass(ListItemActivity.this, AddActivity.class);
+                intent.setClass(RecordListActivity.this, AddActivity.class);
                 intent.putExtra("tid", tid);
                 startActivity(intent);
             }
@@ -210,7 +209,7 @@ public class ListItemActivity extends Activity implements IXListViewListener{
                 Intent intent = new Intent();
                 intent.putExtra("id", id);
                 intent.putExtra("tid", tid);
-                intent.setClass(ListItemActivity.this, AddActivity.class);
+                intent.setClass(RecordListActivity.this, AddActivity.class);
                 startActivity(intent);
             }
         });
@@ -226,7 +225,7 @@ public class ListItemActivity extends Activity implements IXListViewListener{
                 index  = arg2-1;
                 // TODO Auto-generated method stub
                 id = data.get(index).get("id").toString();
-                new AlertDialog.Builder(ListItemActivity.this).setTitle("删除记录").
+                new AlertDialog.Builder(RecordListActivity.this).setTitle("删除记录").
 	                setPositiveButton("确定", new DialogInterface.OnClickListener() {
 	                    
 	                    @Override
@@ -273,7 +272,7 @@ public class ListItemActivity extends Activity implements IXListViewListener{
         //初始化
         listview.setPullLoadEnable(true);
         simpleadapter = new SimpleAdapter(this, data,
-                R.layout.activity_list_list_item,
+                R.layout.xfile_record_list_item,
                 new String[]{"id", "type_name",  "account", "password", "icon"}, 
                 new int[]{R.id.item_id, R.id.type_name, R.id.item_account, R.id.item_password, R.id.item_icon});
         listview.setAdapter(simpleadapter);

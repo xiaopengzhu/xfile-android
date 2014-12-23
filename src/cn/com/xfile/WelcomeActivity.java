@@ -26,7 +26,7 @@ public class WelcomeActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome);
+        setContentView(R.layout.xfile_welcome);
         //获取控件
         ViewPager vp = (ViewPager)findViewById(R.id.welcome_viewpager);
         LayoutInflater lif = LayoutInflater.from(this);
@@ -36,10 +36,10 @@ public class WelcomeActivity extends Activity{
         final ImageView page2 = (ImageView)findViewById(R.id.welcome_page2);
         final ImageView page3 = (ImageView)findViewById(R.id.welcome_page3);
         //视图获取
-        View view0 = lif.inflate(R.layout.new1, null);
-        View view1 = lif.inflate(R.layout.new2, null);
-        View view2 = lif.inflate(R.layout.new3, null);
-        View view3 = lif.inflate(R.layout.new4, null);
+        View view0 = lif.inflate(R.layout.xfile_new1, null);
+        View view1 = lif.inflate(R.layout.xfile_new2, null);
+        View view2 = lif.inflate(R.layout.xfile_new3, null);
+        View view3 = lif.inflate(R.layout.xfile_new4, null);
         //view 装填
         final ArrayList<View> views = new ArrayList<View>();
         views.add(view0);
@@ -130,7 +130,7 @@ public class WelcomeActivity extends Activity{
     
     public void startButton(View v) {
         Intent intent = new Intent();
-        intent.setClass(WelcomeActivity.this, XfileActivity.class);
+        intent.setClass(WelcomeActivity.this, MainActivity.class);
         startActivity(intent);
         this.finish();
     }

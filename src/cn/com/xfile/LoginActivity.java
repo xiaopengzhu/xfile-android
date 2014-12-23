@@ -16,6 +16,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import cn.com.util.MyApp;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -54,7 +55,7 @@ public class LoginActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.xfile_login);
         
         account = (EditText)findViewById(R.id.login_input_name);
         password = (EditText)findViewById(R.id.login_input_password);
@@ -115,7 +116,7 @@ public class LoginActivity extends Activity{
                         startActivity(intent);
                     } else {
                     	Intent intent = new Intent();
-                    	intent.setClass(LoginActivity.this, XfileActivity.class);
+                    	intent.setClass(LoginActivity.this, MainActivity.class);
                     	startActivity(intent);
                     }
                 } else {

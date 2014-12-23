@@ -36,7 +36,7 @@ public class RegisterActivity extends Activity{
 	}
 
 	private void initView() {
-		setContentView(R.layout.activity_register);
+		setContentView(R.layout.xfile_register);
 		account = (EditText)findViewById(R.id.account);
 		password = (EditText)findViewById(R.id.password);
 		password2 = (EditText)findViewById(R.id.password2);

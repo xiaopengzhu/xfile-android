@@ -21,7 +21,7 @@ public class MoreActivity  extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_more);
+        setContentView(R.layout.xfile_more);
         
         upload_btn = (TableRow)findViewById(R.id.tools_upload_btn);
         upload_btn.setOnClickListener(new OnClickListener() {

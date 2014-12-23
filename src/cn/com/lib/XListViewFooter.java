@@ -1,9 +1,3 @@
-/**
- * @file XFooterView.java
- * @create Mar 31, 2012 9:33:43 PM
- * @author Maxwin
- * @description XListView's footer
- */
 package cn.com.lib;
 
 import cn.com.xfile.R;
@@ -100,9 +94,9 @@ public class XListViewFooter extends LinearLayout {
 	
 	private void initView(Context context) {
 		mContext = context;
-		LinearLayout moreView = (LinearLayout)LayoutInflater.from(mContext).inflate(R.layout.xlistview_footer, null);
+		LinearLayout moreView = (LinearLayout)LayoutInflater.from(mContext).inflate(R.layout.lib_xlistview_footer, null);
 		addView(moreView);
-		moreView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+		moreView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		
 		mContentView = moreView.findViewById(R.id.xlistview_footer_content);
 		mProgressBar = moreView.findViewById(R.id.xlistview_footer_progressbar);

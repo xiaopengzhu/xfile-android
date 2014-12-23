@@ -18,7 +18,7 @@ import android.widget.TabHost;
  *
  */
 @SuppressWarnings("deprecation")
-public class XfileActivity extends TabActivity {
+public class MainActivity extends TabActivity {
     //底部选项卡
 	private TabHost tabHost;
     private RadioButton tab_list, tab_notice, tab_message, tab_more;
@@ -26,7 +26,7 @@ public class XfileActivity extends TabActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.xfile_main);
         initTab();
         init();
         ExitManager.getInstance().addActivity(this);
@@ -71,7 +71,7 @@ public class XfileActivity extends TabActivity {
     public void initTab(){
         tabHost=getTabHost();
         tabHost.addTab(tabHost.newTabSpec("list").setIndicator("list")
-                .setContent(new Intent(this, ListActivity.class)));
+                .setContent(new Intent(this, RecordActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("notice").setIndicator("notice")
                 .setContent(new Intent(this, NoticeActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("message").setIndicator("message")
@@ -85,10 +85,10 @@ public class XfileActivity extends TabActivity {
           if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (event.getRepeatCount() == 0) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(
-                        XfileActivity.this);
-                alertDialog.setTitle(XfileActivity.this
+                        MainActivity.this);
+                alertDialog.setTitle(MainActivity.this
                         .getString(R.string.app_close));
-                alertDialog.setPositiveButton(XfileActivity.this
+                alertDialog.setPositiveButton(MainActivity.this
                         .getString(R.string.btn_ok),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
@@ -96,7 +96,7 @@ public class XfileActivity extends TabActivity {
                                 ExitManager.getInstance().exit();
                             }
                         });
-                alertDialog.setNegativeButton(XfileActivity.this
+                alertDialog.setNegativeButton(MainActivity.this
                         .getString(R.string.btn_cancel),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,

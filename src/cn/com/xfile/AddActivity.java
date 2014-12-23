@@ -25,6 +25,8 @@ import org.json.JSONTokener;
 
 
 
+
+import cn.com.util.MyApp;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -62,7 +64,7 @@ public class AddActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
+        setContentView(R.layout.xfile_add);
         Intent intent = getIntent();
         tid = intent.getStringExtra("tid");
         id = intent.getStringExtra("id");
@@ -126,7 +128,7 @@ public class AddActivity extends Activity{
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
-	        adapter.setDropDownViewResource(R.layout.activity_add_spinner_item);
+	        adapter.setDropDownViewResource(R.layout.xfile_add_spinner_item);
 	        type.setAdapter(adapter);
 	        type.setOnItemSelectedListener(new OnItemSelectedListener() {
 

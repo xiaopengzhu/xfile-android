@@ -1,4 +1,4 @@
-package cn.com.xfile;
+package cn.com.util;
 
 import java.util.Collections;
 import java.util.HashMap;
