@@ -6,13 +6,15 @@
     android:background="@drawable/new4" >
 
     <Button
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
+    	android:layout_width="fill_parent"
+    	android:layout_height="36dp"
     	android:layout_alignParentBottom="true"
+    	android:layout_margin="30dp"
+    	android:background="#ddd"
     	android:paddingLeft="30dp"
     	android:paddingRight="30dp"
     	android:layout_marginBottom="30dp"
     	android:onClick="startButton"
-    	android:text="开始" />
+    	android:text="开 始" />
 
 </RelativeLayout>

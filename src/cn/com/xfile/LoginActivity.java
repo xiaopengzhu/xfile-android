@@ -34,7 +34,7 @@ import android.widget.Toast;
 /**
  * 登录
  * @author Administrator
- *
+ * 此类用异步线程方法实现请求
  */
 public class LoginActivity extends Activity{
     //首次登录

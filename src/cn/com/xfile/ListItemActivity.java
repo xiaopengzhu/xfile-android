@@ -133,8 +133,6 @@ public class ListItemActivity extends Activity{
 				});
 			}
 		};
-		
-		
         
         //添加事件
         add_btn.setOnClickListener(new OnClickListener() {
