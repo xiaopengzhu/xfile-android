@@ -14,7 +14,6 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
-import android.media.audiofx.BassBoost.Settings;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,7 +21,6 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewDebug.IntToString;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -73,7 +71,7 @@ public class MediaPlayActivity extends Activity{
 			}
 		});
 		
-		Button camera = (Button)findViewById(R.id.camera);
+		Button camera = (Button)findViewById(R.id.camera_btn);
 		camera.setOnClickListener(new OnClickListener() {
 			
 			@Override

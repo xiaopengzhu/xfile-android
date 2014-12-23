@@ -3,30 +3,22 @@ package cn.com.tools;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import cn.com.util.UploadFile;
-import cn.com.xfile.ListActivity;
-import cn.com.xfile.ListItemActivity;
 import cn.com.xfile.R;
-import android.R.string;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.GridView;
-import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 public class UploadActivity extends Activity{
     private GridView gridview;

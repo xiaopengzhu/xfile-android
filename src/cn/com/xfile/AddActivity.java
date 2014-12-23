@@ -22,6 +22,9 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 
+
+
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -29,6 +32,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -96,7 +101,6 @@ public class AddActivity extends Activity{
 	        
 			//记录拉取
 			if (id!=null) {
-		        MyApp myapp = (MyApp)getApplication();
 		        HttpGet get = new HttpGet("http://www.xpcms.net/mobile.php/api/getRecord/id/"+id+"/mid/"+myapp.getData("id"));
 		        HttpClient client = new DefaultHttpClient();
 		        
@@ -124,7 +128,23 @@ public class AddActivity extends Activity{
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
 	        adapter.setDropDownViewResource(R.layout.activity_add_spinner_item);
 	        type.setAdapter(adapter);
-            			            
+	        type.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+				@Override
+				public void onItemSelected(AdapterView<?> parent, View view,
+						int position, long id) {
+					// TODO Auto-generated method stub
+					TextView tv = (TextView)view;
+					tv.setTextColor(getResources().getColor(R.color.black));
+				}
+
+				@Override
+				public void onNothingSelected(AdapterView<?> parent) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+	        
             if (line!=null) {//编辑模式
                 titleText.setText("编辑");
                 try {

@@ -89,13 +89,13 @@ public final class R {
         public static final int account=0x7f080004;
         public static final int add_btn=0x7f08000e;
         public static final int arrow=0x7f08003a;
-        public static final int camera=0x7f080042;
+        public static final int camera_btn=0x7f080041;
         public static final int console_line_bottom=0x7f08001b;
         public static final int db=0x7f08002f;
         public static final int description=0x7f08003c;
         public static final int empty_cart_view=0x7f080000;
         public static final int forgetPass=0x7f080019;
-        public static final int gps=0x7f080041;
+        public static final int gps=0x7f080040;
         public static final int gridview=0x7f08000a;
         public static final int image=0x7f08003e;
         public static final int item_account=0x7f080013;
@@ -129,7 +129,7 @@ public final class R {
         public static final int reg_btn=0x7f080018;
         public static final int remark=0x7f080006;
         public static final int select=0x7f08003f;
-        public static final int show=0x7f080040;
+        public static final int show=0x7f080042;
         public static final int sub_btn=0x7f080008;
         public static final int submit=0x7f080031;
         public static final int tab_list=0x7f08001d;
