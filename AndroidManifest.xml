@@ -25,15 +25,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".WelcomeActivity"/>
         <activity android:name=".RegisterActivity"/>
         <activity android:name=".RecordActivity"/>
         <activity android:name=".RecordListActivity"/>
+        <activity android:name=".RecordAddActivity"/>
         <activity android:name=".MessageActivity"/>
         <activity android:name=".NoticeActivity"/>
+        <activity android:name=".NoticeAddActivity"/>
         <activity android:name=".MoreActivity"/>
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".AddActivity"/>
-        <activity android:name=".WelcomeActivity"/>
         
         <activity android:name="cn.com.tools.UploadActivity"/>
         <activity android:name="cn.com.tools.ImageViewActivity"/>

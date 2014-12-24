@@ -192,7 +192,7 @@ public class RecordListActivity extends Activity implements IXListViewListener{
             public void onClick(View arg0) {
                 // TODO Auto-generated method stub
                 Intent intent = new Intent();
-                intent.setClass(RecordListActivity.this, AddActivity.class);
+                intent.setClass(RecordListActivity.this, RecordAddActivity.class);
                 intent.putExtra("tid", tid);
                 startActivity(intent);
             }
@@ -211,7 +211,7 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                 Intent intent = new Intent();
                 intent.putExtra("id", id);
                 intent.putExtra("tid", tid);
-                intent.setClass(RecordListActivity.this, AddActivity.class);
+                intent.setClass(RecordListActivity.this, RecordAddActivity.class);
                 startActivity(intent);
             }
         });

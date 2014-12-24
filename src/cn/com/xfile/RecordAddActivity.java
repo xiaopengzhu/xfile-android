@@ -3,7 +3,6 @@ package cn.com.xfile;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -20,11 +19,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
-
-
-
-
 
 
 import cn.com.util.MyApp;
@@ -50,7 +44,7 @@ import android.widget.Toast;
  * @author Administrator
  * 此类用异步任务方法实现请求
  */
-public class AddActivity extends Activity{
+public class RecordAddActivity extends Activity{
 	private String tid;
 	private ArrayList<String> data;
 	private Spinner type;
@@ -66,7 +60,7 @@ public class AddActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.xfile_add);
+        setContentView(R.layout.xfile_record_add);
         Intent intent = getIntent();
         tid = intent.getStringExtra("tid");
         id = intent.getStringExtra("id");
@@ -130,7 +124,7 @@ public class AddActivity extends Activity{
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
-	        adapter.setDropDownViewResource(R.layout.xfile_add_spinner_item);
+	        adapter.setDropDownViewResource(R.layout.xfile_record_add_spinner_item);
 	        type.setAdapter(adapter);
 	        type.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -224,9 +218,9 @@ public class AddActivity extends Activity{
 			Log.v("STST", result + "");
 			if (result == 200) {
 				finish();
-				Toast.makeText(AddActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+				Toast.makeText(RecordAddActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
 			} else {
-				Toast.makeText(AddActivity.this, "保存失败", Toast.LENGTH_SHORT).show();
+				Toast.makeText(RecordAddActivity.this, "保存失败", Toast.LENGTH_SHORT).show();
 			}
 		}
     	
