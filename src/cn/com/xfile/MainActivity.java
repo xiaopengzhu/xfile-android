@@ -12,11 +12,6 @@ import android.view.View.OnClickListener;
 import android.widget.RadioButton;
 import android.widget.TabHost;
 
-/**
- * 主框架
- * @author Administrator
- *
- */
 @SuppressWarnings("deprecation")
 public class MainActivity extends TabActivity {
     //底部选项卡

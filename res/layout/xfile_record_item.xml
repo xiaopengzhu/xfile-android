@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/item_icon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="92dp"
+        android:layout_height="69dp"
         android:src="@null" />
     <LinearLayout 
         android:layout_width="fill_parent"

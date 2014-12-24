@@ -26,6 +26,7 @@ import org.json.JSONTokener;
 
 
 
+
 import cn.com.util.MyApp;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -40,6 +41,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -156,10 +158,14 @@ public class AddActivity extends Activity{
 	                remark.setText(line.getString("remark"));
 	                String type_name = line.getString("type");
 	                //下拉选中
-	            	int index = Arrays.binarySearch(data.toArray(), type_name);
-	            	if (index >= 0) {
-	            		type.setSelection(index);
+	            	SpinnerAdapter ad = type.getAdapter();
+	            	int k = ad.getCount();
+	            	for (int i=0; i<k; i++) {
+	            		if (type_name.equals(ad.getItem(i).toString())) {
+	            			type.setSelection(i);
+	            		}
 	            	}
+	            	
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

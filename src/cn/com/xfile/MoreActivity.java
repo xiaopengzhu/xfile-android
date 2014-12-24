@@ -10,11 +10,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TableRow;
 
-/**
- * 更多
- * @author Administrator
- *
- */
 public class MoreActivity  extends Activity{
 	private TableRow upload_btn, mediaplay, db;
 	

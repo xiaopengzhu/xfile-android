@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONTokener;
 
+import cn.com.util.Tools;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -41,11 +42,6 @@ import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleAdapter.ViewBinder;
 
-/**
- * 记录列表
- * @author Administrator
- *
- */
 public class RecordActivity extends Activity{
     //数据接口
     private GridView gridview;
@@ -139,7 +135,7 @@ public class RecordActivity extends Activity{
                 map = new HashMap<String, Object>();
                 map.put("id", line.getJSONObject(i).getString("id"));
                 map.put("name", line.getJSONObject(i).getString("name"));
-                map.put("icon", getBitMap("http://www.xpcms.net/public/upload/type/"+line.getJSONObject(i).getString("icon")));
+                map.put("icon", Tools.getBitMap("http://www.xpcms.net/public/upload/type/"+line.getJSONObject(i).getString("icon")));
                 list.add(map);
             }
         } catch (ClientProtocolException e) {
@@ -155,41 +151,5 @@ public class RecordActivity extends Activity{
         return list;
         
     }
-    
-    private Bitmap getBitMap(String str) {
-        Bitmap img = null;
-        try {
-            URL url = new URL(str);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            InputStream is = conn.getInputStream();
-            img = BitmapFactory.decodeStream(is); 
-            //圆角
-            
-            Bitmap output = Bitmap.createBitmap(img.getWidth(), img.getHeight(), Config.ARGB_8888);
-            Canvas canvas = new Canvas(output);
-            
-            final int color = 0xff424242;
-            final Paint paint = new Paint();
-            final Rect rect = new Rect(0, 0, img.getWidth(), img.getHeight());
-            final RectF rectF= new RectF(rect);
-            final float roundPx = 5;
-            
-            paint.setAntiAlias(true);
-            canvas.drawARGB(0, 0, 0, 0);
-            paint.setColor(color);
-            canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-            canvas.drawBitmap(img, rect, rect, paint);
-            img = output;
-            
-            
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return img;
-    }
+
 }

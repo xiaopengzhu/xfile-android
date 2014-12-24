@@ -28,6 +28,7 @@ import org.json.JSONTokener;
 import cn.com.lib.XListView;
 import cn.com.lib.XListView.IXListViewListener;
 import cn.com.util.MyApp;
+import cn.com.util.Tools;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -167,6 +168,7 @@ public class RecordListActivity extends Activity implements IXListViewListener{
 			}
 		};
 		
+		//更多
 		getmore = new Runnable() {
 			
 			@Override
@@ -277,6 +279,8 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                 new int[]{R.id.item_id, R.id.type_name, R.id.item_account, R.id.item_password, R.id.item_icon});
         listview.setAdapter(simpleadapter);
         listview.setXListViewListener(this);
+        listview.setPullLoadEnable(false);
+        
     }
 
 	@Override
@@ -292,6 +296,9 @@ public class RecordListActivity extends Activity implements IXListViewListener{
 		listview.stopRefresh();
 		listview.stopLoadMore();
 		listview.setRefreshTime("刚刚");
+		if (data.size() > 6) {
+			listview.setPullLoadEnable(true);
+		}
 	}
 
 	public void onRefresh() {
@@ -322,7 +329,7 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                 map.put("account", line.getJSONObject(i).getString("account"));
                 map.put("password", line.getJSONObject(i).getString("password"));
                 JSONObject type = line.getJSONObject(i).getJSONObject("type");
-                map.put("icon", getBitMap("http://www.xpcms.net/public/upload/type/"+type.getString("icon")));
+                map.put("icon", Tools.getBitMap("http://www.xpcms.net/public/upload/type/"+type.getString("icon")));
                 
                 list.add(map);
             }
@@ -339,41 +346,5 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         return list;
         
     }
-    
-	private Bitmap getBitMap(String str) {
-        Bitmap img = null;
-        try {
-            URL url = new URL(str);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            InputStream is = conn.getInputStream();
-            img = BitmapFactory.decodeStream(is); 
-            
-            //圆角
-            Bitmap output = Bitmap.createBitmap(img.getWidth(), img.getHeight(), Config.ARGB_8888);
-            Canvas canvas = new Canvas(output);
-            
-            final int color = 0xff424242;
-            final Paint paint = new Paint();
-            final Rect rect = new Rect(0, 0, img.getWidth(), img.getHeight());
-            final RectF rectF= new RectF(rect);
-            final float roundPx = 5;
-            
-            paint.setAntiAlias(true);
-            canvas.drawARGB(0, 0, 0, 0);
-            paint.setColor(color);
-            canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-            canvas.drawBitmap(img, rect, rect, paint);
-            img = output;
-            
-            
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return img;
-    }
+
 }
