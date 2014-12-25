@@ -151,6 +151,7 @@
                             android:drawablePadding="10.0dip"
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
+                            android:drawableLeft="@drawable/search_friends"
                             android:paddingLeft="17.0dip"
                             android:text="修改密码"
                             android:textColor="#ff333333"

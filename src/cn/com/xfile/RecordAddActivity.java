@@ -215,7 +215,6 @@ public class RecordAddActivity extends Activity{
 		@Override
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
-			Log.v("STST", result + "");
 			if (result == 200) {
 				finish();
 				Toast.makeText(RecordAddActivity.this, "保存成功", Toast.LENGTH_SHORT).show();

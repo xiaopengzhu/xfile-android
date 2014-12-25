@@ -25,6 +25,7 @@
     </RelativeLayout>
 
     <LinearLayout 
+    	android:id="@+id/mid_linear"
         android:layout_below="@+id/top_relative"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -36,7 +37,8 @@
         <AutoCompleteTextView 
         	android:id="@+id/title"
         	android:layout_width="fill_parent"
-        	android:layout_height="wrap_content" />
+        	android:layout_height="wrap_content"
+        	android:hint="例如：我大学学号的第4位数字" />
         
         <Button
             android:id="@+id/sub_btn"
@@ -45,5 +47,12 @@
             android:layout_marginTop="19dp"
             android:text="提交" />
     </LinearLayout>
+    
+    <TextView 
+    	android:layout_below="@id/mid_linear"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:padding="10dp"
+    	android:text="提示："/>
     
 </RelativeLayout>
