@@ -45,6 +45,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -65,14 +66,13 @@ import android.widget.SimpleAdapter.ViewBinder;
 public class RecordListActivity extends Activity implements IXListViewListener{
     private XListView listview;
     private Button add_btn;
-    private String tid;
     private SimpleAdapter simpleadapter;
     private List<HashMap<String, Object>> data = new ArrayList<HashMap<String,Object>>();
     
     private Handler mHandler;
     private Runnable refresh, getmore, delete;
-    private String url, id;
-    static ProgressDialog progressDialog;
+    private String mid, tid, id;
+    static  ProgressDialog progressDialog;
     
     private int index;
     
@@ -89,11 +89,11 @@ public class RecordListActivity extends Activity implements IXListViewListener{
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				data = getData(url);
+				data = getData();
 				simpleadapter = new SimpleAdapter(getApplicationContext(), data,
 		                R.layout.xfile_record_list_item,
-		                new String[]{"id", "type_name",  "account", "password", "icon"}, 
-		                new int[]{R.id.item_id, R.id.type_name, R.id.item_account, R.id.item_password, R.id.item_icon});
+		                new String[]{"id", "title",  "account", "password", "icon"}, 
+		                new int[]{R.id.item_id, R.id.item_title, R.id.item_account, R.id.item_password, R.id.item_icon});
 		        simpleadapter.setViewBinder(new ViewBinder() {
 		            
 		            @Override
@@ -137,7 +137,7 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                  try {
                      UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
                      DefaultHttpClient httpclient = new DefaultHttpClient();
-                     HttpPost post = new HttpPost("http://www.xpcms.net/mobile.php/api/delRecord");
+                     HttpPost post = new HttpPost("http://www.xpcms.net/mobile.php/record/del");
                      post.setEntity(entity);
                      HttpResponse response = httpclient.execute(post);
                      if (response.getStatusLine().getStatusCode() == 200) {
@@ -265,8 +265,8 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         
         //获取UID
         MyApp myapp = (MyApp)getApplication();
-        String mid = myapp.getData("id").toString();
-        url = "http://www.xpcms.net/mobile.php/api/getRecords/tid/" + tid + "/mid/" + mid;
+        mid = myapp.getData("id").toString();
+        
         
         //Loading
         progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
@@ -275,8 +275,8 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         listview.setPullLoadEnable(true);
         simpleadapter = new SimpleAdapter(this, data,
                 R.layout.xfile_record_list_item,
-                new String[]{"id", "type_name",  "account", "password", "icon"}, 
-                new int[]{R.id.item_id, R.id.type_name, R.id.item_account, R.id.item_password, R.id.item_icon});
+                new String[]{"id", "title",  "account", "password", "icon"}, 
+                new int[]{R.id.item_id, R.id.item_title, R.id.item_account, R.id.item_password, R.id.item_icon});
         listview.setAdapter(simpleadapter);
         listview.setXListViewListener(this);
         listview.setPullLoadEnable(false);
@@ -290,7 +290,6 @@ public class RecordListActivity extends Activity implements IXListViewListener{
 		super.onResume();
 		new Thread(refresh).start();
 	}
-
     
     private void onLoad() {
 		listview.stopRefresh();
@@ -311,9 +310,11 @@ public class RecordListActivity extends Activity implements IXListViewListener{
 		new Thread(getmore).start();
 	}
 
-	private List<HashMap<String, Object>> getData(String url) {
+	private List<HashMap<String, Object>> getData() {
         ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
         HashMap<String, Object> map = null;
+        
+        String url = "http://www.xpcms.net/mobile.php/record/gets/tid/" + tid + "/mid/" + mid;
         
         HttpGet get = new HttpGet(url);
         HttpClient client = new DefaultHttpClient();
@@ -325,7 +326,7 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                 map = new HashMap<String, Object>();
                 map.put("id", line.getJSONObject(i).getString("id"));
                 map.put("type_id", line.getJSONObject(i).getJSONObject("type").getString("id"));
-                map.put("type_name", line.getJSONObject(i).getJSONObject("type").getString("name"));
+                map.put("title", line.getJSONObject(i).getString("title"));
                 map.put("account", line.getJSONObject(i).getString("account"));
                 map.put("password", line.getJSONObject(i).getString("password"));
                 JSONObject type = line.getJSONObject(i).getJSONObject("type");

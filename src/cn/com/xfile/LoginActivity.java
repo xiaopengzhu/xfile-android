@@ -149,7 +149,7 @@ public class LoginActivity extends Activity{
 		        list.add(pair2);
 				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
                 DefaultHttpClient httpclient = new DefaultHttpClient();
-                HttpPost post = new HttpPost("http://www.xpcms.net/mobile.php/api/login");
+                HttpPost post = new HttpPost("http://www.xpcms.net/mobile.php/member/login");
                 post.setEntity(entity);
                 response = httpclient.execute(post);
 			} catch (Exception e) {

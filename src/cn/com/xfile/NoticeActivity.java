@@ -196,4 +196,5 @@ public class NoticeActivity  extends Activity{
         }
         return list;
     }
+
 }

@@ -189,4 +189,5 @@ public class NoticeAddActivity extends Activity{
 			}
 		}
 	}
+
 }

@@ -85,7 +85,7 @@ public class RegisterActivity extends Activity{
 		try {
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
 	        DefaultHttpClient httpclient = new DefaultHttpClient();
-	        HttpPost post = new HttpPost("http://www.xpcms.net/mobile.php/api/register");
+	        HttpPost post = new HttpPost("http://www.xpcms.net/mobile.php/member/register");
 	        post.setEntity(entity);
 	        HttpResponse response = httpclient.execute(post);
 	        if (response.getStatusLine().getStatusCode() == 200) {
@@ -129,4 +129,5 @@ public class RegisterActivity extends Activity{
 		}
 		return hex.toString();
 	}
+
 }

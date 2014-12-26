@@ -33,10 +33,15 @@
         android:gravity="center"
         android:orientation="vertical">
         
-        <Spinner
-            android:id="@+id/type"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+        <AutoCompleteTextView 
+        	android:id="@+id/title"
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:hint="请输出标题"
+        	android:layout_marginTop="10dp"
+        	android:singleLine="true">
+        	<requestFocus />
+        </AutoCompleteTextView>
     
         <EditText
             android:id="@+id/account"
@@ -44,10 +49,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="请输入帐号"
-            android:ems="10" >
-    
-            <requestFocus />
-        </EditText>
+            android:singleLine="true"
+            android:ems="10" />
     
         <EditText
             android:id="@+id/password"
@@ -55,6 +58,7 @@
             android:layout_height="wrap_content"
             android:hint="请输入密码"
             android:layout_marginTop="10dp"
+            android:singleLine="true"
             android:ems="10" />
         
         <EditText 
@@ -63,14 +67,15 @@
         	android:layout_width="fill_parent"
         	android:layout_height="wrap_content"
         	android:inputType="textMultiLine"
-        	android:hint="在此输出备注信息"/>
+        	android:hint="在此输出备注信息" />
         
         <TextView 
         	android:id="@+id/record_id"
         	android:layout_width="fill_parent"
         	android:layout_height="wrap_content"
         	android:text="@null"
-        	android:visibility="gone"/>
+        	android:visibility="gone" />
+
         
         <Button
             android:id="@+id/sub_btn"

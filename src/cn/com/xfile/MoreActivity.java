@@ -50,4 +50,5 @@ public class MoreActivity  extends Activity{
 			}
 		});
     }
+
 }

@@ -119,12 +119,11 @@ public class RecordActivity extends Activity{
 		new Thread(run).start();
     }
     
-    
     private List<HashMap<String, Object>> getData() {
         ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
         HashMap<String, Object> map = null;
         
-        String url = "http://www.xpcms.net/mobile.php/api/getTypes";
+        String url = "http://www.xpcms.net/mobile.php/record/index";
         HttpGet get = new HttpGet(url);
         HttpClient client = new DefaultHttpClient();
         try {

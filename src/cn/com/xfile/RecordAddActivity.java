@@ -20,22 +20,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-
 import cn.com.util.MyApp;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,13 +44,14 @@ import android.widget.Toast;
 public class RecordAddActivity extends Activity{
 	private String tid;
 	private ArrayList<String> data;
-	private Spinner type;
+	private AutoCompleteTextView title;
 	private JSONObject line;
 	private String id;
-	static ProgressDialog progressDialog;
-	private EditText account, password,remark;
+	static  ProgressDialog progressDialog;
+	private EditText account, password, remark;
 	private TextView titleText, record_id;
 	private Button sub_btn;
+	private ArrayAdapter<String> adapter;
 	private MyApp myapp;
 	
     @Override
@@ -61,16 +59,18 @@ public class RecordAddActivity extends Activity{
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.xfile_record_add);
+        
         Intent intent = getIntent();
         tid = intent.getStringExtra("tid");
         id = intent.getStringExtra("id");
-        type = (Spinner)findViewById(R.id.type);
+        
         sub_btn = (Button)findViewById(R.id.sub_btn);
     	titleText = (TextView)findViewById(R.id.titleText);
     	record_id = (TextView)findViewById(R.id.record_id);
         account = (EditText)findViewById(R.id.account);
         password = (EditText)findViewById(R.id.password);
         remark = (EditText)findViewById(R.id.remark);
+        title = (AutoCompleteTextView)findViewById(R.id.title);
         myapp = (MyApp) getApplication();
         
         //异步加载
@@ -86,7 +86,94 @@ public class RecordAddActivity extends Activity{
             	new SubmitTask().execute();
             }
         });
+        
+        //自动提示
+        title.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+				String str = s.toString();
+				if (start > 0) {
+					new AutocompleteTask().execute(str);
+				}
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+        });
+        
     }
+    
+    //输入提示
+	class AutocompleteTask extends AsyncTask<String, Integer, Integer> {
+		JSONArray ary = null;
+		
+		@Override
+		protected Integer doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			List<NameValuePair> list = new ArrayList<NameValuePair>();
+			NameValuePair pair0 = new BasicNameValuePair("str", params[0]);
+			list.add(pair0);
+	        
+			try {
+				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
+				DefaultHttpClient httpclient = new DefaultHttpClient();
+	            HttpPost post = new HttpPost("http://www.xpcms.net/mobile.php/record/autocomplete");
+	            post.setEntity(entity);
+	            HttpResponse response = httpclient.execute(post);
+
+		        String  str = EntityUtils.toString(response.getEntity());
+		        
+		        if (!str.equals("null")) {
+		        	ary = new JSONArray(new JSONTokener(str)); 
+		        	return 1;
+		        }
+		        
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			// TODO Auto-generated method stub
+			if (ary!=null) {
+				data.clear();
+				for (int i=0; i<ary.length(); i++) {
+					try {
+						JSONObject tmp = (JSONObject) ary.get(i);
+						data.add(tmp.getString("name"));
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+				adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.xfile_notice_add_dropdown, data);
+				title.setAdapter(adapter);
+				adapter.notifyDataSetChanged();
+			}
+		}
+	}
     
     //异步加载
     class LoadingTask extends AsyncTask<Void, Integer, Integer> {
@@ -95,11 +182,11 @@ public class RecordAddActivity extends Activity{
 		protected Integer doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			//类型列表拉取
-			data = getData("http://www.xpcms.net/mobile.php/api/getTypes/pid/"+tid);
+			data = getData("http://www.xpcms.net/mobile.php/record/index/pid/"+tid);
 	        
 			//记录拉取
 			if (id!=null) {
-		        HttpGet get = new HttpGet("http://www.xpcms.net/mobile.php/api/getRecord/id/"+id+"/mid/"+myapp.getData("id"));
+		        HttpGet get = new HttpGet("http://www.xpcms.net/mobile.php/record/get/id/"+id+"/mid/"+myapp.getData("id"));
 		        HttpClient client = new DefaultHttpClient();
 		        
 				try {
@@ -123,42 +210,16 @@ public class RecordAddActivity extends Activity{
 		@Override
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, data);
-	        adapter.setDropDownViewResource(R.layout.xfile_record_add_spinner_item);
-	        type.setAdapter(adapter);
-	        type.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-				@Override
-				public void onItemSelected(AdapterView<?> parent, View view,
-						int position, long id) {
-					// TODO Auto-generated method stub
-					TextView tv = (TextView)view;
-					tv.setTextColor(getResources().getColor(R.color.black));
-				}
-
-				@Override
-				public void onNothingSelected(AdapterView<?> parent) {
-					// TODO Auto-generated method stub
-					
-				}
-			});
 	        
             if (line!=null) {//编辑模式
                 titleText.setText("编辑");
                 try {
+                	
+                	title.setText(line.getString("title"));
 					record_id.setText(line.getString("id"));
 					account.setText(line.getString("account"));
 	                password.setText(line.getString("password"));
 	                remark.setText(line.getString("remark"));
-	                String type_name = line.getString("type");
-	                //下拉选中
-	            	SpinnerAdapter ad = type.getAdapter();
-	            	int k = ad.getCount();
-	            	for (int i=0; i<k; i++) {
-	            		if (type_name.equals(ad.getItem(i).toString())) {
-	            			type.setSelection(i);
-	            		}
-	            	}
 	            	
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -178,26 +239,30 @@ public class RecordAddActivity extends Activity{
 			// TODO Auto-generated method stub
 			List<NameValuePair> list = new ArrayList<NameValuePair>();
             
-            NameValuePair pair0 = new BasicNameValuePair("id", record_id.getText().toString());
-            NameValuePair pair1 = new BasicNameValuePair("account", account.getText().toString());
-            NameValuePair pair2 = new BasicNameValuePair("password", password.getText().toString());
-            NameValuePair pair3 = new BasicNameValuePair("type", type.getSelectedItem().toString());
-            NameValuePair pair4 = new BasicNameValuePair("remark", remark.getText().toString());
-            NameValuePair pair5 = new BasicNameValuePair("mid", myapp.getData("id").toString());
+            NameValuePair pair0 = new BasicNameValuePair("id", id);
+            NameValuePair pair1 = new BasicNameValuePair("mid", myapp.getData("id").toString());
+            NameValuePair pair2 = new BasicNameValuePair("tid", tid);
+            NameValuePair pair3 = new BasicNameValuePair("title", title.getText().toString());
+            NameValuePair pair5 = new BasicNameValuePair("account", account.getText().toString());
+            NameValuePair pair6 = new BasicNameValuePair("password", password.getText().toString());
+            NameValuePair pair7 = new BasicNameValuePair("remark", remark.getText().toString());
+            
             
             list.add(pair0);
             list.add(pair1);
             list.add(pair2);
             list.add(pair3);
-            list.add(pair4);
             list.add(pair5);
+            list.add(pair6);
+            list.add(pair7);
             
 			try {
 				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
 				DefaultHttpClient httpclient = new DefaultHttpClient();
-	            HttpPost post = new HttpPost("http://www.xpcms.net/mobile.php/api/addRecord");
+	            HttpPost post = new HttpPost("http://www.xpcms.net/mobile.php/record/add");
 	            post.setEntity(entity);
 	            HttpResponse response = httpclient.execute(post);
+	            
 	            return response.getStatusLine().getStatusCode();
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
@@ -234,7 +299,7 @@ public class RecordAddActivity extends Activity{
             HttpResponse response = client.execute(get);
             String str = EntityUtils.toString(response.getEntity());
             JSONArray line = new JSONArray(new JSONTokener(str));
-            for (int i =0; i<line.length();i++) {
+            for (int i =0; i<line.length(); i++) {
                 list.add(line.getJSONObject(i).getString("name"));
             }
         } catch (ClientProtocolException e) {

@@ -11,39 +11,45 @@
         android:layout_height="72dp"
         android:layout_margin="10dp"
         android:src="@null" />
+    
     <LinearLayout 
         android:layout_width="fill_parent"
         android:layout_height="72dp"
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:orientation="vertical">
+        
         <TextView 
             android:id="@+id/item_id"
             android:layout_width="fill_parent"
             android:layout_height="24dp"
             android:visibility="gone"/>
+        
         <TextView 
-            android:id="@+id/type_name"
+            android:id="@+id/item_title"
             android:layout_width="fill_parent"
             android:layout_height="24dp"
-            android:text="光大银行"
+            android:text="@null"
             android:textStyle="bold"
             android:gravity="center_vertical"
             android:textColor="#000" />
+        
         <TextView 
             android:id="@+id/item_account"
             android:layout_width="fill_parent"
             android:layout_height="24dp"
             android:textColor="#999"
             android:gravity="center_vertical"
-            android:text="431225198505064014"/>
+            android:text="@null"/>
+        
         <TextView 
             android:id="@+id/item_password"
             android:layout_width="fill_parent"
             android:layout_height="24dp"
             android:textColor="#eee"
             android:gravity="center_vertical"
-            android:text="abddfdfe" />
+            android:text="@null" />
+        
     </LinearLayout>
 
 </LinearLayout>
