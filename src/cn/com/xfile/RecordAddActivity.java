@@ -38,8 +38,6 @@ import android.widget.Toast;
 
 /**
  * 添加记录
- * @author Administrator
- * 此类用异步任务方法实现请求
  */
 public class RecordAddActivity extends Activity{
 	private String tid;
