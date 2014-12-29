@@ -58,8 +58,10 @@ public class RecordListActivity extends Activity implements IXListViewListener{
     
     private Handler mHandler;
     private Runnable refresh, getmore, delete;
-    private String mid, tid, id;
+    private String token, tid, id;
     static  ProgressDialog progressDialog;
+    
+    public static int page = 1, pagesize = 8;
     
     private int index;
     
@@ -76,6 +78,7 @@ public class RecordListActivity extends Activity implements IXListViewListener{
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
+				page = 1;
 				data = getData();
 				simpleadapter = new SimpleAdapter(getApplicationContext(), data,
 		                R.layout.xfile_record_list_item,
@@ -161,11 +164,14 @@ public class RecordListActivity extends Activity implements IXListViewListener{
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
+				data.addAll(getData());
+				
 				mHandler.postDelayed(new Runnable() {
  					
  					@Override
  					public void run() {
  						// TODO Auto-generated method stub
+ 						simpleadapter.notifyDataSetChanged();
  						onLoad();
  					}
  				}, 2000);
@@ -252,7 +258,7 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         
         //获取UID
         MyApp myapp = (MyApp)getApplication();
-        mid = myapp.getData("id").toString();
+        token = myapp.getData("token").toString();
         
         
         //Loading
@@ -301,7 +307,7 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
         HashMap<String, Object> map = null;
         
-        String url = "http://www.xpcms.net/mobile.php/record/gets/tid/" + tid + "/mid/" + mid;
+        String url = "http://www.xpcms.net/mobile.php/record/gets/tid/" + tid + "/token/" + token+"/page/" + page + "/pagesize/" + pagesize;
         
         HttpGet get = new HttpGet(url);
         HttpClient client = new DefaultHttpClient();
@@ -321,6 +327,7 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                 
                 list.add(map);
             }
+            page+=1;
         } catch (ClientProtocolException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

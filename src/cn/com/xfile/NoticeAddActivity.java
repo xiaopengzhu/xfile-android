@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import cn.com.util.HttpRequest;
 import cn.com.util.MyApp;
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -81,43 +82,40 @@ public class NoticeAddActivity extends Activity{
 	}
 	
 	class SubmitTask extends AsyncTask<Void, Integer, Integer> {
-
+		
+		private int code;
+		
 		@Override
 		protected Integer doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			List<NameValuePair> list = new ArrayList<NameValuePair>();
             
             NameValuePair pair0 = new BasicNameValuePair("title", title.getText().toString());
-            NameValuePair pair1 = new BasicNameValuePair("mid", myapp.getData("id").toString());
+            NameValuePair pair1 = new BasicNameValuePair("token", myapp.getData("token").toString());
             
             list.add(pair0);
             list.add(pair1);
             
+            String uri = "http://www.xpcms.net/mobile.php/notice/add";
+            JSONObject response = HttpRequest.post(uri, list);
+            
 			try {
-				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
-				DefaultHttpClient httpclient = new DefaultHttpClient();
-	            HttpPost post = new HttpPost("http://www.xpcms.net/mobile.php/notice/add");
-	            post.setEntity(entity);
-	            HttpResponse response = httpclient.execute(post);
-	            return response.getStatusLine().getStatusCode();
-			} catch (UnsupportedEncodingException e) {
+				code = Integer.parseInt(response.get("code").toString());
+			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
+			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            return 0;
+			return code;
 		}
 
 		@Override
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			if (result == 200) {
+			if (code == 200) {
 				finish();
 				Toast.makeText(NoticeAddActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
 			} else {

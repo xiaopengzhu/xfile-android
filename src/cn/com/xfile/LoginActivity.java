@@ -87,10 +87,10 @@ public class LoginActivity extends Activity{
 				try {
 					int code = Integer.parseInt(response.getString("code"));
 					if (code == 200) {//登录成功
-	                    int id = Integer.parseInt(response.getJSONObject("data").getString("id"));
+	                    String  token = response.getString("data");
 	                    //存入全局变量
 	                    MyApp appCookies = (MyApp) getApplication();
-	                    appCookies.setData("id", id);
+	                    appCookies.setData("token", token);
 	                    
 	                    //启动判断
 	                    preferences = getSharedPreferences("phone", Context.MODE_PRIVATE); 

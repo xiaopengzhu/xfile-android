@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import cn.com.util.HttpRequest;
 import cn.com.util.MyApp;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -184,7 +185,7 @@ public class RecordAddActivity extends Activity{
 	        
 			//记录拉取
 			if (id!=null) {
-		        HttpGet get = new HttpGet("http://www.xpcms.net/mobile.php/record/get/id/"+id+"/mid/"+myapp.getData("id"));
+		        HttpGet get = new HttpGet("http://www.xpcms.net/mobile.php/record/get/id/"+id+"/token/"+myapp.getData("token"));
 		        HttpClient client = new DefaultHttpClient();
 		        
 				try {
@@ -231,14 +232,15 @@ public class RecordAddActivity extends Activity{
     
     //提交异步任务
     class SubmitTask extends AsyncTask<Void, Integer, Integer> {
-
+    	private int code;
+    	
 		@Override
 		protected Integer doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			List<NameValuePair> list = new ArrayList<NameValuePair>();
             
             NameValuePair pair0 = new BasicNameValuePair("id", id);
-            NameValuePair pair1 = new BasicNameValuePair("mid", myapp.getData("id").toString());
+            NameValuePair pair1 = new BasicNameValuePair("token", myapp.getData("token").toString());
             NameValuePair pair2 = new BasicNameValuePair("tid", tid);
             NameValuePair pair3 = new BasicNameValuePair("title", title.getText().toString());
             NameValuePair pair5 = new BasicNameValuePair("account", account.getText().toString());
@@ -254,31 +256,23 @@ public class RecordAddActivity extends Activity{
             list.add(pair6);
             list.add(pair7);
             
+            String uri = "http://www.xpcms.net/mobile.php/record/add";
+			JSONObject response = HttpRequest.post(uri, list);
+            
 			try {
-				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
-				DefaultHttpClient httpclient = new DefaultHttpClient();
-	            HttpPost post = new HttpPost("http://www.xpcms.net/mobile.php/record/add");
-	            post.setEntity(entity);
-	            HttpResponse response = httpclient.execute(post);
-	            
-	            return response.getStatusLine().getStatusCode();
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
+				code = response.getInt("code");
+			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            return 0;
+			
+            return code;
 		}
 
 		@Override
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
-			if (result == 200) {
+			if (code == 200) {
 				finish();
 				Toast.makeText(RecordAddActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
 			} else {

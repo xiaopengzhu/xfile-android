@@ -1,25 +1,16 @@
 package cn.com.xfile;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONTokener;
+import org.json.JSONObject;
 
+import cn.com.util.HttpRequest;
 import cn.com.util.MyApp;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,6 +19,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -96,32 +88,31 @@ public class NoticeActivity  extends Activity{
     
     class DeleteTask extends AsyncTask<Integer, Integer, Integer> {
     	private int index;
+    	private int code;
     	
 		@Override
 		protected Integer doInBackground(Integer... params) {
 			// TODO Auto-generated method stub
-			List<NameValuePair> list = new ArrayList<NameValuePair>();
+			
+			index = params[0];
+			
+			List<NameValuePair> list = new ArrayList<NameValuePair>(); Log.v("TEST", data.get(params[0]).get("id").toString());
             NameValuePair pair1 = new BasicNameValuePair("id", data.get(params[0]).get("id").toString());
             list.add(pair1);
+            
+            String uri = "http://www.xpcms.net/mobile.php/notice/delete";
+            JSONObject response = HttpRequest.post(uri, list);
+            
             try {
-                UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
-                DefaultHttpClient httpclient = new DefaultHttpClient();
-                HttpPost post = new HttpPost("http://www.xpcms.net/mobile.php/notice/delete");
-                post.setEntity(entity);
-                HttpResponse response = httpclient.execute(post);
-                int result = response.getStatusLine().getStatusCode();
-                index = params[0];
-                return result;
-            } catch (UnsupportedEncodingException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (ClientProtocolException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+				code = Integer.parseInt(response.get("code").toString());
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
 			return null;
 		}
 
@@ -129,7 +120,7 @@ public class NoticeActivity  extends Activity{
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			if (result == 200) {
+			if (code == 200) {
 				data.remove(index);
 				simpleadapter.notifyDataSetChanged();
             	Toast.makeText(NoticeActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
@@ -167,13 +158,11 @@ public class NoticeActivity  extends Activity{
         ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
         HashMap<String, Object> map = null;
         
-        String url = "http://www.xpcms.net/mobile.php/notice/index/mid/" + myapp.getData("id").toString();
-        HttpGet get = new HttpGet(url);
-        HttpClient client = new DefaultHttpClient();
+        String uri = "http://www.xpcms.net/mobile.php/notice/index/token/" + myapp.getData("token").toString();
+        JSONObject response = HttpRequest.get(uri);
+        
         try {
-            HttpResponse response = client.execute(get);
-            String str = EntityUtils.toString(response.getEntity());
-            JSONArray line = new JSONArray(new JSONTokener(str));
+            JSONArray line = response.getJSONArray("data");
             for (int i =0; i<line.length();i++) {
                 map = new HashMap<String, Object>();
                 map.put("id", line.getJSONObject(i).getString("id"));
@@ -181,12 +170,6 @@ public class NoticeActivity  extends Activity{
                 map.put("title", line.getJSONObject(i).getString("title"));
                 list.add(map);
             }
-        } catch (ClientProtocolException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
