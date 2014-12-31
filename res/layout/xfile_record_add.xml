@@ -42,15 +42,30 @@
         	android:singleLine="true">
         	<requestFocus />
         </AutoCompleteTextView>
-    
-        <EditText
+        
+        <LinearLayout 
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:layout_marginTop="10dp"
+        	android:layout_gravity="center" >
+        	
+        	<EditText
             android:id="@+id/account"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_weight="1"
             android:hint="请输入帐号"
             android:singleLine="true"
             android:ems="10" />
+        	
+        	<ImageView 
+        		android:layout_width="wrap_content"
+        		android:layout_height="fill_parent"
+        		android:onClick="insertNotice"
+        		android:src="@drawable/insert" />
+        	
+        </LinearLayout>
+        
     
         <EditText
             android:id="@+id/password"

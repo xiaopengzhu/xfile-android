@@ -120,7 +120,7 @@ public class RecordListActivity extends Activity implements IXListViewListener{
 				// TODO Auto-generated method stub
 				 List<NameValuePair> list = new ArrayList<NameValuePair>();
                  MyApp myapp = (MyApp) getApplication();
-                 NameValuePair pair1 = new BasicNameValuePair("mid", myapp.getData("id").toString());
+                 NameValuePair pair1 = new BasicNameValuePair("token", myapp.getData("token").toString());
                  NameValuePair pair2 = new BasicNameValuePair("id", id);
                  list.add(pair1);
                  list.add(pair2);
@@ -266,11 +266,6 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         
         //初始化
         listview.setPullLoadEnable(true);
-        simpleadapter = new SimpleAdapter(this, data,
-                R.layout.xfile_record_list_item,
-                new String[]{"id", "title",  "account", "password", "icon"}, 
-                new int[]{R.id.item_id, R.id.item_title, R.id.item_account, R.id.item_password, R.id.item_icon});
-        listview.setAdapter(simpleadapter);
         listview.setXListViewListener(this);
         listview.setPullLoadEnable(false);
         

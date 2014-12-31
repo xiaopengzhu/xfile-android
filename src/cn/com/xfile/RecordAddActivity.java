@@ -1,8 +1,8 @@
 package cn.com.xfile;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -22,18 +22,30 @@ import org.json.JSONTokener;
 
 import cn.com.util.HttpRequest;
 import cn.com.util.MyApp;
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +64,9 @@ public class RecordAddActivity extends Activity{
 	private Button sub_btn;
 	private ArrayAdapter<String> adapter;
 	private MyApp myapp;
+	
+	private AlertDialog.Builder builder;
+	private AlertDialog dialog;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +127,60 @@ public class RecordAddActivity extends Activity{
 			}
         });
         
+        //侦测删除
+        account.setOnKeyListener(new OnKeyListener() {
+			
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				// TODO Auto-generated method stub
+				
+				return false;
+			}
+		});
+        
+    }
+    
+    public void insertNotice(View v) {
+    	new NoticeTask().execute();
+    }
+    
+    //加载密码提示
+    class NoticeTask extends AsyncTask<Void, Integer, Integer> {
+    	private List<HashMap<String, Object>> data;
+    	
+    	
+		@Override
+		protected Integer doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			data = getNotice();
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+   	
+	    	SimpleAdapter simpleadapter = new SimpleAdapter(getApplicationContext(), data,
+	                R.layout.xfile_recordadd_notice_item,
+	                new String[]{"id", "sort", "title"}, 
+	                new int[]{R.id.item_id, R.id.sort, R.id.item_title});
+	    	if (dialog != null && dialog.isShowing()) return;
+	    	
+	    	builder = new AlertDialog.Builder(RecordAddActivity.this);
+	    	builder.setAdapter(simpleadapter, new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					String x = "[" + data.get(which).get("id").toString() +"]";
+					account.append(x);
+				}
+			});
+	    	dialog = builder.create();
+	    	dialog.show();
+		}
+    	
     }
     
     //输入提示
@@ -306,5 +375,28 @@ public class RecordAddActivity extends Activity{
         }
         return list;
         
+    }
+    
+    private List<HashMap<String, Object>> getNotice() {
+        ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
+        HashMap<String, Object> map = null;
+        
+        String uri = "http://www.xpcms.net/mobile.php/notice/index/token/" + myapp.getData("token").toString();
+        JSONObject response = HttpRequest.get(uri);
+        
+        try {
+            JSONArray line = response.getJSONArray("data");
+            for (int i =0; i<line.length();i++) {
+                map = new HashMap<String, Object>();
+                map.put("id", line.getJSONObject(i).getString("id"));
+                map.put("sort", (i+1));
+                map.put("title", line.getJSONObject(i).getString("title"));
+                list.add(map);
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return list;
     }
 }
