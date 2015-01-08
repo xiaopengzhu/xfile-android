@@ -50,31 +50,46 @@
         	android:layout_gravity="center" >
         	
         	<EditText
-            android:id="@+id/account"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="请输入帐号"
-            android:singleLine="true"
-            android:ems="10" />
+	            android:id="@+id/account"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:hint="请输入帐号"
+	            android:singleLine="true"
+	            android:longClickable="false"
+	            android:ems="10" />
         	
         	<ImageView 
         		android:layout_width="wrap_content"
         		android:layout_height="fill_parent"
-        		android:onClick="insertNotice"
+        		android:onClick="insertAccNotice"
         		android:src="@drawable/insert" />
         	
         </LinearLayout>
         
-    
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="请输入密码"
-            android:layout_marginTop="10dp"
-            android:singleLine="true"
-            android:ems="10" />
+        <LinearLayout 
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:layout_marginTop="10dp"
+        	android:gravity="center" >
+        	
+        	<EditText
+	            android:id="@+id/password"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:hint="请输入密码"
+	            android:layout_weight="1"
+	            android:singleLine="true"
+	            android:longClickable="false"
+	            android:ems="10" />
+        	
+        	<ImageView 
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:onClick="insertPassNotice"
+                android:src="@drawable/insert" />
+        </LinearLayout>
+
         
         <EditText 
         	android:id="@+id/remark"

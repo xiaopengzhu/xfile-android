@@ -23,6 +23,7 @@ import org.json.JSONTokener;
 
 import cn.com.lib.XListView;
 import cn.com.lib.XListView.IXListViewListener;
+import cn.com.util.EncryptString;
 import cn.com.util.MyApp;
 import cn.com.util.Tools;
 import android.app.Activity;
@@ -310,13 +311,21 @@ public class RecordListActivity extends Activity implements IXListViewListener{
             HttpResponse response = client.execute(get);
             String str = EntityUtils.toString(response.getEntity());
             JSONArray line = new JSONArray(new JSONTokener(str));
+            EncryptString encryptString;
             for (int i =0; i<line.length();i++) {
                 map = new HashMap<String, Object>();
                 map.put("id", line.getJSONObject(i).getString("id"));
                 map.put("type_id", line.getJSONObject(i).getJSONObject("type").getString("id"));
                 map.put("title", line.getJSONObject(i).getString("title"));
-                map.put("account", line.getJSONObject(i).getString("account"));
-                map.put("password", line.getJSONObject(i).getString("password"));
+                
+                encryptString = new EncryptString();
+                encryptString.contruct(line.getJSONObject(i).getString("account"));
+                map.put("account", encryptString.showString);
+                
+                encryptString = new EncryptString();
+                encryptString.contruct(line.getJSONObject(i).getString("password"));
+                map.put("password", encryptString.showString);
+                
                 JSONObject type = line.getJSONObject(i).getJSONObject("type");
                 map.put("icon", Tools.getBitMap("http://www.xpcms.net/public/upload/type/"+type.getString("icon")));
                 

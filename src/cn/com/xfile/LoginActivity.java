@@ -7,6 +7,8 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import cn.com.util.EncryptString;
 import cn.com.util.HttpRequest;
 import cn.com.util.MyApp;
 import android.app.Activity;
@@ -17,6 +19,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -55,6 +58,7 @@ public class LoginActivity extends Activity{
 				startActivity(intent);
 			}
 		});
+
     }
    
     //登录任务

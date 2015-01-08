@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import cn.com.util.EncryptString;
 import cn.com.util.HttpRequest;
 import cn.com.util.MyApp;
 import android.app.ActionBar.LayoutParams;
@@ -67,6 +68,11 @@ public class RecordAddActivity extends Activity{
 	
 	private AlertDialog.Builder builder;
 	private AlertDialog dialog;
+	
+	private int notice_type;
+	private EncryptString acc_encrypt, pass_encrypt;
+	private int acc_position, pass_position;
+	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,20 +133,121 @@ public class RecordAddActivity extends Activity{
 			}
         });
         
-        //侦测删除
-        account.setOnKeyListener(new OnKeyListener() {
+        //侦测输入
+        account.addTextChangedListener(new TextWatcher() {
 			
 			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+				CharSequence str = null;
+
+				if (before > 0) {//删除模式
+					acc_encrypt.delete(start+before, before);
+				}
+				//一次插入多个字符情况，Notice塞入时start会重置为0, count变为整个长度
+				if (count > 0) {//插入模式，分键盘插入和Notice提示插入
+					
+					if (start == 0 && before == 0 && s.subSequence(0,1).toString().equals("■")) {//首位Notice插入
+						Log.e("type", "notice1");
+					} else if (start == 0 && before == 0 && !s.subSequence(0,1).toString().equals("■")) {//首位Keybord插入
+						str = s.subSequence(0, count);
+						if (str.toString().equals(acc_encrypt.showString)) {//编辑状态时还原的情况,此时start处于首位，且showString就有值
+							
+						} else {
+							acc_encrypt.add(start, str.toString());
+						}
+						Log.e("type", "keybord1");
+					} else if (start == 0 && s.length() == count) {//非首位Notice插入
+						Log.e("type", "notice2");
+					} else {
+						str = s.subSequence(start, start+count);
+						Log.e("str", s.toString() + " = "+str.toString());
+						acc_encrypt.add(start, str.toString());
+						Log.e("type", "keybord2");
+					}
+
+				}
+				Log.e("true", acc_encrypt.trueString);
+				Log.e("show", acc_encrypt.showString);
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
 				
-				return false;
+			}
+		});
+        
+        //侦测输入
+        password.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+				CharSequence str = null;
+
+				if (before > 0) {//删除模式
+					pass_encrypt.delete(start+before, before);
+				}
+				//一次插入多个字符情况，Notice塞入时start会重置为0, count变为整个长度
+				if (count > 0) {//插入模式，分键盘插入和Notice提示插入
+					
+					if (start == 0 && before == 0 && s.subSequence(0,1).toString().equals("■")) {//首位Notice插入
+						Log.e("type", "notice1");
+					} else if (start == 0 && before == 0 && !s.subSequence(0,1).toString().equals("■")) {//首位Keybord插入
+						str = s.subSequence(0, count);
+						if (str.toString().equals(pass_encrypt.showString)) {//编辑状态时还原的情况,此时start处于首位，且showString就有值
+							
+						} else {
+							pass_encrypt.add(start, str.toString());
+						}
+						Log.e("type", "keybord1");
+						
+					} else if (start == 0 && s.length() == count) {//非首位Notice插入
+						Log.e("type", "notice2");
+					} else {
+						str = s.subSequence(start, start+count);
+						Log.e("str", s.toString() + " = "+str.toString());
+						pass_encrypt.add(start, str.toString());
+						Log.e("type", "keybord2");
+					}
+
+				}
+				//Log.e("true", pass_encrypt.trueString);
+				//Log.e("show", pass_encrypt.showString);
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
         
     }
     
-    public void insertNotice(View v) {
+    public void insertAccNotice(View v) {
+    	notice_type = 1;
+    	acc_position = account.getSelectionStart();
+    	new NoticeTask().execute();
+    }
+    
+    public void insertPassNotice(View v) {
+    	notice_type = 2;
+    	pass_position = password.getSelectionStart();
     	new NoticeTask().execute();
     }
     
@@ -173,8 +280,19 @@ public class RecordAddActivity extends Activity{
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
-					String x = "[" + data.get(which).get("id").toString() +"]";
-					account.append(x);
+					String str = "[" + data.get(which).get("id").toString() +"]";
+					if (notice_type == 1) {
+						acc_encrypt.add(acc_position, str);
+						
+						account.setText(acc_encrypt.showString);
+						account.setSelection(acc_position+1);
+						Log.e("xx", "show" + acc_encrypt.showString + "true" + acc_encrypt.trueString);
+					}
+					if (notice_type == 2) {
+						pass_encrypt.add(pass_position, str);
+						password.setText(pass_encrypt.showString);
+						password.setSelection(pass_position+1);
+					}
 				}
 			});
 	    	dialog = builder.create();
@@ -285,14 +403,26 @@ public class RecordAddActivity extends Activity{
                 	
                 	title.setText(line.getString("title"));
 					record_id.setText(line.getString("id"));
-					account.setText(line.getString("account"));
-	                password.setText(line.getString("password"));
+					
+					acc_encrypt = new EncryptString();
+					acc_encrypt.contruct(line.getString("account"));
+					account.setText(acc_encrypt.showString);
+	                
+					pass_encrypt = new EncryptString();
+					pass_encrypt.contruct(line.getString("password"));
+					password.setText(pass_encrypt.showString);
+					
 	                remark.setText(line.getString("remark"));
 	            	
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+            } else {
+            	acc_encrypt = new EncryptString();
+            	acc_encrypt.contruct("");
+            	pass_encrypt = new EncryptString();
+            	pass_encrypt.contruct("");
             }
 	        progressDialog.dismiss();
 		}
@@ -312,8 +442,8 @@ public class RecordAddActivity extends Activity{
             NameValuePair pair1 = new BasicNameValuePair("token", myapp.getData("token").toString());
             NameValuePair pair2 = new BasicNameValuePair("tid", tid);
             NameValuePair pair3 = new BasicNameValuePair("title", title.getText().toString());
-            NameValuePair pair5 = new BasicNameValuePair("account", account.getText().toString());
-            NameValuePair pair6 = new BasicNameValuePair("password", password.getText().toString());
+            NameValuePair pair5 = new BasicNameValuePair("account", acc_encrypt.trueString);
+            NameValuePair pair6 = new BasicNameValuePair("password", pass_encrypt.trueString);
             NameValuePair pair7 = new BasicNameValuePair("remark", remark.getText().toString());
             
             
