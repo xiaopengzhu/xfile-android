@@ -49,14 +49,13 @@
         	android:layout_marginTop="10dp"
         	android:layout_gravity="center" >
         	
-        	<EditText
+        	<cn.com.lib.MyEditText
 	            android:id="@+id/account"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_weight="1"
 	            android:hint="请输入帐号"
 	            android:singleLine="true"
-	            android:longClickable="false"
 	            android:ems="10" />
         	
         	<ImageView 

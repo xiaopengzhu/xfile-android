@@ -75,5 +75,13 @@ public class EncryptString {
 		}
 		return buffer.toString();
 	}
+	
+	public String getTrue() {
+		return trueString;
+	} 
+	
+	public String getShow() {
+		return showString;
+	}
 
 }

@@ -1,7 +1,6 @@
 package cn.com.xfile;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 

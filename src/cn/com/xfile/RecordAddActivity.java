@@ -20,13 +20,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import cn.com.lib.MyEditText;
 import cn.com.util.EncryptString;
 import cn.com.util.HttpRequest;
 import cn.com.util.MyApp;
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -36,16 +35,15 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnKeyListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,11 +58,13 @@ public class RecordAddActivity extends Activity{
 	private JSONObject line;
 	private String id;
 	static  ProgressDialog progressDialog;
-	private EditText account, password, remark;
+	private EditText  password, remark;
 	private TextView titleText, record_id;
 	private Button sub_btn;
 	private ArrayAdapter<String> adapter;
 	private MyApp myapp;
+	
+	private MyEditText account;
 	
 	private AlertDialog.Builder builder;
 	private AlertDialog dialog;
@@ -87,7 +87,7 @@ public class RecordAddActivity extends Activity{
         sub_btn = (Button)findViewById(R.id.sub_btn);
     	titleText = (TextView)findViewById(R.id.titleText);
     	record_id = (TextView)findViewById(R.id.record_id);
-        account = (EditText)findViewById(R.id.account);
+        account = (MyEditText)findViewById(R.id.account);
         password = (EditText)findViewById(R.id.password);
         remark = (EditText)findViewById(R.id.remark);
         title = (AutoCompleteTextView)findViewById(R.id.title);
@@ -137,18 +137,22 @@ public class RecordAddActivity extends Activity{
         account.addTextChangedListener(new TextWatcher() {
 			
 			@Override
+			/**
+			 * s 为变化后字符串
+			 * start 为变化后的光标位置
+			 * before 为变化前的光标位置
+			 * count 为新增量
+			 */
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				// TODO Auto-generated method stub
 				CharSequence str = null;
 
-				if (before > 0) {//删除模式
+				if (before > 0 && count == 0) {//删除模式, setText会先执行一行清空，此时不能调用delete
 					acc_encrypt.delete(start+before, before);
 				}
 				//一次插入多个字符情况，Notice塞入时start会重置为0, count变为整个长度
 				if (count > 0) {//插入模式，分键盘插入和Notice提示插入
-					
 					if (start == 0 && before == 0 && s.subSequence(0,1).toString().equals("■")) {//首位Notice插入
-						Log.e("type", "notice1");
 					} else if (start == 0 && before == 0 && !s.subSequence(0,1).toString().equals("■")) {//首位Keybord插入
 						str = s.subSequence(0, count);
 						if (str.toString().equals(acc_encrypt.showString)) {//编辑状态时还原的情况,此时start处于首位，且showString就有值
@@ -156,19 +160,15 @@ public class RecordAddActivity extends Activity{
 						} else {
 							acc_encrypt.add(start, str.toString());
 						}
-						Log.e("type", "keybord1");
 					} else if (start == 0 && s.length() == count) {//非首位Notice插入
-						Log.e("type", "notice2");
 					} else {
 						str = s.subSequence(start, start+count);
-						Log.e("str", s.toString() + " = "+str.toString());
 						acc_encrypt.add(start, str.toString());
-						Log.e("type", "keybord2");
 					}
 
 				}
-				Log.e("true", acc_encrypt.trueString);
-				Log.e("show", acc_encrypt.showString);
+				Log.e("4-true", acc_encrypt.getTrue());
+				Log.e("4-show", acc_encrypt.getShow());
 			}
 			
 			@Override
@@ -192,14 +192,12 @@ public class RecordAddActivity extends Activity{
 				// TODO Auto-generated method stub
 				CharSequence str = null;
 
-				if (before > 0) {//删除模式
+				if (before > 0 && count == 0) {//删除模式, setText会先执行一行清空，此时不能调用delete
 					pass_encrypt.delete(start+before, before);
 				}
 				//一次插入多个字符情况，Notice塞入时start会重置为0, count变为整个长度
 				if (count > 0) {//插入模式，分键盘插入和Notice提示插入
-					
 					if (start == 0 && before == 0 && s.subSequence(0,1).toString().equals("■")) {//首位Notice插入
-						Log.e("type", "notice1");
 					} else if (start == 0 && before == 0 && !s.subSequence(0,1).toString().equals("■")) {//首位Keybord插入
 						str = s.subSequence(0, count);
 						if (str.toString().equals(pass_encrypt.showString)) {//编辑状态时还原的情况,此时start处于首位，且showString就有值
@@ -207,20 +205,13 @@ public class RecordAddActivity extends Activity{
 						} else {
 							pass_encrypt.add(start, str.toString());
 						}
-						Log.e("type", "keybord1");
-						
 					} else if (start == 0 && s.length() == count) {//非首位Notice插入
-						Log.e("type", "notice2");
 					} else {
 						str = s.subSequence(start, start+count);
-						Log.e("str", s.toString() + " = "+str.toString());
 						pass_encrypt.add(start, str.toString());
-						Log.e("type", "keybord2");
 					}
 
 				}
-				//Log.e("true", pass_encrypt.trueString);
-				//Log.e("show", pass_encrypt.showString);
 			}
 			
 			@Override
@@ -238,8 +229,9 @@ public class RecordAddActivity extends Activity{
 		});
         
     }
-    
-    public void insertAccNotice(View v) {
+
+
+	public void insertAccNotice(View v) {
     	notice_type = 1;
     	acc_position = account.getSelectionStart();
     	new NoticeTask().execute();
@@ -286,7 +278,7 @@ public class RecordAddActivity extends Activity{
 						
 						account.setText(acc_encrypt.showString);
 						account.setSelection(acc_position+1);
-						Log.e("xx", "show" + acc_encrypt.showString + "true" + acc_encrypt.trueString);
+						Log.e("5", "show" + acc_encrypt.showString + "true" + acc_encrypt.trueString);
 					}
 					if (notice_type == 2) {
 						pass_encrypt.add(pass_position, str);
