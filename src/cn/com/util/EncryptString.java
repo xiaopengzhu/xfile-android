@@ -51,6 +51,8 @@ public class EncryptString {
 	
 	//计算在真实字符串中的光标位置
 	public Integer realposition(Integer position) {
+		if (position > showString.length()) return null;
+		
 		String source = showString.substring(0, position); 
 		String target = new String("■");
 		int number = 0;  
@@ -70,6 +72,7 @@ public class EncryptString {
 	//剪掉指定位置的字符
 	public String cut(String str, Integer start, Integer end) {
 		StringBuffer buffer = new StringBuffer(str);
+		if (end > buffer.length()) return null;
 		for (int i = start; i<end; i ++) {
 			buffer.deleteCharAt(start);
 		}

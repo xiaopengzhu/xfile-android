@@ -145,6 +145,7 @@ public class RecordAddActivity extends Activity{
 			 */
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				// TODO Auto-generated method stub
+				
 				CharSequence str = null;
 
 				if (before > 0 && count == 0) {//删除模式, setText会先执行一行清空，此时不能调用delete
@@ -167,8 +168,6 @@ public class RecordAddActivity extends Activity{
 					}
 
 				}
-				Log.e("4-true", acc_encrypt.getTrue());
-				Log.e("4-show", acc_encrypt.getShow());
 			}
 			
 			@Override
@@ -278,7 +277,6 @@ public class RecordAddActivity extends Activity{
 						
 						account.setText(acc_encrypt.showString);
 						account.setSelection(acc_position+1);
-						Log.e("5", "show" + acc_encrypt.showString + "true" + acc_encrypt.trueString);
 					}
 					if (notice_type == 2) {
 						pass_encrypt.add(pass_position, str);
