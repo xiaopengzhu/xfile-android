@@ -83,8 +83,8 @@ public class RecordListActivity extends Activity implements IXListViewListener{
 				data = getData();
 				simpleadapter = new SimpleAdapter(getApplicationContext(), data,
 		                R.layout.xfile_record_list_item,
-		                new String[]{"id", "title",  "account", "password", "icon"}, 
-		                new int[]{R.id.item_id, R.id.item_title, R.id.item_account, R.id.item_password, R.id.item_icon});
+		                new String[]{"id", "title",  "account", "multi", "icon"}, 
+		                new int[]{R.id.item_id, R.id.item_title, R.id.item_account, R.id.item_multi, R.id.item_icon});
 		        simpleadapter.setViewBinder(new ViewBinder() {
 		            
 		            @Override
@@ -328,6 +328,9 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                 
                 JSONObject type = line.getJSONObject(i).getJSONObject("type");
                 map.put("icon", Tools.getBitMap("http://www.xpcms.net/public/upload/type/"+type.getString("icon")));
+                
+                //Multi设置
+                map.put("multi", encryptString.showString);
                 
                 list.add(map);
             }

@@ -40,13 +40,16 @@
             android:layout_height="24dp"
             android:textColor="#999"
             android:gravity="center_vertical"
+            android:singleLine="true"
             android:text="@null"/>
         
         <TextView 
-            android:id="@+id/item_password"
+            android:id="@+id/item_multi"
             android:layout_width="fill_parent"
             android:layout_height="24dp"
-            android:textColor="#eee"
+            android:textColor="#000"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
             android:gravity="center_vertical"
             android:text="@null" />
         

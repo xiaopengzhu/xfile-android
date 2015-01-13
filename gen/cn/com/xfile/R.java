@@ -99,8 +99,8 @@ public final class R {
         public static final int item_account=0x7f080040;
         public static final int item_icon=0x7f08003c;
         public static final int item_id=0x7f080035;
+        public static final int item_multi=0x7f080041;
         public static final int item_name=0x7f08003d;
-        public static final int item_password=0x7f080041;
         public static final int item_title=0x7f080037;
         public static final int listview=0x7f08000e;
         public static final int login_btn=0x7f080015;
