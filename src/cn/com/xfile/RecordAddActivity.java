@@ -20,7 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import cn.com.lib.MyEditText;
 import cn.com.util.EncryptString;
 import cn.com.util.HttpRequest;
 import cn.com.util.MyApp;
@@ -53,13 +52,12 @@ public class RecordAddActivity extends Activity{
 	private JSONObject line;
 	private String id;
 	static  ProgressDialog progressDialog;
-	private EditText  password, remark;
+	private EditText  account,password, remark;
 	private TextView titleText, record_id;
 	private Button sub_btn;
 	private ArrayAdapter<String> adapter;
 	private MyApp myapp;
 	
-	private MyEditText account;
 	
 	private AlertDialog.Builder builder;
 	private AlertDialog dialog;
@@ -82,7 +80,7 @@ public class RecordAddActivity extends Activity{
         sub_btn = (Button)findViewById(R.id.sub_btn);
     	titleText = (TextView)findViewById(R.id.titleText);
     	record_id = (TextView)findViewById(R.id.record_id);
-        account = (MyEditText)findViewById(R.id.account);
+        account = (EditText)findViewById(R.id.account);
         password = (EditText)findViewById(R.id.password);
         remark = (EditText)findViewById(R.id.remark);
         title = (AutoCompleteTextView)findViewById(R.id.title);

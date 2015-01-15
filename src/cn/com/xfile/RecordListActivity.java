@@ -32,14 +32,22 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -90,12 +98,21 @@ public class RecordListActivity extends Activity implements IXListViewListener{
 		            @Override
 		            public boolean setViewValue(View view, Object data,
 		                    String textRepresentation) {
-		                // TODO Auto-generated method stub
-		                if (view instanceof ImageView && data instanceof Bitmap) {
+		            	
+		                //如果是BitMap就显示图片
+		            	if (view instanceof ImageView && data instanceof Bitmap) {
 		                    ImageView iv = (ImageView) view;
 		                    iv.setImageBitmap((Bitmap)data);
 		                    return true;
-		                } else 
+		                } 
+		            	
+		                //如果含有〓字符就拆成一个链接
+		            	if (view instanceof TextView && data instanceof SpannableString) {
+		            		TextView multi = (TextView)view;
+		            		multi.setMovementMethod(LinkMovementMethod.getInstance());
+		            		Log.e("test", data.toString());
+		            	}
+		            	
 		                return false;
 		            }
 		        });
@@ -261,7 +278,6 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         MyApp myapp = (MyApp)getApplication();
         token = myapp.getData("token").toString();
         
-        
         //Loading
         progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
         
@@ -330,7 +346,22 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                 map.put("icon", Tools.getBitMap("http://www.xpcms.net/public/upload/type/"+type.getString("icon")));
                 
                 //Multi设置
-                map.put("multi", encryptString.showString);
+                String ad = line.getJSONObject(i).getJSONObject("type").getString("ad");
+                String link = line.getJSONObject(i).getJSONObject("type").getString("link");
+                String remark = line.getJSONObject(i).getString("remark");
+                
+                if (ad.equals("")) {
+                	map.put("multi", remark);
+                } else {
+                	if(!link.equals("")) {
+                		SpannableString sp = new SpannableString(ad);
+                		sp.setSpan(new URLSpan(link), 0, sp.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                		sp.setSpan(new BackgroundColorSpan(Color.RED), 0, sp.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                		map.put("multi", sp);
+                	} else {
+                		map.put("multi", ad);
+                	}
+                }
                 
                 list.add(map);
             }

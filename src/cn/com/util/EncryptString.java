@@ -1,12 +1,8 @@
 package cn.com.util;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import android.R.integer;
-import android.util.Log;
 
 public class EncryptString {
 	public String trueString, showString;

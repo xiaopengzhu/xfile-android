@@ -184,10 +184,11 @@ public final class R {
         public static final int xfile_record_item=0x7f030016;
         public static final int xfile_record_list=0x7f030017;
         public static final int xfile_record_list_item=0x7f030018;
-        public static final int xfile_recordadd_notice_item=0x7f030019;
-        public static final int xfile_recordadd_popwindow=0x7f03001a;
-        public static final int xfile_register=0x7f03001b;
-        public static final int xfile_welcome=0x7f03001c;
+        public static final int xfile_record_view=0x7f030019;
+        public static final int xfile_recordadd_notice_item=0x7f03001a;
+        public static final int xfile_recordadd_popwindow=0x7f03001b;
+        public static final int xfile_register=0x7f03001c;
+        public static final int xfile_welcome=0x7f03001d;
     }
     public static final class string {
         public static final int ActivityMainTitle=0x7f060001;

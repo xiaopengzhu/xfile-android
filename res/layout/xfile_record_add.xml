@@ -49,7 +49,7 @@
         	android:layout_marginTop="10dp"
         	android:layout_gravity="center" >
         	
-        	<cn.com.lib.MyEditText
+        	<EditText
 	            android:id="@+id/account"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
