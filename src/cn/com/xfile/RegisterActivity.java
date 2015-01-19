@@ -21,7 +21,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class RegisterActivity extends Activity{
-	private EditText account, password, password2, nickname;
+	private EditText account, password, password2, nickname, second_password;
 	static ProgressDialog progressDialog;
 
 	@Override
@@ -33,6 +33,7 @@ public class RegisterActivity extends Activity{
 		password = (EditText)findViewById(R.id.password);
 		password2 = (EditText)findViewById(R.id.password2);
 		nickname = (EditText)findViewById(R.id.nickname);
+		second_password = (EditText)findViewById(R.id.second_password);
 	}
 	
 	class RegisterTask extends AsyncTask<Void, Integer, Integer> {
@@ -45,9 +46,11 @@ public class RegisterActivity extends Activity{
 			NameValuePair pair1 = new BasicNameValuePair("account", account.getText().toString());
 			NameValuePair pair2 = new BasicNameValuePair("password", password.getText().toString());
 			NameValuePair pair3 = new BasicNameValuePair("nickname", nickname.getText().toString());
+			NameValuePair pair4 = new BasicNameValuePair("second_password", second_password.getText().toString());
 			list.add(pair1);
 			list.add(pair2);
 			list.add(pair3);
+			list.add(pair4);
 			
 			String uri = "http://www.xpcms.net/mobile.php/member/register";
 			response = HttpRequest.post(uri, list);

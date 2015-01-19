@@ -33,6 +33,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.transition.Scene;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -46,11 +48,10 @@ import android.widget.Toast;
  * 添加记录
  */
 public class RecordAddActivity extends Activity{
-	private String tid;
+	private String id, tid, second_password;
 	private ArrayList<String> data;
 	private AutoCompleteTextView title;
 	private JSONObject line;
-	private String id;
 	static  ProgressDialog progressDialog;
 	private EditText  account,password, remark;
 	private TextView titleText, record_id;
@@ -76,6 +77,7 @@ public class RecordAddActivity extends Activity{
         Intent intent = getIntent();
         tid = intent.getStringExtra("tid");
         id = intent.getStringExtra("id");
+        second_password = intent.getStringExtra("second_password");
         
         sub_btn = (Button)findViewById(R.id.sub_btn);
     	titleText = (TextView)findViewById(R.id.titleText);
@@ -355,9 +357,9 @@ public class RecordAddActivity extends Activity{
 	        
 			//记录拉取
 			if (id!=null) {
-		        HttpGet get = new HttpGet("http://www.xpcms.net/mobile.php/record/get/id/"+id+"/token/"+myapp.getData("token"));
+		        HttpGet get = new HttpGet("http://www.xpcms.net/mobile.php/record/get/id/"+id+"/token/"+myapp.getData("token")+"/second_password/" + second_password);
 		        HttpClient client = new DefaultHttpClient();
-		        
+		        Log.e("test", "http://www.xpcms.net/mobile.php/record/get/id/"+id+"/token/"+myapp.getData("token")+"/second_password/" + second_password);
 				try {
 					HttpResponse response = client.execute(get);
 			        String  str = EntityUtils.toString(response.getEntity());

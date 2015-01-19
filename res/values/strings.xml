@@ -10,6 +10,7 @@
     <string name="register_nickname_tip">请填写昵称</string>
     <string name="register_password_tip">请填写密码</string>
     <string name="register_password_again_tip">请再次输入密码</string>
+    <string name="register_second_password_tip">请输入二级密码</string>
     <string name="register_submit">提交</string>
     
     <string name="main_navigation_catagory">分类</string>

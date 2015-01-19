@@ -32,15 +32,10 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.URLSpan;
-import android.util.Log;
+import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -74,6 +69,11 @@ public class RecordListActivity extends Activity implements IXListViewListener{
     
     private int index;
     
+    private String second_password;
+    
+    //长按菜单
+    private String[] opts = new String[]{"查看", "编辑", "删除"};
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,21 +99,18 @@ public class RecordListActivity extends Activity implements IXListViewListener{
 		            public boolean setViewValue(View view, Object data,
 		                    String textRepresentation) {
 		            	
-		                //如果是BitMap就显示图片
-		            	if (view instanceof ImageView && data instanceof Bitmap) {
-		                    ImageView iv = (ImageView) view;
-		                    iv.setImageBitmap((Bitmap)data);
-		                    return true;
-		                } 
-		            	
-		                //如果含有〓字符就拆成一个链接
-		            	if (view instanceof TextView && data instanceof SpannableString) {
-		            		TextView multi = (TextView)view;
-		            		multi.setMovementMethod(LinkMovementMethod.getInstance());
-		            		Log.e("test", data.toString());
-		            	}
-		            	
-		                return false;
+		            	switch (view.getId()) {
+							case R.id.item_icon:
+								ImageView iv = (ImageView) view;
+			                    iv.setImageBitmap((Bitmap)data);
+								return true;
+							case R.id.item_multi:
+								TextView tv = (TextView)view;
+								tv.setText(Html.fromHtml(data.toString()));
+								return true;
+							default:
+								return false;
+						}
 		            }
 		        });
 				
@@ -140,8 +137,10 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                  MyApp myapp = (MyApp) getApplication();
                  NameValuePair pair1 = new BasicNameValuePair("token", myapp.getData("token").toString());
                  NameValuePair pair2 = new BasicNameValuePair("id", id);
+                 NameValuePair pair3 = new BasicNameValuePair("second_password", second_password);
                  list.add(pair1);
                  list.add(pair2);
+                 list.add(pair3);
                  try {
                      UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
                      DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -196,7 +195,7 @@ public class RecordListActivity extends Activity implements IXListViewListener{
 			}
 		};
 		
-        //添加事件
+        //添加
         add_btn.setOnClickListener(new OnClickListener() {
             
             @Override
@@ -209,49 +208,39 @@ public class RecordListActivity extends Activity implements IXListViewListener{
             }
         });
         
-        //点击编辑
+        //点击
         listview.setOnItemClickListener(new OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                    long arg3) {
-                // TODO Auto-generated method stub
-                String id = data.get(arg2-1).get("id").toString();
-                TextView tv = (TextView)findViewById(R.id.type_id); 
-                String tid = tv.getText().toString();
-                Intent intent = new Intent();
-                intent.putExtra("id", id);
-                intent.putExtra("tid", tid);
-                intent.setClass(RecordListActivity.this, RecordAddActivity.class);
-                startActivity(intent);
-            }
-        });
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				// TODO Auto-generated method stub
+				String link = data.get(arg2-1).get("link").toString().trim();
+				if (!link.equals("")) {
+					Intent intent = new Intent();
+                    intent.putExtra("url", link);
+                    intent.setClass(RecordListActivity.this, WebViewActivity.class);
+                    startActivity(intent);
+				}
+				
+			}
+		});
         
-        //长按删除
+        //长按
         listview.setOnItemLongClickListener(new OnItemLongClickListener() {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                     int arg2, long arg3) {
-           	
-            	//长按
-                index  = arg2-1;
-                // TODO Auto-generated method stub
+           	    index = arg2-1; 
                 id = data.get(index).get("id").toString();
-                new AlertDialog.Builder(RecordListActivity.this).setTitle("删除记录").
-	                setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                
+                new AlertDialog.Builder(RecordListActivity.this).setTitle("选择操作").
+	                setItems(opts, new DialogInterface.OnClickListener() {
 	                    
 	                    @Override
 	                    public void onClick(DialogInterface dialog, int which) {
-	                        // TODO Auto-generated method stub
-	                    	new Thread(delete).start();
-	                    }
-	                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-	                    
-	                    @Override
-	                    public void onClick(DialogInterface dialog, int which) {
-	                        // TODO Auto-generated method stub
-	                        
+	                    	secondPass(which);
 	                    }
 	                }).show();
                 
@@ -262,6 +251,59 @@ public class RecordListActivity extends Activity implements IXListViewListener{
     
     }
 	
+    private void secondPass(final int type) {
+    	LayoutInflater lf = LayoutInflater.from(this);
+    	final View view = lf.inflate(R.layout.xfile_recordlist_secondpass, null);
+
+    	new AlertDialog.Builder(RecordListActivity.this).
+    	setTitle("请输入二级密码").setView(view).
+    	setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				EditText secondPass = (EditText)view.findViewById(R.id.seconed_password);
+				second_password = secondPass.getText().toString();
+				
+				Intent intent;
+            	switch (type) {
+					//查看
+                	case 0:
+                		intent = new Intent();
+                        intent.putExtra("id", id);
+                        intent.putExtra("second_password", second_password);
+                        intent.setClass(RecordListActivity.this, RecordViewActivity.class);
+                        startActivity(intent);
+						
+						break;
+                	//编辑
+                	case 1:
+                        intent = new Intent();
+                        intent.putExtra("id", id);
+                        intent.putExtra("tid", tid);
+                        intent.putExtra("second_password", second_password);
+                        intent.setClass(RecordListActivity.this, RecordAddActivity.class);
+                        startActivity(intent);
+						break;
+                	//删除
+                	case 2:
+                		new Thread(delete).start();
+                		break;
+
+					default:
+						break;
+				}
+			}
+		}).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				
+			}
+		}).show();
+    }
+    
     private void initView() {
     	//控件线程
         mHandler = new Handler();
@@ -271,8 +313,6 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         //获取转入数据
         Intent intent = getIntent();
         tid = intent.getStringExtra("tid");
-        TextView tv2 = (TextView)findViewById(R.id.type_id);
-        tv2.setText(tid);
         
         //获取UID
         MyApp myapp = (MyApp)getApplication();
@@ -288,7 +328,6 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         
     }
 
-	@Override
 	// 返回时调用此方法刷新
 	protected void onResume() {
 		// TODO Auto-generated method stub
@@ -306,12 +345,10 @@ public class RecordListActivity extends Activity implements IXListViewListener{
 	}
 
 	public void onRefresh() {
-		// TODO Auto-generated method stub
 		new Thread(refresh).start();
 	}
 
 	public void onLoadMore() {
-		// TODO Auto-generated method stub
 		new Thread(getmore).start();
 	}
 
@@ -353,22 +390,13 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                 if (ad.equals("")) {
                 	map.put("multi", remark);
                 } else {
-                	if(!link.equals("")) {
-                		SpannableString sp = new SpannableString(ad);
-                		sp.setSpan(new URLSpan(link), 0, sp.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                		sp.setSpan(new BackgroundColorSpan(Color.RED), 0, sp.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                		map.put("multi", sp);
-                	} else {
-                		map.put("multi", ad);
-                	}
+                	map.put("multi", "<font color=\"red\">" + ad + "</font>");
                 }
+                map.put("link", link);
                 
                 list.add(map);
             }
-            page+=1;
-        } catch (ClientProtocolException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            page += 1;
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
