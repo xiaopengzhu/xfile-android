@@ -24,6 +24,7 @@ import org.json.JSONTokener;
 import cn.com.lib.XListView;
 import cn.com.lib.XListView.IXListViewListener;
 import cn.com.util.EncryptString;
+import cn.com.util.HttpRequest;
 import cn.com.util.MyApp;
 import cn.com.util.Tools;
 import android.app.Activity;
@@ -32,6 +33,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
@@ -141,36 +143,37 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                  list.add(pair1);
                  list.add(pair2);
                  list.add(pair3);
-                 try {
-                     UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, "UTF-8");
-                     DefaultHttpClient httpclient = new DefaultHttpClient();
-                     HttpPost post = new HttpPost("http://www.xpcms.net/mobile.php/record/del");
-                     post.setEntity(entity);
-                     HttpResponse response = httpclient.execute(post);
-                     if (response.getStatusLine().getStatusCode() == 200) {
-                         
-                    	 mHandler.post(new Runnable() {
-         					
-         					@Override
-         					public void run() {
-         						// TODO Auto-generated method stub
-         						data.remove(index);
-                                simpleadapter.notifyDataSetChanged();
-                                
-                                Toast.makeText(RecordListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
-         					}
-         				});
-                         
-                     }
-                 } catch (UnsupportedEncodingException e) {
-                     // TODO Auto-generated catch block
-                     e.printStackTrace();
-                 } catch (ClientProtocolException e) {
-                     // TODO Auto-generated catch block
-                     e.printStackTrace();
-                 } catch (IOException e) {
-                     // TODO Auto-generated catch block
-                     e.printStackTrace();
+                 
+                 String uri = "http://www.xpcms.net/mobile.php/record/del";
+                 JSONObject response = HttpRequest.post(uri, list);
+
+                 if (response!=null) {
+                	try {
+                		final int code = Integer.parseInt(response.getString("code"));
+						final String msg = response.getString("msg");
+						
+	                	mHandler.post(new Runnable() {
+	     					
+	     					@Override
+	     					public void run() {
+	     						// TODO Auto-generated method stub
+	     						if (code == 200) {
+	     						data.remove(index);
+	                            simpleadapter.notifyDataSetChanged();
+	                            
+	                            Toast.makeText(RecordListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+	     						} else {
+	     							Toast.makeText(RecordListActivity.this, msg, Toast.LENGTH_SHORT).show();
+	     						}
+	     					}
+	     				});
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                	                      
+                 } else {
+                	 Toast.makeText(RecordListActivity.this, "服务器内部错误", Toast.LENGTH_SHORT).show();
                  }
 			}
 		};
@@ -363,7 +366,11 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         try {
             HttpResponse response = client.execute(get);
             String str = EntityUtils.toString(response.getEntity());
-            JSONArray line = new JSONArray(new JSONTokener(str));
+            JSONObject obj = new JSONObject(new JSONTokener(str));
+            int code = Integer.parseInt(obj.getString("code"));
+            if (code!=200) return null;
+            
+            JSONArray line = obj.getJSONArray("data");
             EncryptString encryptString;
             for (int i =0; i<line.length();i++) {
                 map = new HashMap<String, Object>();

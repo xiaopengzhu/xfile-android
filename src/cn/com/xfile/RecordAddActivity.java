@@ -51,7 +51,7 @@ public class RecordAddActivity extends Activity{
 	private String id, tid, second_password;
 	private ArrayList<String> data;
 	private AutoCompleteTextView title;
-	private JSONObject line;
+	private JSONObject ret;
 	static  ProgressDialog progressDialog;
 	private EditText  account,password, remark;
 	private TextView titleText, record_id;
@@ -359,11 +359,10 @@ public class RecordAddActivity extends Activity{
 			if (id!=null) {
 		        HttpGet get = new HttpGet("http://www.xpcms.net/mobile.php/record/get/id/"+id+"/token/"+myapp.getData("token")+"/second_password/" + second_password);
 		        HttpClient client = new DefaultHttpClient();
-		        Log.e("test", "http://www.xpcms.net/mobile.php/record/get/id/"+id+"/token/"+myapp.getData("token")+"/second_password/" + second_password);
 				try {
 					HttpResponse response = client.execute(get);
 			        String  str = EntityUtils.toString(response.getEntity());
-					line = new JSONObject(new JSONTokener(str)); 
+					ret = new JSONObject(new JSONTokener(str)); 
 				} catch (ClientProtocolException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -381,10 +380,19 @@ public class RecordAddActivity extends Activity{
 		@Override
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
-	        
-            if (line!=null) {//编辑模式
+		
+            if (ret!=null) {//编辑模式
                 titleText.setText("编辑");
                 try {
+                	int code = Integer.parseInt(ret.getString("code"));
+                	String msg = ret.getString("msg");
+                	if (code!=200) {
+                		Toast.makeText(RecordAddActivity.this, msg, Toast.LENGTH_SHORT).show();
+                		finish();
+                		return;
+                	}
+                	
+                	JSONObject line = ret.getJSONObject("data");
                 	
                 	title.setText(line.getString("title"));
 					record_id.setText(line.getString("id"));

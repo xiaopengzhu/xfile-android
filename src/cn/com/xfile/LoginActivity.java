@@ -109,7 +109,8 @@ public class LoginActivity extends Activity{
 	                    	startActivity(intent);
 	                    }
 	                } else {
-	                    Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+	                	String msg = response.getString("msg");
+	                    Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
 	                }
 				} catch (NumberFormatException e) {
 					// TODO Auto-generated catch block
@@ -119,7 +120,7 @@ public class LoginActivity extends Activity{
 					e.printStackTrace();
 				} 
             } else {
-                Toast.makeText(LoginActivity.this, "连接服务器失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "服务器内部错误", Toast.LENGTH_SHORT).show();
             }
 		}
     }
