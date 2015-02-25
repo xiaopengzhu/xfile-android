@@ -45,8 +45,8 @@ public class RecordActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.xfile_record);
-		
-		//初始加载空数据
+        
+        //初始加载空数据
         progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
         gridview = (GridView)findViewById(R.id.gridview);
         mHandler = new Handler();
@@ -70,41 +70,41 @@ public class RecordActivity extends Activity{
         
         //异步加载服务器数据
         Runnable run = new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				data = getData();
-				simpleadapter = new SimpleAdapter(getApplicationContext(), data,
-		                R.layout.xfile_record_item,
-		                new String[]{"id", "name", "icon"}, 
-		                new int[]{R.id.item_id, R.id.item_name, R.id.item_icon});
-		        
-		        simpleadapter.setViewBinder(new ViewBinder() {
-		            
-		            @Override
-		            public boolean setViewValue(View view, Object data,
-		                    String textRepresentation) {
-		                // TODO Auto-generated method stub
-		                if (view instanceof ImageView && data instanceof Bitmap) {
-		                    ImageView iv = (ImageView) view;
-		                    iv.setImageBitmap((Bitmap)data);
-		                    return true;
-		                } else 
-		                return false;
-		            }
-		        });
-				mHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						gridview.setAdapter(simpleadapter);
-						progressDialog.dismiss();
-					}
-				});
-			}
-		};
-		new Thread(run).start();
+            
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                data = getData();
+                simpleadapter = new SimpleAdapter(getApplicationContext(), data,
+                        R.layout.xfile_record_item,
+                        new String[]{"id", "name", "icon"}, 
+                        new int[]{R.id.item_id, R.id.item_name, R.id.item_icon});
+                
+                simpleadapter.setViewBinder(new ViewBinder() {
+                    
+                    @Override
+                    public boolean setViewValue(View view, Object data,
+                            String textRepresentation) {
+                        // TODO Auto-generated method stub
+                        if (view instanceof ImageView && data instanceof Bitmap) {
+                            ImageView iv = (ImageView) view;
+                            iv.setImageBitmap((Bitmap)data);
+                            return true;
+                        } else 
+                        return false;
+                    }
+                });
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        gridview.setAdapter(simpleadapter);
+                        progressDialog.dismiss();
+                    }
+                });
+            }
+        };
+        new Thread(run).start();
     }
     
     private List<HashMap<String, Object>> getData() {

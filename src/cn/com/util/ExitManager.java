@@ -14,8 +14,8 @@ public class ExitManager extends Application{
            
     }
     public static ExitManager getInstance(){
-    	if (instance==null) {
-    		instance=new ExitManager();
+        if (instance==null) {
+            instance=new ExitManager();
         }
         return instance;
     }

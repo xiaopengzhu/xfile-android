@@ -28,12 +28,12 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 public class NoticeActivity  extends Activity{
-	static ProgressDialog progressDialog;
-	private ListView listview;
-	private List<HashMap<String, Object>> data;
-	private SimpleAdapter simpleadapter;
-	private MyApp myapp;
-	
+    static ProgressDialog progressDialog;
+    private ListView listview;
+    private List<HashMap<String, Object>> data;
+    private SimpleAdapter simpleadapter;
+    private MyApp myapp;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,59 +44,59 @@ public class NoticeActivity  extends Activity{
         listview = (ListView)findViewById(R.id.listview);
         listview.setOnItemLongClickListener(new OnItemLongClickListener() {
 
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					final int position, long id) {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                    final int position, long id) {
                 // TODO Auto-generated method stub
-				
-				new AlertDialog.Builder(NoticeActivity.this).setTitle("删除记录").
-	                setPositiveButton("确定", new DialogInterface.OnClickListener() {
-	                    
-	                    @Override
-	                    public void onClick(DialogInterface dialog, int which) {
-	                        // TODO Auto-generated method stub
-	                    	new DeleteTask().execute(position);
-	                    }
-	                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-	                    
-	                    @Override
-	                    public void onClick(DialogInterface dialog, int which) {
-	                        // TODO Auto-generated method stub
-	                        
-	                    }
-	                }).show();
+                
+                new AlertDialog.Builder(NoticeActivity.this).setTitle("删除记录").
+                    setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // TODO Auto-generated method stub
+                            new DeleteTask().execute(position);
+                        }
+                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // TODO Auto-generated method stub
+                            
+                        }
+                    }).show();
                 
                 //返回true则不会再次触发ItemClick
                 return true;
-			}
-		});
+            }
+        });
         
         new LoadingTask().execute();
     }
     
     @Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		new LoadingTask().execute();
-	}
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        new LoadingTask().execute();
+    }
 
-	public void add(View v) {
-    	Intent intent = new Intent(NoticeActivity.this, NoticeAddActivity.class);
-    	startActivity(intent);
+    public void add(View v) {
+        Intent intent = new Intent(NoticeActivity.this, NoticeAddActivity.class);
+        startActivity(intent);
     }
     
     class DeleteTask extends AsyncTask<Integer, Integer, Integer> {
-    	private int index;
-    	private int code;
-    	
-		@Override
-		protected Integer doInBackground(Integer... params) {
-			// TODO Auto-generated method stub
-			
-			index = params[0];
-			
-			List<NameValuePair> list = new ArrayList<NameValuePair>(); Log.v("TEST", data.get(params[0]).get("id").toString());
+        private int index;
+        private int code;
+        
+        @Override
+        protected Integer doInBackground(Integer... params) {
+            // TODO Auto-generated method stub
+            
+            index = params[0];
+            
+            List<NameValuePair> list = new ArrayList<NameValuePair>(); Log.v("TEST", data.get(params[0]).get("id").toString());
             NameValuePair pair1 = new BasicNameValuePair("id", data.get(params[0]).get("id").toString());
             list.add(pair1);
             
@@ -104,54 +104,54 @@ public class NoticeActivity  extends Activity{
             JSONObject response = HttpRequest.post(uri, list);
             
             try {
-				code = Integer.parseInt(response.get("code").toString());
-			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+                code = Integer.parseInt(response.get("code").toString());
+            } catch (NumberFormatException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             
-			return null;
-		}
+            return null;
+        }
 
-		@Override
-		protected void onPostExecute(Integer result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-			if (code == 200) {
-				data.remove(index);
-				simpleadapter.notifyDataSetChanged();
-            	Toast.makeText(NoticeActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
-			} else {
-				Toast.makeText(NoticeActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
-			}
-		}
-    	
+        @Override
+        protected void onPostExecute(Integer result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            if (code == 200) {
+                data.remove(index);
+                simpleadapter.notifyDataSetChanged();
+                Toast.makeText(NoticeActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(NoticeActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+            }
+        }
+        
     }
     
     class LoadingTask extends AsyncTask<Void, Integer, Integer> {
 
-		@Override
-		protected Integer doInBackground(Void... params) {
-			// TODO Auto-generated method stub
-			data = getData();
-			return null;
-		}
+        @Override
+        protected Integer doInBackground(Void... params) {
+            // TODO Auto-generated method stub
+            data = getData();
+            return null;
+        }
 
-		@Override
-		protected void onPostExecute(Integer result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-			progressDialog.dismiss();
-			simpleadapter = new SimpleAdapter(getApplicationContext(), data,
-	                R.layout.xfile_notice_item,
-	                new String[]{"id", "sort", "title"}, 
-	                new int[]{R.id.item_id, R.id.sort, R.id.item_title});
-			listview.setAdapter(simpleadapter);
-		}
-    	
+        @Override
+        protected void onPostExecute(Integer result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+            simpleadapter = new SimpleAdapter(getApplicationContext(), data,
+                    R.layout.xfile_notice_item,
+                    new String[]{"id", "sort", "title"}, 
+                    new int[]{R.id.item_id, R.id.sort, R.id.item_title});
+            listview.setAdapter(simpleadapter);
+        }
+        
     }
     
     private List<HashMap<String, Object>> getData() {

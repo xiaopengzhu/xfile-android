@@ -1,18 +1,13 @@
 package cn.com.xfile;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -20,20 +15,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import cn.com.lib.XListView;
 import cn.com.lib.XListView.IXListViewListener;
 import cn.com.util.EncryptString;
 import cn.com.util.HttpRequest;
 import cn.com.util.MyApp;
 import cn.com.util.Tools;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
@@ -56,6 +50,7 @@ import android.widget.SimpleAdapter.ViewBinder;
  * @author Administrator
  *
  */
+@SuppressLint("InflateParams")
 public class RecordListActivity extends Activity implements IXListViewListener{
     private XListView listview;
     private Button add_btn;
@@ -85,57 +80,57 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         
         //刷新
         refresh = new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				page = 1;
-				data = getData();
-				simpleadapter = new SimpleAdapter(getApplicationContext(), data,
-		                R.layout.xfile_record_list_item,
-		                new String[]{"id", "title",  "account", "multi", "icon"}, 
-		                new int[]{R.id.item_id, R.id.item_title, R.id.item_account, R.id.item_multi, R.id.item_icon});
-		        simpleadapter.setViewBinder(new ViewBinder() {
-		            
-		            @Override
-		            public boolean setViewValue(View view, Object data,
-		                    String textRepresentation) {
-		            	
-		            	switch (view.getId()) {
-							case R.id.item_icon:
-								ImageView iv = (ImageView) view;
-			                    iv.setImageBitmap((Bitmap)data);
-								return true;
-							case R.id.item_multi:
-								TextView tv = (TextView)view;
-								tv.setText(Html.fromHtml(data.toString()));
-								return true;
-							default:
-								return false;
-						}
-		            }
-		        });
-				
-				mHandler.post(new Runnable() {
-					
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						listview.setAdapter(simpleadapter);
-						progressDialog.dismiss();
-						onLoad();
-					}
-				});
-			}
-		};
+            
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                page = 1;
+                data = getData();
+                simpleadapter = new SimpleAdapter(getApplicationContext(), data,
+                        R.layout.xfile_record_list_item,
+                        new String[]{"id", "title",  "account", "multi", "icon"}, 
+                        new int[]{R.id.item_id, R.id.item_title, R.id.item_account, R.id.item_multi, R.id.item_icon});
+                simpleadapter.setViewBinder(new ViewBinder() {
+                    
+                    @Override
+                    public boolean setViewValue(View view, Object data,
+                            String textRepresentation) {
+                        
+                        switch (view.getId()) {
+                            case R.id.item_icon:
+                                ImageView iv = (ImageView) view;
+                                iv.setImageBitmap((Bitmap)data);
+                                return true;
+                            case R.id.item_multi:
+                                TextView tv = (TextView)view;
+                                tv.setText(Html.fromHtml(data.toString()));
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                
+                mHandler.post(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        listview.setAdapter(simpleadapter);
+                        progressDialog.dismiss();
+                        onLoad();
+                    }
+                });
+            }
+        };
         
-		//删除
-		delete = new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				 List<NameValuePair> list = new ArrayList<NameValuePair>();
+        //删除
+        delete = new Runnable() {
+            
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                 List<NameValuePair> list = new ArrayList<NameValuePair>();
                  MyApp myapp = (MyApp) getApplication();
                  NameValuePair pair1 = new BasicNameValuePair("token", myapp.getData("token").toString());
                  NameValuePair pair2 = new BasicNameValuePair("id", id);
@@ -148,56 +143,56 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                  JSONObject response = HttpRequest.post(uri, list);
 
                  if (response!=null) {
-                	try {
-                		final int code = Integer.parseInt(response.getString("code"));
-						final String msg = response.getString("msg");
-						
-	                	mHandler.post(new Runnable() {
-	     					
-	     					@Override
-	     					public void run() {
-	     						// TODO Auto-generated method stub
-	     						if (code == 200) {
-	     						data.remove(index);
-	                            simpleadapter.notifyDataSetChanged();
-	                            
-	                            Toast.makeText(RecordListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
-	     						} else {
-	     							Toast.makeText(RecordListActivity.this, msg, Toast.LENGTH_SHORT).show();
-	     						}
-	     					}
-	     				});
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-                	                      
+                    try {
+                        final int code = Integer.parseInt(response.getString("code"));
+                        final String msg = response.getString("msg");
+                        
+                        mHandler.post(new Runnable() {
+                             
+                             @Override
+                             public void run() {
+                                 // TODO Auto-generated method stub
+                                 if (code == 200) {
+                                 data.remove(index);
+                                simpleadapter.notifyDataSetChanged();
+                                
+                                Toast.makeText(RecordListActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                                 } else {
+                                     Toast.makeText(RecordListActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                 }
+                             }
+                         });
+                    } catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                                          
                  } else {
-                	 Toast.makeText(RecordListActivity.this, "服务器内部错误", Toast.LENGTH_SHORT).show();
+                     Toast.makeText(RecordListActivity.this, "服务器内部错误", Toast.LENGTH_SHORT).show();
                  }
-			}
-		};
-		
-		//更多
-		getmore = new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				data.addAll(getData());
-				
-				mHandler.postDelayed(new Runnable() {
- 					
- 					@Override
- 					public void run() {
- 						// TODO Auto-generated method stub
- 						simpleadapter.notifyDataSetChanged();
- 						onLoad();
- 					}
- 				}, 2000);
-			}
-		};
-		
+            }
+        };
+        
+        //更多
+        getmore = new Runnable() {
+            
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                data.addAll(getData());
+                
+                mHandler.postDelayed(new Runnable() {
+                     
+                     @Override
+                     public void run() {
+                         // TODO Auto-generated method stub
+                         simpleadapter.notifyDataSetChanged();
+                         onLoad();
+                     }
+                 }, 2000);
+            }
+        };
+        
         //添加
         add_btn.setOnClickListener(new OnClickListener() {
             
@@ -214,20 +209,20 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         //点击
         listview.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				// TODO Auto-generated method stub
-				String link = data.get(arg2-1).get("link").toString().trim();
-				if (!link.equals("")) {
-					Intent intent = new Intent();
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1,
+                    int arg2, long arg3) {
+                // TODO Auto-generated method stub
+                String link = data.get(arg2-1).get("link").toString().trim();
+                if (!link.equals("")) {
+                    Intent intent = new Intent();
                     intent.putExtra("url", link);
                     intent.setClass(RecordListActivity.this, WebViewActivity.class);
                     startActivity(intent);
-				}
-				
-			}
-		});
+                }
+                
+            }
+        });
         
         //长按
         listview.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -235,17 +230,17 @@ public class RecordListActivity extends Activity implements IXListViewListener{
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                     int arg2, long arg3) {
-           	    index = arg2-1; 
+                   index = arg2-1; 
                 id = data.get(index).get("id").toString();
                 
                 new AlertDialog.Builder(RecordListActivity.this).setTitle("选择操作").
-	                setItems(opts, new DialogInterface.OnClickListener() {
-	                    
-	                    @Override
-	                    public void onClick(DialogInterface dialog, int which) {
-	                    	secondPass(which);
-	                    }
-	                }).show();
+                    setItems(opts, new DialogInterface.OnClickListener() {
+                        
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            secondPass(which);
+                        }
+                    }).show();
                 
                 //返回true则不会再次触发ItemClick
                 return true;
@@ -253,62 +248,62 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         });
     
     }
-	
+    
     private void secondPass(final int type) {
-    	LayoutInflater lf = LayoutInflater.from(this);
-    	final View view = lf.inflate(R.layout.xfile_recordlist_secondpass, null);
+        LayoutInflater lf = LayoutInflater.from(this);
+        final View view = lf.inflate(R.layout.xfile_recordlist_secondpass, null);
 
-    	new AlertDialog.Builder(RecordListActivity.this).
-    	setTitle("请输入二级密码").setView(view).
-    	setPositiveButton("确定", new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				EditText secondPass = (EditText)view.findViewById(R.id.seconed_password);
-				second_password = secondPass.getText().toString();
-				
-				Intent intent;
-            	switch (type) {
-					//查看
-                	case 0:
-                		intent = new Intent();
+        new AlertDialog.Builder(RecordListActivity.this).
+        setTitle("请输入二级密码").setView(view).
+        setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+                EditText secondPass = (EditText)view.findViewById(R.id.seconed_password);
+                second_password = secondPass.getText().toString();
+                
+                Intent intent;
+                switch (type) {
+                    //查看
+                    case 0:
+                        intent = new Intent();
                         intent.putExtra("id", id);
                         intent.putExtra("second_password", second_password);
                         intent.setClass(RecordListActivity.this, RecordViewActivity.class);
                         startActivity(intent);
-						
-						break;
-                	//编辑
-                	case 1:
+                        
+                        break;
+                    //编辑
+                    case 1:
                         intent = new Intent();
                         intent.putExtra("id", id);
                         intent.putExtra("tid", tid);
                         intent.putExtra("second_password", second_password);
                         intent.setClass(RecordListActivity.this, RecordAddActivity.class);
                         startActivity(intent);
-						break;
-                	//删除
-                	case 2:
-                		new Thread(delete).start();
-                		break;
+                        break;
+                    //删除
+                    case 2:
+                        new Thread(delete).start();
+                        break;
 
-					default:
-						break;
-				}
-			}
-		}).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				
-			}
-		}).show();
+                    default:
+                        break;
+                }
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+                
+            }
+        }).show();
     }
     
     private void initView() {
-    	//控件线程
+        //控件线程
         mHandler = new Handler();
         add_btn = (Button)findViewById(R.id.add_btn);
         listview = (XListView)findViewById(R.id.refreshable_view);
@@ -331,31 +326,31 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         
     }
 
-	// 返回时调用此方法刷新
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		new Thread(refresh).start();
-	}
+    // 返回时调用此方法刷新
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        new Thread(refresh).start();
+    }
     
     private void onLoad() {
-		listview.stopRefresh();
-		listview.stopLoadMore();
-		listview.setRefreshTime("刚刚");
-		if (data.size() > 6) {
-			listview.setPullLoadEnable(true);
-		}
-	}
+        listview.stopRefresh();
+        listview.stopLoadMore();
+        listview.setRefreshTime("刚刚");
+        if (data.size() > 6) {
+            listview.setPullLoadEnable(true);
+        }
+    }
 
-	public void onRefresh() {
-		new Thread(refresh).start();
-	}
+    public void onRefresh() {
+        new Thread(refresh).start();
+    }
 
-	public void onLoadMore() {
-		new Thread(getmore).start();
-	}
+    public void onLoadMore() {
+        new Thread(getmore).start();
+    }
 
-	private List<HashMap<String, Object>> getData() {
+    private List<HashMap<String, Object>> getData() {
         ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
         HashMap<String, Object> map = null;
         
@@ -395,9 +390,9 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                 String remark = line.getJSONObject(i).getString("remark");
                 
                 if (ad.equals("")) {
-                	map.put("multi", remark);
+                    map.put("multi", remark);
                 } else {
-                	map.put("multi", "<font color=\"red\">" + ad + "</font>");
+                    map.put("multi", "<font color=\"red\">" + ad + "</font>");
                 }
                 map.put("link", link);
                 

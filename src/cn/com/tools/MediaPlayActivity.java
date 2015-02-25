@@ -30,114 +30,114 @@ import android.widget.TextView;
 
 public class MediaPlayActivity extends Activity{
 
-	private ListView listview;
-	private ArrayList<HashMap<String,Object>> files;
-	private MediaPlayer mp;
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.tools_mediaplay);
-		
-		listview = (ListView)findViewById(R.id.listview);
-		mp = new MediaPlayer();
-		
-		
-		listview.setOnItemClickListener(new OnItemClickListener() {
+    private ListView listview;
+    private ArrayList<HashMap<String,Object>> files;
+    private MediaPlayer mp;
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.tools_mediaplay);
+        
+        listview = (ListView)findViewById(R.id.listview);
+        mp = new MediaPlayer();
+        
+        
+        listview.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				// TODO Auto-generated method stub
-				String path = files.get(position).get("media").toString();
-				try {
-					mp.setDataSource(path);
-					mp.prepare();
-					mp.start();
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SecurityException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalStateException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
-		
-		Button camera = (Button)findViewById(R.id.camera_btn);
-		camera.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-				intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory().getPath() + "test.png")));
-				startActivityForResult(intent, 1);
-			}
-		});
-		
-	}
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		Log.v("TEST", "拍照完成");
-	}
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                    int position, long id) {
+                // TODO Auto-generated method stub
+                String path = files.get(position).get("media").toString();
+                try {
+                    mp.setDataSource(path);
+                    mp.prepare();
+                    mp.start();
+                } catch (IllegalArgumentException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (SecurityException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IllegalStateException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+        
+        Button camera = (Button)findViewById(R.id.camera_btn);
+        camera.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory().getPath() + "test.png")));
+                startActivityForResult(intent, 1);
+            }
+        });
+        
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        Log.v("TEST", "拍照完成");
+    }
 
-	//选择图片
-	public void select(View v) {
-		files = getFile();
-		SimpleAdapter listAdapter = new SimpleAdapter(this, files, R.layout.tools_mediaplay_item, new String[]{"media"},new int[]{R.id.media});
-		listview.setAdapter(listAdapter);
-	}
-	
-	//获取定位
-	public void gps(View v) {
-		LocationManager lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-		
-		Criteria criteria = new Criteria();
-		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-		criteria.setAltitudeRequired(false);
-		criteria.setBearingRequired(false);
-		criteria.setCostAllowed(true);
-		criteria.setPowerRequirement(Criteria.POWER_LOW);
-		
-		String provider = lm.getBestProvider(criteria, true);
-		Location location = lm.getLastKnownLocation(provider);
-		
-		TextView show = (TextView)findViewById(R.id.show);
-		show.setText("纬度:" + location.getLatitude() + " 经度:" + location.getLongitude());
-		
-	}
-	
-	//选择文件
-	public ArrayList<HashMap<String,Object>> getFile(){
-		String filePath = Environment.getExternalStorageDirectory().getPath() + "/Music/";
-		File file = new File(filePath);
-		File[] files = file.listFiles(new FilenameFilter() {
-			
-			@Override
-			public boolean accept(File dir, String filename) {
-				// TODO Auto-generated method stub
-				return filename.endsWith(".mp3");
-			}
-		});
-		
-		ArrayList<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
-		HashMap<String, Object> map = null;
-		for (File f : files) {
-			map = new HashMap<String, Object>();
-			map.put("media", filePath + f.getName());
-			list.add(map);
-		}
-		return list;
-	}
+    //选择图片
+    public void select(View v) {
+        files = getFile();
+        SimpleAdapter listAdapter = new SimpleAdapter(this, files, R.layout.tools_mediaplay_item, new String[]{"media"},new int[]{R.id.media});
+        listview.setAdapter(listAdapter);
+    }
+    
+    //获取定位
+    public void gps(View v) {
+        LocationManager lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+        
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(false);
+        criteria.setCostAllowed(true);
+        criteria.setPowerRequirement(Criteria.POWER_LOW);
+        
+        String provider = lm.getBestProvider(criteria, true);
+        Location location = lm.getLastKnownLocation(provider);
+        
+        TextView show = (TextView)findViewById(R.id.show);
+        show.setText("纬度:" + location.getLatitude() + " 经度:" + location.getLongitude());
+        
+    }
+    
+    //选择文件
+    public ArrayList<HashMap<String,Object>> getFile(){
+        String filePath = Environment.getExternalStorageDirectory().getPath() + "/Music/";
+        File file = new File(filePath);
+        File[] files = file.listFiles(new FilenameFilter() {
+            
+            @Override
+            public boolean accept(File dir, String filename) {
+                // TODO Auto-generated method stub
+                return filename.endsWith(".mp3");
+            }
+        });
+        
+        ArrayList<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
+        HashMap<String, Object> map = null;
+        for (File f : files) {
+            map = new HashMap<String, Object>();
+            map.put("media", filePath + f.getName());
+            list.add(map);
+        }
+        return list;
+    }
 
 }

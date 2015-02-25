@@ -14,33 +14,33 @@ import java.util.Map;
 import android.util.Log;
 
 public class UploadFile {
-	/**
-	 * 上传
-	 * @param url  接口
-	 * @param params 表单名称
-	 * @param files 文件名称
-	 * @return
-	 */
-	public static String upload(String url, Map<String, String>params, Map<String, File>files) throws IOException {
-		//Header
-		String BOUNDARY = java.util.UUID.randomUUID().toString();
-		String PREFIX = "--", LINEND = "\r\n";
-		String MULTIPART_FROM_DATA = "multipart/form-data";
-		String CHARSET = "UTF-8";
-		
-		//连接接口
-		URL uri = new URL(url);
-		HttpURLConnection conn = (HttpURLConnection)uri.openConnection();
-		conn.setReadTimeout(5*1000);//5秒
-		conn.setDoInput(true);
-		conn.setDoOutput(true);
-		conn.setUseCaches(false);
-		conn.setRequestMethod("POST");
-		conn.setRequestProperty("Connection", "keep-alive");
-		conn.setRequestProperty("Charset", CHARSET);
-		conn.setRequestProperty("Content-Type", MULTIPART_FROM_DATA + ";boundary=" + BOUNDARY);
-		
-		//拼接文本参数
+    /**
+     * 上传
+     * @param url  接口
+     * @param params 表单名称
+     * @param files 文件名称
+     * @return
+     */
+    public static String upload(String url, Map<String, String>params, Map<String, File>files) throws IOException {
+        //Header
+        String BOUNDARY = java.util.UUID.randomUUID().toString();
+        String PREFIX = "--", LINEND = "\r\n";
+        String MULTIPART_FROM_DATA = "multipart/form-data";
+        String CHARSET = "UTF-8";
+        
+        //连接接口
+        URL uri = new URL(url);
+        HttpURLConnection conn = (HttpURLConnection)uri.openConnection();
+        conn.setReadTimeout(5*1000);//5秒
+        conn.setDoInput(true);
+        conn.setDoOutput(true);
+        conn.setUseCaches(false);
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Connection", "keep-alive");
+        conn.setRequestProperty("Charset", CHARSET);
+        conn.setRequestProperty("Content-Type", MULTIPART_FROM_DATA + ";boundary=" + BOUNDARY);
+        
+        //拼接文本参数
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
             sb.append(PREFIX);
@@ -99,7 +99,7 @@ public class UploadFile {
         String data = "OK";
         
         while((line = bufReader.readLine())==null) {
-        	data += line;
+            data += line;
         }
         
         Log.v("TEST", data);
@@ -116,5 +116,5 @@ public class UploadFile {
         conn.disconnect();
         
         return  in.toString();
-	}
+    }
 }

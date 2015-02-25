@@ -48,92 +48,92 @@ public class LoginActivity extends Activity{
 
         TextView forgetPass = (TextView)findViewById(R.id.forgetPass);
         forgetPass.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(LoginActivity.this, MoreActivity.class);
-				startActivity(intent);
-			}
-		});
+            
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Intent intent = new Intent(LoginActivity.this, MoreActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
    
     //登录任务
     class LoginTask extends AsyncTask<Void, Integer, Integer> {
-    	private JSONObject response;
-    	
-		@Override
-		protected Integer doInBackground(Void... params) {
-			// TODO Auto-generated method stub
-			List<NameValuePair> list = new ArrayList<NameValuePair>();
-	    	NameValuePair pair1 = new BasicNameValuePair("account", account.getText().toString());
-	        NameValuePair pair2 = new BasicNameValuePair("password", password.getText().toString());
-	        
-	        list.add(pair1);
-	        list.add(pair2);
-	        
-	        String uri = "http://www.xpcms.net/mobile.php/member/login";
-	        
-	        response = HttpRequest.post(uri, list);
-			return null;
-		}
+        private JSONObject response;
+        
+        @Override
+        protected Integer doInBackground(Void... params) {
+            // TODO Auto-generated method stub
+            List<NameValuePair> list = new ArrayList<NameValuePair>();
+            NameValuePair pair1 = new BasicNameValuePair("account", account.getText().toString());
+            NameValuePair pair2 = new BasicNameValuePair("password", password.getText().toString());
+            
+            list.add(pair1);
+            list.add(pair2);
+            
+            String uri = "http://www.xpcms.net/mobile.php/member/login";
+            
+            response = HttpRequest.post(uri, list);
+            return null;
+        }
 
-		@Override
-		protected void onPostExecute(Integer result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-			progressDialog.dismiss();
-			
-			if (response!=null) {
-				try {
-					int code = Integer.parseInt(response.getString("code"));
-					if (code == 200) {//登录成功
-	                    String  token = response.getString("data");
-	                    //存入全局变量
-	                    MyApp appCookies = (MyApp) getApplication();
-	                    appCookies.setData("token", token);
-	                    
-	                    //启动判断
-	                    preferences = getSharedPreferences("phone", Context.MODE_PRIVATE); 
-	                    if (preferences.getBoolean("firststart", true)) {//首次启动进行欢迎页面
-	                    	editor = preferences.edit();
-	                    	editor.putBoolean("firststart", false);
-	                    	editor.commit();
-	                    	Intent intent = new Intent();
-	                        intent.setClass(LoginActivity.this, WelcomeActivity.class);
-	                        startActivity(intent);
-	                    } else {
-	                    	Intent intent = new Intent();
-	                    	intent.setClass(LoginActivity.this, MainActivity.class);
-	                    	startActivity(intent);
-	                    }
-	                } else {
-	                	String msg = response.getString("msg");
-	                    Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
-	                }
-				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} 
+        @Override
+        protected void onPostExecute(Integer result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+            
+            if (response!=null) {
+                try {
+                    int code = Integer.parseInt(response.getString("code"));
+                    if (code == 200) {//登录成功
+                        String  token = response.getString("data");
+                        //存入全局变量
+                        MyApp appCookies = (MyApp) getApplication();
+                        appCookies.setData("token", token);
+                        
+                        //启动判断
+                        preferences = getSharedPreferences("phone", Context.MODE_PRIVATE); 
+                        if (preferences.getBoolean("firststart", true)) {//首次启动进行欢迎页面
+                            editor = preferences.edit();
+                            editor.putBoolean("firststart", false);
+                            editor.commit();
+                            Intent intent = new Intent();
+                            intent.setClass(LoginActivity.this, WelcomeActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent();
+                            intent.setClass(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    } else {
+                        String msg = response.getString("msg");
+                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (NumberFormatException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } 
             } else {
                 Toast.makeText(LoginActivity.this, "服务器内部错误", Toast.LENGTH_SHORT).show();
             }
-		}
+        }
     }
     
-	//登录
+    //登录
     public void login(View v) {
-    	progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
-		new LoginTask().execute();
+        progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
+        new LoginTask().execute();
     }
     
     //注册
     public void register(View v) {
-    	Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-    	startActivity(intent);
+        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivity(intent);
     }
 }
