@@ -17,7 +17,6 @@ import android.widget.ImageView;
 public class WelcomeActivity extends Activity{
     
     @SuppressLint("InflateParams")
-	@Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);

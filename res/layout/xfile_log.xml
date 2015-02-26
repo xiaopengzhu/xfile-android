@@ -24,7 +24,7 @@
 	        android:layout_centerInParent="true"
 	        android:padding="10.0dip"
 	        android:singleLine="true"
-	        android:text="@string/tab_message"
+	        android:text="@string/tab_log"
 	        android:textColor="@color/white"
 	        android:textSize="15sp" />
 

@@ -33,7 +33,7 @@
         <activity android:name=".RecordListActivity"/>
         <activity android:name=".RecordAddActivity"/>
         <activity android:name=".WebViewActivity"/>
-        <activity android:name=".MessageActivity"/>
+        <activity android:name=".LogActivity"/>
         <activity android:name=".NoticeActivity"/>
         <activity android:name=".NoticeAddActivity"/>
         <activity android:name=".MoreActivity"/>

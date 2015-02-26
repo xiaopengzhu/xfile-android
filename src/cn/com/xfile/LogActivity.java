@@ -3,10 +3,10 @@ package cn.com.xfile;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class MessageActivity extends Activity {
+public class LogActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.xfile_message);
+        setContentView(R.layout.xfile_log);
     }
 }

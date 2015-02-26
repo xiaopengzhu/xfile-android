@@ -1,7 +1,9 @@
 package cn.com.xfile;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import cn.com.util.HttpRequest;
 import cn.com.util.MyApp;
 import android.app.Activity;
@@ -9,6 +11,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,7 +20,8 @@ public class RecordViewActivity extends Activity{
     private String id, second_password;
     private MyApp myapp;
     static  ProgressDialog progressDialog;
-    private TextView account, password, notice;
+    private TextView account, password, title, remark;
+    private ListView notice;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +36,9 @@ public class RecordViewActivity extends Activity{
         myapp = (MyApp) getApplication();
         account = (TextView)findViewById(R.id.account);
         password = (TextView)findViewById(R.id.password);
-        notice = (TextView)findViewById(R.id.notice);
+        title = (TextView)findViewById(R.id.titleText);
+        remark = (TextView)findViewById(R.id.remark);
+        notice = (ListView)findViewById(R.id.notice);
         
         //异步加载
         progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
@@ -64,9 +71,17 @@ public class RecordViewActivity extends Activity{
                     }
                     
                     JSONObject line = ret.getJSONObject("data");
+                    title.setText(line.getString("title"));
                     account.setText(line.getString("account"));
                     password.setText(line.getString("password"));
-                    notice.setText("xxxxxxx");
+                    remark.setText(line.getString("remark"));
+                    
+                    JSONArray ary = line.getJSONArray("notice");
+                    String[] data = new String[ary.length()];
+                    for(int i=0; i<ary.length();i++) {
+                        data[i] = ary.get(i).toString();
+                    }
+                    notice.setAdapter(new ArrayAdapter<String>(RecordViewActivity.this, R.layout.xfile_record_view_item, data));
                     
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block

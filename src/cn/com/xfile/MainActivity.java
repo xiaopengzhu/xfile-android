@@ -15,8 +15,8 @@ import android.widget.TabHost;
 @SuppressWarnings("deprecation")
 public class MainActivity extends TabActivity {
     //底部选项卡
-	private TabHost tabHost;
-    private RadioButton tab_list, tab_notice, tab_message, tab_more;
+    private TabHost tabHost;
+    private RadioButton tab_list, tab_notice, tab_log, tab_more;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class MainActivity extends TabActivity {
     public void init(){
         tab_list=(RadioButton)findViewById(R.id.tab_list);
         tab_notice = (RadioButton) findViewById(R.id.tab_notice);
-        tab_message = (RadioButton) findViewById(R.id.tab_message);
+        tab_log = (RadioButton) findViewById(R.id.tab_log);
         tab_more = (RadioButton) findViewById(R.id.tab_more);
         
         tab_list.setOnClickListener(new OnClickListener() {
@@ -47,10 +47,10 @@ public class MainActivity extends TabActivity {
             }
         });
         
-        tab_message.setOnClickListener(new OnClickListener() {
+        tab_log.setOnClickListener(new OnClickListener() {
 
             public void onClick(View view) {
-                tabHost.setCurrentTabByTag("message");
+                tabHost.setCurrentTabByTag("log");
             }
         });
         
@@ -69,8 +69,8 @@ public class MainActivity extends TabActivity {
                 .setContent(new Intent(this, RecordActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("notice").setIndicator("notice")
                 .setContent(new Intent(this, NoticeActivity.class)));
-        tabHost.addTab(tabHost.newTabSpec("message").setIndicator("message")
-                .setContent(new Intent(this, MessageActivity.class)));
+        tabHost.addTab(tabHost.newTabSpec("log").setIndicator("log")
+                .setContent(new Intent(this, LogActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("more").setIndicator("more")
                 .setContent(new Intent(this, MoreActivity.class)));
     }

@@ -36,6 +36,34 @@ public class RegisterActivity extends Activity{
         second_password = (EditText)findViewById(R.id.second_password);
     }
     
+    public void submit(View v) {
+        if (!password.getText().toString().equals(password2.getText().toString())) {
+            Toast.makeText(this, "密码二次输入不匹配", Toast.LENGTH_SHORT).show();
+        } else {
+            new RegisterTask().execute();
+        }
+    }
+    
+    public static String MD5(String str) {
+        byte[] hash = null;
+        try {
+            hash = MessageDigest.getInstance("md5").digest(str.getBytes("UTF-8"));
+        } catch (NoSuchAlgorithmException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        StringBuilder hex = new StringBuilder(hash.length * 2);
+        for(byte b : hash){
+             if ((b & 0xFF) < 0x10) hex.append("0");
+             hex.append(Integer.toHexString(b & 0xFF));
+        }
+        return hex.toString();
+    }
+    
     class RegisterTask extends AsyncTask<Void, Integer, Integer> {
         private JSONObject response;
         
@@ -85,33 +113,4 @@ public class RegisterActivity extends Activity{
         }
         
     }
-    
-    public void submit(View v) {
-        if (!password.getText().toString().equals(password2.getText().toString())) {
-            Toast.makeText(this, "密码二次输入不匹配", Toast.LENGTH_SHORT).show();
-        } else {
-            new RegisterTask().execute();
-        }
-    }
-    
-    public static String MD5(String str) {
-        byte[] hash = null;
-        try {
-            hash = MessageDigest.getInstance("md5").digest(str.getBytes("UTF-8"));
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
-        StringBuilder hex = new StringBuilder(hash.length * 2);
-        for(byte b : hash){
-             if ((b & 0xFF) < 0x10) hex.append("0");
-             hex.append(Integer.toHexString(b & 0xFF));
-        }
-        return hex.toString();
-    }
-
 }

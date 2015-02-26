@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -15,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
 import cn.com.lib.XListView;
 import cn.com.lib.XListView.IXListViewListener;
 import cn.com.util.EncryptString;
@@ -58,13 +60,13 @@ public class RecordListActivity extends Activity implements IXListViewListener{
     private List<HashMap<String, Object>> data = new ArrayList<HashMap<String,Object>>();
     
     private Handler mHandler;
-    private Runnable refresh, getmore, delete;
+    private Runnable refresh, getmore, delete, checkSecondPass;
     private String token, tid, id;
     static  ProgressDialog progressDialog;
     
     public static int page = 1, pagesize = 8;
     
-    private int index;
+    private int index, optype;
     
     private String second_password;
     
@@ -129,7 +131,7 @@ public class RecordListActivity extends Activity implements IXListViewListener{
             
             @Override
             public void run() {
-                // TODO Auto-generated method stub
+                 // TODO Auto-generated method stub
                  List<NameValuePair> list = new ArrayList<NameValuePair>();
                  MyApp myapp = (MyApp) getApplication();
                  NameValuePair pair1 = new BasicNameValuePair("token", myapp.getData("token").toString());
@@ -190,6 +192,75 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                          onLoad();
                      }
                  }, 2000);
+            }
+        };
+        
+        //检测二次密码
+        checkSecondPass = new Runnable() {
+            
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                List<NameValuePair> list = new ArrayList<NameValuePair>();
+                MyApp myapp = (MyApp) getApplication();
+                NameValuePair pair1 = new BasicNameValuePair("token", myapp.getData("token").toString());
+                NameValuePair pair2 = new BasicNameValuePair("second_password", second_password);
+                list.add(pair1);
+                list.add(pair2);
+                
+                String uri = "http://www.xpcms.net/mobile.php/member/checkSecondPass";
+                JSONObject response = HttpRequest.post(uri, list);
+
+                if (response!=null) {
+                   try {
+                       final int code = Integer.parseInt(response.getString("code"));
+                       
+                       mHandler.post(new Runnable() {
+                            
+                            @Override
+                            public void run() {
+                                // TODO Auto-generated method stub
+                                if (code == 200) {
+                                    Intent intent;
+                                    switch (optype) {
+                                        //查看
+                                        case 0:
+                                            intent = new Intent();
+                                            intent.putExtra("id", id);
+                                            intent.putExtra("second_password", second_password);
+                                            intent.setClass(RecordListActivity.this, RecordViewActivity.class);
+                                            startActivity(intent);
+                                            
+                                            break;
+                                        //编辑
+                                        case 1:
+                                            intent = new Intent();
+                                            intent.putExtra("id", id);
+                                            intent.putExtra("tid", tid);
+                                            intent.putExtra("second_password", second_password);
+                                            intent.setClass(RecordListActivity.this, RecordAddActivity.class);
+                                            startActivity(intent);
+                                            break;
+                                        //删除
+                                        case 2:
+                                            new Thread(delete).start();
+                                            break;
+
+                                        default:
+                                            break;
+                                    }
+                                } else {
+                                    Toast.makeText(RecordListActivity.this, "二级密码错误", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                   } catch (JSONException e) {
+                       // TODO Auto-generated catch block
+                       e.printStackTrace();
+                   }
+                } else {
+                    Toast.makeText(RecordListActivity.this, "服务器内部错误", Toast.LENGTH_SHORT).show();
+                }
             }
         };
         
@@ -263,34 +334,9 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                 EditText secondPass = (EditText)view.findViewById(R.id.seconed_password);
                 second_password = secondPass.getText().toString();
                 
-                Intent intent;
-                switch (type) {
-                    //查看
-                    case 0:
-                        intent = new Intent();
-                        intent.putExtra("id", id);
-                        intent.putExtra("second_password", second_password);
-                        intent.setClass(RecordListActivity.this, RecordViewActivity.class);
-                        startActivity(intent);
-                        
-                        break;
-                    //编辑
-                    case 1:
-                        intent = new Intent();
-                        intent.putExtra("id", id);
-                        intent.putExtra("tid", tid);
-                        intent.putExtra("second_password", second_password);
-                        intent.setClass(RecordListActivity.this, RecordAddActivity.class);
-                        startActivity(intent);
-                        break;
-                    //删除
-                    case 2:
-                        new Thread(delete).start();
-                        break;
+                optype = type;
+                new Thread(checkSecondPass).start();
 
-                    default:
-                        break;
-                }
             }
         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
             

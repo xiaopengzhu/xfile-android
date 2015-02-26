@@ -57,14 +57,12 @@ public class RecordAddActivity extends Activity{
     private ArrayAdapter<String> adapter;
     private MyApp myapp;
     
-    
     private AlertDialog.Builder builder;
     private AlertDialog dialog;
     
     private int notice_type;
     private EncryptString acc_encrypt, pass_encrypt;
     private int acc_position, pass_position;
-    
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,7 +220,6 @@ public class RecordAddActivity extends Activity{
         
     }
 
-
     public void insertAccNotice(View v) {
         notice_type = 1;
         acc_position = account.getSelectionStart();
@@ -233,6 +230,55 @@ public class RecordAddActivity extends Activity{
         notice_type = 2;
         pass_position = password.getSelectionStart();
         new NoticeTask().execute();
+    }
+    
+    private ArrayList<String> getData(String url) {
+        ArrayList<String> list = new ArrayList<String>();
+        
+        HttpGet get = new HttpGet(url);
+        HttpClient client = new DefaultHttpClient();
+        try {
+            HttpResponse response = client.execute(get);
+            String str = EntityUtils.toString(response.getEntity());
+            JSONArray line = new JSONArray(new JSONTokener(str));
+            for (int i =0; i<line.length(); i++) {
+                list.add(line.getJSONObject(i).getString("name"));
+            }
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return list;
+        
+    }
+    
+    private List<HashMap<String, Object>> getNotice() {
+        ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
+        HashMap<String, Object> map = null;
+        
+        String uri = "http://www.xpcms.net/mobile.php/notice/index/token/" + myapp.getData("token").toString();
+        JSONObject response = HttpRequest.get(uri);
+        
+        try {
+            JSONArray line = response.getJSONArray("data");
+            for (int i =0; i<line.length();i++) {
+                map = new HashMap<String, Object>();
+                map.put("id", line.getJSONObject(i).getString("id"));
+                map.put("sort", (i+1));
+                map.put("title", line.getJSONObject(i).getString("title"));
+                list.add(map);
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return list;
     }
     
     //加载密码提示
@@ -471,53 +517,5 @@ public class RecordAddActivity extends Activity{
         }
         
     }
-    
-    private ArrayList<String> getData(String url) {
-        ArrayList<String> list = new ArrayList<String>();
-        
-        HttpGet get = new HttpGet(url);
-        HttpClient client = new DefaultHttpClient();
-        try {
-            HttpResponse response = client.execute(get);
-            String str = EntityUtils.toString(response.getEntity());
-            JSONArray line = new JSONArray(new JSONTokener(str));
-            for (int i =0; i<line.length(); i++) {
-                list.add(line.getJSONObject(i).getString("name"));
-            }
-        } catch (ClientProtocolException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return list;
-        
-    }
-    
-    private List<HashMap<String, Object>> getNotice() {
-        ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
-        HashMap<String, Object> map = null;
-        
-        String uri = "http://www.xpcms.net/mobile.php/notice/index/token/" + myapp.getData("token").toString();
-        JSONObject response = HttpRequest.get(uri);
-        
-        try {
-            JSONArray line = response.getJSONArray("data");
-            for (int i =0; i<line.length();i++) {
-                map = new HashMap<String, Object>();
-                map.put("id", line.getJSONObject(i).getString("id"));
-                map.put("sort", (i+1));
-                map.put("title", line.getJSONObject(i).getString("title"));
-                list.add(map);
-            }
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return list;
-    }
+
 }

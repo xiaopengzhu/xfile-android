@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONTokener;
 
+import cn.com.util.MyApp;
 import cn.com.util.Tools;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -40,6 +41,7 @@ public class RecordActivity extends Activity{
     private Handler mHandler;
     //Loading
     static ProgressDialog progressDialog;
+    private MyApp myapp;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class RecordActivity extends Activity{
         progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
         gridview = (GridView)findViewById(R.id.gridview);
         mHandler = new Handler();
+        myapp = (MyApp) getApplication();
         
         //选项点击事件    
         gridview.setOnItemClickListener(new OnItemClickListener() {
@@ -111,7 +114,7 @@ public class RecordActivity extends Activity{
         ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
         HashMap<String, Object> map = null;
         
-        String url = "http://www.xpcms.net/mobile.php/record/index";
+        String url = "http://www.xpcms.net/mobile.php/record/index/token/"+ myapp.getData("token").toString();
         HttpGet get = new HttpGet(url);
         HttpClient client = new DefaultHttpClient();
         try {

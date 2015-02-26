@@ -86,6 +86,29 @@ public class NoticeActivity  extends Activity{
         startActivity(intent);
     }
     
+    private List<HashMap<String, Object>> getData() {
+        ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
+        HashMap<String, Object> map = null;
+        
+        String uri = "http://www.xpcms.net/mobile.php/notice/index/token/" + myapp.getData("token").toString();
+        JSONObject response = HttpRequest.get(uri);
+        
+        try {
+            JSONArray line = response.getJSONArray("data");
+            for (int i =0; i<line.length();i++) {
+                map = new HashMap<String, Object>();
+                map.put("id", line.getJSONObject(i).getString("id"));
+                map.put("sort", (i+1));
+                map.put("title", line.getJSONObject(i).getString("title"));
+                list.add(map);
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
     class DeleteTask extends AsyncTask<Integer, Integer, Integer> {
         private int index;
         private int code;
@@ -98,7 +121,9 @@ public class NoticeActivity  extends Activity{
             
             List<NameValuePair> list = new ArrayList<NameValuePair>(); Log.v("TEST", data.get(params[0]).get("id").toString());
             NameValuePair pair1 = new BasicNameValuePair("id", data.get(params[0]).get("id").toString());
+            NameValuePair pair2 = new BasicNameValuePair("token", myapp.getData("token").toString());
             list.add(pair1);
+            list.add(pair2);
             
             String uri = "http://www.xpcms.net/mobile.php/notice/delete";
             JSONObject response = HttpRequest.post(uri, list);
@@ -154,27 +179,4 @@ public class NoticeActivity  extends Activity{
         
     }
     
-    private List<HashMap<String, Object>> getData() {
-        ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
-        HashMap<String, Object> map = null;
-        
-        String uri = "http://www.xpcms.net/mobile.php/notice/index/token/" + myapp.getData("token").toString();
-        JSONObject response = HttpRequest.get(uri);
-        
-        try {
-            JSONArray line = response.getJSONArray("data");
-            for (int i =0; i<line.length();i++) {
-                map = new HashMap<String, Object>();
-                map.put("id", line.getJSONObject(i).getString("id"));
-                map.put("sort", (i+1));
-                map.put("title", line.getJSONObject(i).getString("title"));
-                list.add(map);
-            }
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return list;
-    }
-
 }

@@ -58,7 +58,19 @@ public class LoginActivity extends Activity{
         });
 
     }
-   
+    
+    //登录
+    public void login(View v) {
+        progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
+        new LoginTask().execute();
+    }
+    
+    //注册
+    public void register(View v) {
+        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivity(intent);
+    }
+    
     //登录任务
     class LoginTask extends AsyncTask<Void, Integer, Integer> {
         private JSONObject response;
@@ -123,17 +135,5 @@ public class LoginActivity extends Activity{
                 Toast.makeText(LoginActivity.this, "服务器内部错误", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-    
-    //登录
-    public void login(View v) {
-        progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
-        new LoginTask().execute();
-    }
-    
-    //注册
-    public void register(View v) {
-        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-        startActivity(intent);
     }
 }

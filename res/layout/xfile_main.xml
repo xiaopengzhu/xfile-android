@@ -56,10 +56,10 @@
                     android:text="@string/tab_notice" />
 
                 <RadioButton
-                    android:id="@+id/tab_message"
+                    android:id="@+id/tab_log"
                     style="@style/main_tab_bottom"
                     android:drawableTop="@drawable/main_navigation_car"
-                    android:text="@string/tab_message" />
+                    android:text="@string/tab_log" />
 
                 <RadioButton
                     android:id="@+id/tab_more"

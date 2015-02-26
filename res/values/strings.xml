@@ -26,7 +26,7 @@
     <string name="tab_notice">密码提示</string>
     <string name="tab_myhome">我的资料</string>
     <string name="tab_more">更多设置</string>
-    <string name="tab_message">消息中心</string>
+    <string name="tab_log">操作日志</string>
     <string name="account">用户名称</string>
     <string name="password">用户密码</string>
     <string name="login">登录</string>
@@ -42,6 +42,7 @@
     <string name="updated_at">上次更新于%1$s前</string>
     <string name="updated_just_now">刚刚更新</string>
     <string name="time_error">时间有问题</string>
+    <string name="view">记录详情</string>
     
     <string name="xlistview_header_hint_normal">下拉刷新</string>
     <string name="xlistview_header_hint_ready">松开刷新数据</string>

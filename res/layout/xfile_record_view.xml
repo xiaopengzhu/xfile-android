@@ -1,49 +1,123 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="vertical"
-	android:background="#fff" >
-	
-	<LinearLayout 
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:padding="10dp" >
-		<TextView 
-	        android:layout_width="30dp"
-	        android:layout_height="wrap_content"
-	        android:text="帐号" />
-	    <TextView 
-	        android:id="@+id/account"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content" />
-	</LinearLayout>
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/empty_cart_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:background="#ffefebe7">
+
+    <RelativeLayout
+        android:id="@+id/top_relative"
+        android:layout_width="fill_parent"
+        android:layout_height="50.0dip"
+        android:background="#106184" >
+        
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="10.0dip"
+            android:singleLine="true"
+            android:text="@string/view"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout 
+        android:layout_below="@+id/top_relative"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:gravity="center"
+        android:orientation="vertical">
+        
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/edit_text_focused" >
+        
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginRight="5dp"
+                android:text="帐号：" />
+        
+            <TextView
+                android:id="@+id/account" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#999"
+                android:textSize="16sp" />
+        </LinearLayout>
+        
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edit_text_focused" >
+        
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginRight="5dp"
+                android:text="密码："/>
+        
+            <TextView
+                android:id="@+id/password" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#999"
+                android:textSize="16sp" />
+        </LinearLayout>
+        
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edit_text_focused" >
+        
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:text="备注："/>
+        
+            <TextView
+                android:id="@+id/remark" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#999"
+                android:textSize="16sp" />
+        </LinearLayout>
+        
+        <TextView 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textColor="#000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="提示列表:"/>
+        
+        <ListView 
+            android:id="@+id/notice"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edit_text_focused"
+            android:divider="#eee"
+            android:dividerHeight="1dp" />
+    </LinearLayout>
     
-	<LinearLayout 
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:padding="10dp" >
-		
-		<TextView 
-	        android:layout_width="30dp"
-	        android:layout_height="wrap_content"
-	        android:text="密码" />
-	    <TextView 
-	        android:id="@+id/password"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content" />
-		
-	</LinearLayout>
-    
-	<TextView 
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:padding="10dp"
-		android:text="提示列表"/>
-	
-    <TextView 
-    	android:id="@+id/notice"
-    	android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:padding="10dp" />
-</LinearLayout>
+</RelativeLayout>
