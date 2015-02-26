@@ -11,22 +11,30 @@
         android:layout_width="fill_parent"
         android:layout_height="50.0dip" >
 
-	    <ImageView
-	        android:id="@+id/titleBg"
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent"
-	        android:background="#106184" />
-	
-	    <TextView
-	        android:id="@+id/titleText"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_centerInParent="true"
-	        android:padding="10.0dip"
-	        android:singleLine="true"
-	        android:text="@string/tab_log"
-	        android:textColor="@color/white"
-	        android:textSize="15sp" />
+        <ImageView
+            android:id="@+id/titleBg"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#106184" />
+    
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="10.0dip"
+            android:singleLine="true"
+            android:text="@string/tab_log"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
     </RelativeLayout>
+    
+    <cn.com.lib.XListView 
+        android:id="@+id/refreshable_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/top_relative"
+        android:divider="#eee"
+        android:dividerHeight="1dp" />
 </RelativeLayout>
