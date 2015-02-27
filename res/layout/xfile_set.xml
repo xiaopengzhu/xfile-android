@@ -15,24 +15,16 @@
             android:layout_height="fill_parent"
             android:background="#106184" />
     
-        <ImageView
-            android:id="@+id/progressImage"
-            android:layout_width="0.0dip"
-            android:layout_height="fill_parent"
-            android:background="@drawable/android_title_bg_progress"
-            android:visibility="gone" />
-    
-        <Button
-            android:id="@+id/titleRightButton"
-            style="\@style/title_right_button"
-            android:layout_width="100.0dip"
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="5.0dip"
-            android:layout_marginTop="2.0dip"
-            android:visibility="gone" />
+            android:layout_centerInParent="true"
+            android:padding="10.0dip"
+            android:singleLine="true"
+            android:text="@string/tab_set"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
 
     </RelativeLayout>
@@ -212,36 +204,6 @@
                     </TableRow>
 
                     <TableRow
-                        android:id="@+id/more_page_row5"
-                        android:layout_width="fill_parent"
-                        android:layout_marginLeft="2.0dip"
-                        android:layout_marginRight="2.0dip"
-                        android:background="@drawable/more_itemmiddle_press"
-                        android:paddingBottom="16.0dip"
-                        android:paddingTop="16.0dip" >
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="fill_parent"
-                            android:drawableLeft="@drawable/feed_back"
-                            android:drawablePadding="10.0dip"
-                            android:gravity="center_vertical"
-                            android:includeFontPadding="false"
-                            android:paddingLeft="17.0dip"
-                            android:text="意见反馈"
-                            android:textColor="#ff333333"
-                            android:textSize="16.0sp" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="fill_parent"
-                            android:layout_gravity="right"
-                            android:gravity="center_vertical"
-                            android:paddingRight="20.0dip"
-                            android:src="@drawable/ic_arrow" />
-                    </TableRow>
-
-                    <TableRow
                         android:id="@+id/more_page_row6"
                         android:layout_width="fill_parent"
                         android:layout_marginLeft="2.0dip"
@@ -339,36 +301,6 @@
                             android:includeFontPadding="false"
                             android:paddingLeft="17.0dip"
                             android:text="上传图片"
-                            android:textColor="#ff333333"
-                            android:textSize="16.0sp" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="fill_parent"
-                            android:layout_gravity="right"
-                            android:gravity="center_vertical"
-                            android:paddingRight="20.0dip"
-                            android:src="@drawable/ic_arrow" />
-                    </TableRow>
-
-                    <TableRow
-                    	android:id="@+id/mediaplay"
-                        android:layout_width="fill_parent"
-                        android:layout_marginLeft="2.0dip"
-                        android:layout_marginRight="2.0dip"
-                        android:background="@drawable/more_itemmiddle_press"
-                        android:paddingBottom="16.0dip"
-                        android:paddingTop="16.0dip" >
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="fill_parent"
-                            android:drawableLeft="@drawable/feed_back"
-                            android:drawablePadding="10.0dip"
-                            android:gravity="center_vertical"
-                            android:includeFontPadding="false"
-                            android:paddingLeft="17.0dip"
-                            android:text="媒体操作"
                             android:textColor="#ff333333"
                             android:textSize="16.0sp" />
 

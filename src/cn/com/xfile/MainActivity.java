@@ -72,7 +72,7 @@ public class MainActivity extends TabActivity {
         tabHost.addTab(tabHost.newTabSpec("log").setIndicator("log")
                 .setContent(new Intent(this, LogActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("more").setIndicator("more")
-                .setContent(new Intent(this, MoreActivity.class)));
+                .setContent(new Intent(this, SetActivity.class)));
     }
     
     public boolean dispatchKeyEvent( KeyEvent event) {
