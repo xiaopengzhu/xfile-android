@@ -46,26 +46,26 @@
                     android:id="@+id/tab_list"
                     style="@style/main_tab_bottom"
                     android:checked="true"
-                    android:drawableTop="@drawable/main_navigation_home"
+                    android:drawableTop="@drawable/nav_liston"
                     android:text="@string/tab_list" />
 
                 <RadioButton
                     android:id="@+id/tab_notice"
                     style="@style/main_tab_bottom"
-                    android:drawableTop="@drawable/main_navigation_catagory"
+                    android:drawableTop="@drawable/nav_notice"
                     android:text="@string/tab_notice" />
 
                 <RadioButton
                     android:id="@+id/tab_log"
                     style="@style/main_tab_bottom"
-                    android:drawableTop="@drawable/main_navigation_car"
+                    android:drawableTop="@drawable/nav_log"
                     android:text="@string/tab_log" />
 
                 <RadioButton
                     android:id="@+id/tab_more"
                     style="@style/main_tab_bottom"
-                    android:drawableTop="@drawable/main_navigation_more"
-                    android:text="@string/main_navigation_more" />
+                    android:drawableTop="@drawable/nav_set"
+                    android:text="@string/tab_set" />
             </RadioGroup>
         </LinearLayout>
     </LinearLayout>

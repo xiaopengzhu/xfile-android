@@ -37,9 +37,17 @@ public class RegisterActivity extends Activity{
     }
     
     public void submit(View v) {
-        if (!password.getText().toString().equals(password2.getText().toString())) {
+        if (account.getText().toString().length() < 6) {
+            Toast.makeText(this, "用户名长不度不能小于6", Toast.LENGTH_SHORT).show();
+        } else if (nickname.getText().toString().length() < 1) {
+            Toast.makeText(this, "昵称不能为空", Toast.LENGTH_SHORT).show();
+        } else if (password.getText().toString().length() < 6) {
+            Toast.makeText(this, "密码长不度不能小于6", Toast.LENGTH_SHORT).show();
+        } else if (!password.getText().toString().equals(password2.getText().toString())) {
             Toast.makeText(this, "密码二次输入不匹配", Toast.LENGTH_SHORT).show();
-        } else {
+        } else if (second_password.getText().toString().length() < 6) {
+            Toast.makeText(this, "二级密码长度不能少于6", Toast.LENGTH_SHORT).show();
+        }else {
             new RegisterTask().execute();
         }
     }

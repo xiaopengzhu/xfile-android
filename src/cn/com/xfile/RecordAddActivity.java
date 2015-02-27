@@ -483,7 +483,6 @@ public class RecordAddActivity extends Activity{
             NameValuePair pair6 = new BasicNameValuePair("password", pass_encrypt.trueString);
             NameValuePair pair7 = new BasicNameValuePair("remark", remark.getText().toString());
             
-            
             list.add(pair0);
             list.add(pair1);
             list.add(pair2);

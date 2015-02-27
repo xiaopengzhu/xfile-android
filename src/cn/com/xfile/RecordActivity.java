@@ -139,7 +139,6 @@ public class RecordActivity extends Activity{
             e.printStackTrace();
         }
         return list;
-        
     }
 
 }

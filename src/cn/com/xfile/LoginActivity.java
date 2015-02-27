@@ -18,9 +18,14 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +38,7 @@ public class LoginActivity extends Activity{
     private Editor editor;
     //控件
     private EditText account, password;
+    private String accountText, passwordText;
     //Loading
     static ProgressDialog progressDialog;
     
@@ -61,6 +67,12 @@ public class LoginActivity extends Activity{
     
     //登录
     public void login(View v) {
+        accountText = account.getText().toString();
+        passwordText = password.getText().toString();
+        if (accountText.length() < 1 || passwordText.length() < 1) {
+            Toast.makeText(this, "用户和密码不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
         progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
         new LoginTask().execute();
     }
@@ -79,8 +91,8 @@ public class LoginActivity extends Activity{
         protected Integer doInBackground(Void... params) {
             // TODO Auto-generated method stub
             List<NameValuePair> list = new ArrayList<NameValuePair>();
-            NameValuePair pair1 = new BasicNameValuePair("account", account.getText().toString());
-            NameValuePair pair2 = new BasicNameValuePair("password", password.getText().toString());
+            NameValuePair pair1 = new BasicNameValuePair("account", accountText);
+            NameValuePair pair2 = new BasicNameValuePair("password", passwordText);
             
             list.add(pair1);
             list.add(pair2);
