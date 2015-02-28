@@ -111,6 +111,7 @@ public class NoticeActivity  extends Activity{
     class DeleteTask extends AsyncTask<Integer, Integer, Integer> {
         private int index;
         private int code;
+        private String msg;
         
         @Override
         protected Integer doInBackground(Integer... params) {
@@ -129,6 +130,7 @@ public class NoticeActivity  extends Activity{
             
             try {
                 code = Integer.parseInt(response.get("code").toString());
+                msg = response.get("msg").toString();
             } catch (NumberFormatException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -149,7 +151,7 @@ public class NoticeActivity  extends Activity{
                 simpleadapter.notifyDataSetChanged();
                 Toast.makeText(NoticeActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(NoticeActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(NoticeActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
         }
         
