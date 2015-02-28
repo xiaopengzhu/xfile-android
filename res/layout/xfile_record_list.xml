@@ -29,7 +29,7 @@
             
         <Button 
             android:id="@+id/add_btn"
-            android:background="@drawable/add_recode_button"
+            android:background="@drawable/add_recorde_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"

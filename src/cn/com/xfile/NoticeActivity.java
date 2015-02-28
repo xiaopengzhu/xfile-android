@@ -19,7 +19,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -119,7 +118,7 @@ public class NoticeActivity  extends Activity{
             
             index = params[0];
             
-            List<NameValuePair> list = new ArrayList<NameValuePair>(); Log.v("TEST", data.get(params[0]).get("id").toString());
+            List<NameValuePair> list = new ArrayList<NameValuePair>();
             NameValuePair pair1 = new BasicNameValuePair("id", data.get(params[0]).get("id").toString());
             NameValuePair pair2 = new BasicNameValuePair("token", myapp.getData("token").toString());
             list.add(pair1);

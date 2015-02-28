@@ -28,10 +28,10 @@
             android:background="#ffefebe7"
             android:orientation="vertical" >
             
-        	<TextView 
-        		android:layout_width="fill_parent"
-        		android:layout_height="1dp"
-        		android:background="#999"/>
+            <TextView 
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#999"/>
 
             <RadioGroup
                 android:id="@+id/main_tab_group"
@@ -41,30 +41,29 @@
                 android:background="#000"
                 android:gravity="bottom"
                 android:orientation="horizontal" >
-
                 <RadioButton
                     android:id="@+id/tab_list"
-                    style="@style/main_tab_bottom"
+                    style="@style/tab_bottom"
                     android:checked="true"
-                    android:drawableTop="@drawable/nav_liston"
+                    android:drawableTop="@drawable/tablist_button"
                     android:text="@string/tab_list" />
 
                 <RadioButton
                     android:id="@+id/tab_notice"
-                    style="@style/main_tab_bottom"
-                    android:drawableTop="@drawable/nav_notice"
+                    style="@style/tab_bottom"
+                    android:drawableTop="@drawable/tabnotice_button"
                     android:text="@string/tab_notice" />
 
                 <RadioButton
                     android:id="@+id/tab_log"
-                    style="@style/main_tab_bottom"
-                    android:drawableTop="@drawable/nav_log"
+                    style="@style/tab_bottom"
+                    android:drawableTop="@drawable/tablog_button"
                     android:text="@string/tab_log" />
 
                 <RadioButton
-                    android:id="@+id/tab_more"
-                    style="@style/main_tab_bottom"
-                    android:drawableTop="@drawable/nav_set"
+                    android:id="@+id/tab_set"
+                    style="@style/tab_bottom"
+                    android:drawableTop="@drawable/tabset_button"
                     android:text="@string/tab_set" />
             </RadioGroup>
         </LinearLayout>
