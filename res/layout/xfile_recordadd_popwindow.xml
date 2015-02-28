@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
-	android:orientation="vertical"
-	android:background="@drawable/android_big_button_focus">
+	android:orientation="vertical">
 	
     <ListView 
     	android:id="@+id/listview"

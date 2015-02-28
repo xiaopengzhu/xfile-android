@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="match_parent"
-	android:background="#ffefebe7" >
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="#ffefebe7" >
 
     <RelativeLayout
         android:id="@+id/top_relative"
@@ -47,7 +47,8 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:background="@drawable/wrap" >
 
                 <TableLayout
                     android:id="@+id/MorePageTableLayout_Follow"
@@ -97,7 +98,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="fill_parent"
-                            android:drawableLeft="@drawable/search_friends"
+                            android:drawableLeft="@drawable/search"
                             android:drawablePadding="10.0dip"
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
@@ -129,7 +130,7 @@
                             android:drawablePadding="10.0dip"
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
-                            android:drawableLeft="@drawable/search_friends"
+                            android:drawableLeft="@drawable/search"
                             android:paddingLeft="17.0dip"
                             android:text="修改密码"
                             android:textColor="#ff333333"
@@ -160,7 +161,8 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                android:background="@drawable/wrap" >
 
                 <TableLayout
                     android:id="@+id/MorePageTableLayout_Client"
@@ -257,17 +259,23 @@
                             android:src="@drawable/ic_arrow" />
                     </TableRow>
                 </TableLayout>
-                
-                <TextView
+            </LinearLayout>
+            
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10.0dip"
+                    android:layout_marginTop="10.0dip"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="4.0dip"
+                    android:text="工具箱"
+                    android:textColor="#ff888888"
+                    android:textSize="16.0sp" />
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10.0dip"
-                android:layout_marginTop="10.0dip"
-                android:gravity="center_vertical"
-                android:paddingLeft="4.0dip"
-                android:text="工具箱"
-                android:textColor="#ff888888"
-                android:textSize="16.0sp" />
+                android:orientation="vertical"
+                android:background="@drawable/wrap" >
                 
                 <TableLayout
                     android:id="@+id/ToolsTableLayout"
@@ -278,7 +286,7 @@
                     android:stretchColumns="0" >
 
                     <TableRow
-                    	android:id="@+id/tools_upload_btn"
+                        android:id="@+id/tools_upload_btn"
                         android:layout_width="fill_parent"
                         android:layout_marginLeft="2.0dip"
                         android:layout_marginRight="2.0dip"
@@ -307,7 +315,7 @@
                     </TableRow>
 
                     <TableRow
-                    	android:id="@+id/db"
+                        android:id="@+id/db"
                         android:layout_width="fill_parent"
                         android:layout_marginLeft="2.0dip"
                         android:layout_marginRight="2.0dip"
@@ -393,12 +401,13 @@
                 </TableLayout>
                 
             </LinearLayout>
+            
             <Button 
-            	android:layout_width="fill_parent"
-            	android:layout_height="wrap_content"
-            	android:layout_marginTop="20dp"
-            	android:drawablePadding="10dp"
-            	android:text="退出登录"/>
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:drawablePadding="10dp"
+                android:text="退出登录"/>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>
