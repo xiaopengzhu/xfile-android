@@ -75,6 +75,10 @@ public class NoticeAddActivity extends Activity{
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
+                if (title.getText().toString().equals("")) {
+                    Toast.makeText(NoticeAddActivity.this, "内容不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 new SubmitTask().execute();
             }
         });

@@ -56,6 +56,7 @@
                 android:textColor="#ff000000"
                 style="?android:attr/buttonBarButtonStyle"
                 android:onClick="login"
+                android:focusable="true"
                 android:textSize="16.0sp" />
         
             <Button
@@ -66,6 +67,7 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_marginLeft="20dp"
                 android:gravity="center"
+                android:focusable="true"
                 android:text="@string/register"
                 android:textColor="#ff000000"
                 android:onClick="register"

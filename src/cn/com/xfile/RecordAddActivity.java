@@ -94,6 +94,10 @@ public class RecordAddActivity extends Activity{
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
+                if (title.getText().toString().equals("")) {
+                    Toast.makeText(RecordAddActivity.this, "标题不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 new SubmitTask().execute();
             }
         });
