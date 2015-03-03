@@ -2,13 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
-    android:background="#ffefebe7">
+    android:background="#fff">
 
     <RelativeLayout
         android:id="@+id/top_relative"
         android:layout_width="fill_parent"
         android:layout_height="50.0dip"
-        android:background="#106184" >
+        android:background="#d10b97" >
 	    
 	    <TextView
 	        android:id="@+id/titleText"
@@ -37,6 +37,10 @@
         	android:id="@+id/title"
         	android:layout_width="fill_parent"
         	android:layout_height="wrap_content"
+        	android:focusable="true"
+        	android:background="@drawable/common_edittext"
+        	android:paddingLeft="10dp"
+        	android:paddingRight="10dp"
         	android:hint="例如：我大学学号的第4位数字" />
         
         <Button
@@ -44,6 +48,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="19dp"
+            android:focusable="true"
+            android:background="@drawable/common_button_select"
             android:text="提交" />
     </LinearLayout>
     

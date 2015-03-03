@@ -2,13 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
-    android:background="#ffefebe7">
+    android:background="#fff">
 
     <RelativeLayout
         android:id="@+id/top_relative"
         android:layout_width="fill_parent"
         android:layout_height="50.0dip"
-        android:background="#106184" >
+        android:background="#d10b97" >
         
         <TextView
             android:id="@+id/titleText"

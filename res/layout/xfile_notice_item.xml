@@ -15,7 +15,6 @@
         android:layout_marginRight="20dp"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:text="aaa"
         android:visibility="gone" />
         
     <TextView 
@@ -25,15 +24,14 @@
         android:layout_marginRight="20dp"
         android:textColor="#666"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="aaa" />
+        android:textStyle="bold"/>
     
     <TextView 
         android:id="@+id/item_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textSize="15sp"
-        android:text="111"
+        android:textColor="#f862c5"
         android:gravity="center_vertical" />
 
 </LinearLayout>

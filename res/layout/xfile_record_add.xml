@@ -2,13 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
-    android:background="#ffefebe7">
+    android:background="#fff">
 
     <RelativeLayout
         android:id="@+id/top_relative"
         android:layout_width="fill_parent"
         android:layout_height="50.0dip"
-        android:background="#106184" >
+        android:background="#d10b97" >
 	    
 	    <TextView
 	        android:id="@+id/titleText"
@@ -38,6 +38,10 @@
         	android:layout_height="wrap_content"
         	android:hint="请输出标题"
         	android:layout_marginTop="10dp"
+        	android:focusable="true"
+            android:background="@drawable/common_edittext"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
         	android:singleLine="true">
         	<requestFocus />
         </AutoCompleteTextView>
@@ -54,6 +58,10 @@
 	            android:layout_height="wrap_content"
 	            android:layout_weight="1"
 	            android:hint="请输入帐号"
+	            android:focusable="true"
+                android:background="@drawable/common_edittext"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
 	            android:singleLine="true"
 	            android:ems="10" />
         	
@@ -77,6 +85,10 @@
 	            android:layout_height="wrap_content"
 	            android:hint="请输入密码"
 	            android:layout_weight="1"
+	            android:focusable="true"
+                android:background="@drawable/common_edittext"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
 	            android:singleLine="true"
 	            android:longClickable="false"
 	            android:ems="10" />
@@ -95,6 +107,10 @@
         	android:layout_width="fill_parent"
         	android:layout_height="wrap_content"
         	android:inputType="textMultiLine"
+        	android:focusable="true"
+            android:background="@drawable/common_edittext"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
         	android:hint="在此输出备注信息" />
         
         <TextView 
@@ -110,6 +126,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="19dp"
+            android:focusable="true"
+            android:background="@drawable/common_button_select"
             android:text="提交" />
     </LinearLayout>
     

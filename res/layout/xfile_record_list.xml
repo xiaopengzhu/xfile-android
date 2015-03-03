@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
-    android:background="#ffefebe7">
+    android:background="#fff">
   
 
     <RelativeLayout
@@ -14,7 +14,7 @@
             android:id="@+id/titleBg"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="#106184" />
+            android:background="#d10b97" />
     
         <TextView
             android:id="@+id/titleText"
@@ -45,7 +45,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/top_relative"
-        android:divider="#eee"
+        android:divider="#f862c5"
         android:dividerHeight="1dp" />
 
 </RelativeLayout>
