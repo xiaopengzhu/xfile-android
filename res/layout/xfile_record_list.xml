@@ -41,11 +41,11 @@
 
 
     <cn.com.lib.XListView 
-    	android:id="@+id/refreshable_view"
+        android:id="@+id/refreshable_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/top_relative"
-        android:divider="#f862c5"
+        android:divider="#fff"
         android:dividerHeight="1dp" />
 
 </RelativeLayout>

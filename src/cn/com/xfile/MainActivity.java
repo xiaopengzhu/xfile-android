@@ -55,7 +55,6 @@ public class MainActivity extends TabActivity {
 
             public void onClick(View view) {
                 tabHost.setCurrentTabByTag("set");
-
             }
         });
     }
@@ -63,13 +62,13 @@ public class MainActivity extends TabActivity {
     public void initTab(){
         tabHost=getTabHost();
         tabHost.addTab(tabHost.newTabSpec("list").setIndicator("list")
-                .setContent(new Intent(this, RecordActivity.class)));
+               .setContent(new Intent(this, RecordActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("notice").setIndicator("notice")
-                .setContent(new Intent(this, NoticeActivity.class)));
+               .setContent(new Intent(this, NoticeActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("log").setIndicator("log")
-                .setContent(new Intent(this, LogActivity.class)));
+               .setContent(new Intent(this, LogActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("set").setIndicator("set")
-                .setContent(new Intent(this, SetActivity.class)));
+               .setContent(new Intent(this, SetActivity.class)));
     }
     
 }

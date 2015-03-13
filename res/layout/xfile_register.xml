@@ -98,6 +98,7 @@
                 android:layout_marginTop="10dp"
                 android:onClick="submit"
                 android:focusable="true"
+                android:textColor="#fff"
                 android:background="@drawable/common_button_select"
                 android:text="@string/register_submit" />
             

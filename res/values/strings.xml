@@ -15,6 +15,7 @@
     <string name="app_close">关闭应用程序</string>
     <string name="btn_cancel">取 消</string>
     <string name="btn_ok">确 定</string>
+    <string name="start">开始</string>
     
     <string name="tab_list">记录</string>
     <string name="tab_notice">提示</string>

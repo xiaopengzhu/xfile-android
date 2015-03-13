@@ -366,7 +366,6 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
         
         //初始化
-        listview.setPullLoadEnable(true);
         listview.setXListViewListener(this);
         listview.setPullLoadEnable(false);
         
