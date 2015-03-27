@@ -20,12 +20,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import cn.com.lib.XProgressDialog;
 import cn.com.util.EncryptString;
 import cn.com.util.HttpRequest;
 import cn.com.util.MyApp;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -50,7 +50,7 @@ public class RecordAddActivity extends Activity{
     private ArrayList<String> data;
     private AutoCompleteTextView title;
     private JSONObject ret;
-    static  ProgressDialog progressDialog;
+    private XProgressDialog xProgressDialog;
     private EditText  account,password, remark;
     private TextView titleText, record_id;
     private Button sub_btn;
@@ -85,7 +85,8 @@ public class RecordAddActivity extends Activity{
         myapp = (MyApp) getApplication();
         
         //异步加载
-        progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
+        startProgressDialog();
+        
         new LoadingTask().execute();
         
         //提交
@@ -465,7 +466,7 @@ public class RecordAddActivity extends Activity{
                 pass_encrypt = new EncryptString();
                 pass_encrypt.contruct("");
             }
-            progressDialog.dismiss();
+            stopProgressDialog();
         }
         
     }
@@ -520,5 +521,25 @@ public class RecordAddActivity extends Activity{
         }
         
     }
+    
+    /** 
+     * 开启进度对话框 
+     */  
+    private void startProgressDialog() {  
+        if (xProgressDialog == null) {  
+        	xProgressDialog = XProgressDialog.createDialog(this);  
+        }  
+        xProgressDialog.show();  
+    }  
+      
+    /** 
+     * 停止进度对话框 
+     */  
+    private void stopProgressDialog() {  
+        if (xProgressDialog != null) {  
+        	xProgressDialog.dismiss();  
+        	xProgressDialog = null;  
+        }  
+    }  
 
 }

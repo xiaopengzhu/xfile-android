@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import cn.com.lib.XListView;
+import cn.com.lib.XProgressDialog;
 import cn.com.lib.XListView.IXListViewListener;
 import cn.com.util.EncryptString;
 import cn.com.util.HttpRequest;
@@ -26,7 +27,6 @@ import cn.com.util.Tools;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -36,6 +36,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -62,7 +63,7 @@ public class RecordListActivity extends Activity implements IXListViewListener{
     private Handler mHandler;
     private Runnable refresh, getmore, delete, checkSecondPass;
     private String token, tid, id;
-    static  ProgressDialog progressDialog;
+    private XProgressDialog xProgressDialog;
     
     public static int page = 1, pagesize = 8;
     
@@ -119,7 +120,7 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                     public void run() {
                         // TODO Auto-generated method stub
                         listview.setAdapter(simpleadapter);
-                        progressDialog.dismiss();
+                        stopProgressDialog();
                         onLoad();
                     }
                 });
@@ -303,9 +304,9 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                     int arg2, long arg3) {
                    index = arg2-1; 
                 id = data.get(index).get("id").toString();
-                
-                new AlertDialog.Builder(RecordListActivity.this).setTitle("选择操作").
-                    setItems(opts, new DialogInterface.OnClickListener() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RecordListActivity.this);
+                builder.setTitle("选择操作").setView(LayoutInflater.from(RecordListActivity.this).inflate(R.layout.alert_dialog, null));
+                builder.setItems(opts, new DialogInterface.OnClickListener() {
                         
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -325,8 +326,8 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         final View view = lf.inflate(R.layout.xfile_recordlist_secondpass, null);
 
         new AlertDialog.Builder(RecordListActivity.this).
-        setTitle("请输入二级密码").setView(view).
-        setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        	setTitle("请输入二级密码").setView(view).
+        	setPositiveButton("确定", new DialogInterface.OnClickListener() {
             
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -363,7 +364,7 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         token = myapp.getData("token").toString();
         
         //Loading
-        progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
+        startProgressDialog();
         
         //初始化
         listview.setXListViewListener(this);
@@ -454,5 +455,25 @@ public class RecordListActivity extends Activity implements IXListViewListener{
         return list;
         
     }
+    
+    /** 
+     * 开启进度对话框 
+     */  
+    private void startProgressDialog() {  
+        if (xProgressDialog == null) {  
+        	xProgressDialog = XProgressDialog.createDialog(this);  
+        }  
+        xProgressDialog.show();  
+    }  
+      
+    /** 
+     * 停止进度对话框 
+     */  
+    private void stopProgressDialog() {  
+        if (xProgressDialog != null) {  
+        	xProgressDialog.dismiss();  
+        	xProgressDialog = null;  
+        }  
+    }  
 
 }

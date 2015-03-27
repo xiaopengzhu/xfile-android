@@ -10,11 +10,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cn.com.lib.XProgressDialog;
 import cn.com.util.HttpRequest;
 import cn.com.util.MyApp;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -27,7 +27,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 public class NoticeActivity  extends Activity{
-    static ProgressDialog progressDialog;
+	private XProgressDialog xProgressDialog;
     private ListView listview;
     private List<HashMap<String, Object>> data;
     private SimpleAdapter simpleadapter;
@@ -39,7 +39,8 @@ public class NoticeActivity  extends Activity{
         setContentView(R.layout.xfile_notice);
         myapp = (MyApp) getApplication();
         
-        progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
+        startProgressDialog();
+        
         listview = (ListView)findViewById(R.id.listview);
         listview.setOnItemLongClickListener(new OnItemLongClickListener() {
 
@@ -170,7 +171,9 @@ public class NoticeActivity  extends Activity{
         protected void onPostExecute(Integer result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-            progressDialog.dismiss();
+
+            stopProgressDialog();
+            
             simpleadapter = new SimpleAdapter(getApplicationContext(), data,
                     R.layout.xfile_notice_item,
                     new String[]{"id", "sort", "title"}, 
@@ -180,4 +183,23 @@ public class NoticeActivity  extends Activity{
         
     }
     
+    /** 
+     * 开启进度对话框 
+     */  
+    private void startProgressDialog() {  
+        if (xProgressDialog == null) {  
+        	xProgressDialog = XProgressDialog.createDialog(this);  
+        }  
+        xProgressDialog.show();  
+    }  
+      
+    /** 
+     * 停止进度对话框 
+     */  
+    private void stopProgressDialog() {  
+        if (xProgressDialog != null) {  
+        	xProgressDialog.dismiss();  
+        	xProgressDialog = null;  
+        }  
+    } 
 }

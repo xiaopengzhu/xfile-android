@@ -13,7 +13,6 @@ import org.json.JSONObject;
 
 import cn.com.util.HttpRequest;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +21,6 @@ import android.widget.Toast;
 
 public class RegisterActivity extends Activity{
     private EditText account, password, password2, nickname, second_password;
-    static ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

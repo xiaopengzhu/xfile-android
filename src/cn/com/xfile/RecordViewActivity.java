@@ -4,10 +4,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cn.com.lib.XProgressDialog;
 import cn.com.util.HttpRequest;
 import cn.com.util.MyApp;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ import android.widget.Toast;
 public class RecordViewActivity extends Activity{
     private String id, second_password;
     private MyApp myapp;
-    static  ProgressDialog progressDialog;
+    private XProgressDialog xProgressDialog;
     private TextView account, password, title, remark;
     private ListView notice;
     
@@ -41,7 +41,7 @@ public class RecordViewActivity extends Activity{
         notice = (ListView)findViewById(R.id.notice);
         
         //异步加载
-        progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
+        startProgressDialog();
         new LoadingTask().execute();
     }
     
@@ -91,7 +91,27 @@ public class RecordViewActivity extends Activity{
                 Toast.makeText(RecordViewActivity.this, "服务器内部错误", Toast.LENGTH_SHORT).show();
                 finish();
             }
-            progressDialog.dismiss();
+            stopProgressDialog();
         }
     }
+    
+    /** 
+     * 开启进度对话框 
+     */  
+    private void startProgressDialog() {  
+        if (xProgressDialog == null) {  
+        	xProgressDialog = XProgressDialog.createDialog(this);  
+        }  
+        xProgressDialog.show();  
+    }  
+      
+    /** 
+     * 停止进度对话框 
+     */  
+    private void stopProgressDialog() {  
+        if (xProgressDialog != null) {  
+        	xProgressDialog.dismiss();  
+        	xProgressDialog = null;  
+        }  
+    }  
 }

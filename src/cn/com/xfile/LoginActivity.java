@@ -8,10 +8,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cn.com.lib.XProgressDialog;
 import cn.com.util.HttpRequest;
 import cn.com.util.MyApp;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,7 +35,7 @@ public class LoginActivity extends Activity{
     private EditText account, password;
     private String accountText, passwordText;
     //Loading
-    static ProgressDialog progressDialog;
+    private XProgressDialog xProgressDialog;
     
     //初始化
     @Override
@@ -68,7 +68,7 @@ public class LoginActivity extends Activity{
             Toast.makeText(this, "用户和密码不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
+        startProgressDialog();
         new LoginTask().execute();
     }
     
@@ -102,7 +102,7 @@ public class LoginActivity extends Activity{
         protected void onPostExecute(Integer result) {
             // TODO Auto-generated method stub
             super.onPostExecute(result);
-            progressDialog.dismiss();
+            stopProgressDialog();
             
             if (response!=null) {
                 try {
@@ -143,4 +143,24 @@ public class LoginActivity extends Activity{
             }
         }
     }
+    
+    /** 
+     * 开启进度对话框 
+     */  
+    private void startProgressDialog() {  
+        if (xProgressDialog == null) {  
+        	xProgressDialog = XProgressDialog.createDialog(this);  
+        }  
+        xProgressDialog.show();  
+    }  
+      
+    /** 
+     * 停止进度对话框 
+     */  
+    private void stopProgressDialog() {  
+        if (xProgressDialog != null) {  
+        	xProgressDialog.dismiss();  
+        	xProgressDialog = null;  
+        }  
+    }  
 }

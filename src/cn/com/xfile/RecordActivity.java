@@ -15,10 +15,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONTokener;
 
+import cn.com.lib.XProgressDialog;
 import cn.com.util.MyApp;
 import cn.com.util.Tools;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -40,7 +40,7 @@ public class RecordActivity extends Activity{
     //主线程
     private Handler mHandler;
     //Loading
-    static ProgressDialog progressDialog;
+    private XProgressDialog xProgressDialog;
     private MyApp myapp;
     
     @Override
@@ -49,7 +49,7 @@ public class RecordActivity extends Activity{
         setContentView(R.layout.xfile_record);
         
         //初始加载空数据
-        progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
+        startProgressDialog();
         gridview = (GridView)findViewById(R.id.gridview);
         mHandler = new Handler();
         myapp = (MyApp) getApplication();
@@ -102,7 +102,7 @@ public class RecordActivity extends Activity{
                     public void run() {
                         // TODO Auto-generated method stub
                         gridview.setAdapter(simpleadapter);
-                        progressDialog.dismiss();
+                        stopProgressDialog();
                     }
                 });
             }
@@ -140,5 +140,25 @@ public class RecordActivity extends Activity{
         }
         return list;
     }
+    
+    /** 
+     * 开启进度对话框 
+     */  
+    private void startProgressDialog() {  
+        if (xProgressDialog == null) {  
+        	xProgressDialog = XProgressDialog.createDialog(this);  
+        }  
+        xProgressDialog.show();  
+    }  
+      
+    /** 
+     * 停止进度对话框 
+     */  
+    private void stopProgressDialog() {  
+        if (xProgressDialog != null) {  
+        	xProgressDialog.dismiss();  
+        	xProgressDialog = null;  
+        }  
+    } 
 
 }

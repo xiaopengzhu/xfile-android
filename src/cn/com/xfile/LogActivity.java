@@ -9,11 +9,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cn.com.lib.XListView;
+import cn.com.lib.XProgressDialog;
 import cn.com.lib.XListView.IXListViewListener;
 import cn.com.util.HttpRequest;
 import cn.com.util.MyApp;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.SimpleAdapter;
@@ -23,7 +23,7 @@ public class LogActivity extends Activity implements IXListViewListener {
     public static int page = 1, pagesize = 8;
     private XListView listview;
     private MyApp myapp;
-    static  ProgressDialog progressDialog;
+    private XProgressDialog xProgressDialog;
     private SimpleAdapter simpleadapter;
     private List<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
     
@@ -36,7 +36,7 @@ public class LogActivity extends Activity implements IXListViewListener {
         myapp = (MyApp)getApplication();
         
         //Loading
-        progressDialog = ProgressDialog.show(this, "加载中...", "请稍候", true, false);
+        startProgressDialog();
         new LoadTask().execute(1);
         
         //初始化
@@ -127,7 +127,7 @@ public class LogActivity extends Activity implements IXListViewListener {
         @Override
         protected void onPostExecute(String msg) {
             // TODO Auto-generated method stub
-            progressDialog.dismiss();
+            stopProgressDialog();
             if (msg.equals("refresh")) {
                 listview.setAdapter(simpleadapter);
             } else if (msg.equals("loadmore")) {
@@ -135,8 +135,27 @@ public class LogActivity extends Activity implements IXListViewListener {
             } else {
                 Toast.makeText(LogActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
-            progressDialog.dismiss();
             onLoad();
         }
     }
+    
+    /** 
+     * 开启进度对话框 
+     */  
+    private void startProgressDialog() {  
+        if (xProgressDialog == null) {  
+        	xProgressDialog = XProgressDialog.createDialog(this);  
+        }  
+        xProgressDialog.show();  
+    }  
+      
+    /** 
+     * 停止进度对话框 
+     */  
+    private void stopProgressDialog() {  
+        if (xProgressDialog != null) {  
+        	xProgressDialog.dismiss();  
+        	xProgressDialog = null;  
+        }  
+    } 
 }
