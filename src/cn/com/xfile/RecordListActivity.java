@@ -36,7 +36,6 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -304,8 +303,8 @@ public class RecordListActivity extends Activity implements IXListViewListener{
                     int arg2, long arg3) {
                    index = arg2-1; 
                 id = data.get(index).get("id").toString();
-                AlertDialog.Builder builder = new AlertDialog.Builder(RecordListActivity.this);
-                builder.setTitle("选择操作").setView(LayoutInflater.from(RecordListActivity.this).inflate(R.layout.alert_dialog, null));
+                AlertDialog.Builder builder = new AlertDialog.Builder(RecordListActivity.this, R.style.alert_dialog);
+                builder.setTitle("选择操作");//.setView(LayoutInflater.from(RecordListActivity.this).inflate(R.layout.alert_dialog, null));
                 builder.setItems(opts, new DialogInterface.OnClickListener() {
                         
                         @Override
